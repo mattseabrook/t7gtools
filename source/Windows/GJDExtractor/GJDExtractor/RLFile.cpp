@@ -22,22 +22,9 @@ static std::vector<char> ReadAllBytes(char const* filename)
 
 void RLFile::open(const char* filename)
 {
-	std::vector<char> test = ReadAllBytes(filename);
+	std::vector<char> rl = ReadAllBytes(filename);
 
-	size_t fileSize = test.size();
-	/*
-	std::ifstream rl(filename);
-
-	rl.seekg(0, std::ios::end);
-	size_t fileSize = rl.tellg();
-
-	char *buffer = new char[fileSize];
-
-	rl.seekg(0, std::ios::beg);
-	rl.read(buffer, fileSize);
-
-	rl.close();
-	*/
+	size_t fileSize = rl.size();
 
 	std::cout << "\tFile: " << filename << std::endl;
 	std::cout << "\tSize: " << fileSize << " bytes" << std::endl;
@@ -48,27 +35,36 @@ void RLFile::open(const char* filename)
 	int byte = 0;
 
 	for (int i = 0; i < fileSize / blockSize; ++i) {
+
+		// Next time try:
+		// Make a local array or vector, store the 20 blocks in it.
+		// try hard coding [0:12] [13:16] [17:20]
+
 		char name[12];
+		uint32_t offset[4];
+		int offset_counter = 0;
+		uint32_t size[4];
+		int size_counter = 0;
 
 		for (int j = 0; j < blockSize; ++j) {
-			// [0] to [12] characters that represent *.GJD filename
-
 			if (j < 12) {
-				//name[j] = buffer[byte];
-
-				name[j] = test[byte];
+				name[j] = rl[byte];
 			}
-			else {
-				if (j < 16) {
-					//std::cout << arr << std::endl;
-				}
+			else if (j < 16) {
+				offset[offset_counter] = rl[byte];
+				offset_counter++;
+			}
+			else if (j < blockSize) {
+				size[size_counter] = rl[byte];
+				size_counter++;
 			}
 
 			byte++;
 		}
 
 		std::cout << "\t" << name << std::endl;
-		std::cout << "\t" << "\tOffset: " << std::endl;
-		std::cout << "\t" << "\tSize: " << std::endl;
+		int a = int(offset);
+		std::cout << "\t" << "\tOffset: " << a << std::endl;
+		std::cout << "\t" << "\tSize: " << size << std::endl;
 	}
 }

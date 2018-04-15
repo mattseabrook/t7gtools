@@ -1,2 +1,4 @@
 ﻿  RLFile.cpp
+c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(66): warning C4311: '<function-style-cast>': pointer truncation from 'uint32_t *' to 'int'
+c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(66): warning C4302: '<function-style-cast>': truncation from 'uint32_t *' to 'int'
   GJDExtractor.vcxproj -> C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\GJDExtractor.exe
