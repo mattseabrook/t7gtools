@@ -115,7 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cli.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RLFile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cli.h" />
+    <ClInclude Include="RLFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
