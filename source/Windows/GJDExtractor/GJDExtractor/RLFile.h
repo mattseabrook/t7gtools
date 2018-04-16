@@ -17,7 +17,6 @@ Rob Landeros (RL) fileType definitions
 #define RL_OFFSET			4
 #define RL_SIZE				4
 
-
 //-------------------
 
 
@@ -30,7 +29,7 @@ class RLFile
 {
 public:
 	void open(const char* filename);
-	std::vector<char> split(std::vector<char> rlBlock);
+	void procBlock(std::vector<char> data);
 };
 
 //-------------------
