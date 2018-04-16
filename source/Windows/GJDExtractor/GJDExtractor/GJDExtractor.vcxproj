@@ -23,6 +23,7 @@
     <ProjectGuid>{5E56EFC9-9832-43EE-8D9B-900866285F24}</ProjectGuid>
     <RootNamespace>GJDExtractor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>t7gtools</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -122,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="cli.h" />
     <ClInclude Include="RLFile.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

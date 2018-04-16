@@ -1,4 +1,5 @@
-﻿  RLFile.cpp
-c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(66): warning C4311: '<function-style-cast>': pointer truncation from 'uint32_t *' to 'int'
-c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(66): warning C4302: '<function-style-cast>': truncation from 'uint32_t *' to 'int'
-  GJDExtractor.vcxproj -> C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\GJDExtractor.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (GJDExtractor.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  RLFile.cpp
+c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(49): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  GJDExtractor.vcxproj -> C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\t7gtools.exe

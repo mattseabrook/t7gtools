@@ -31,6 +31,7 @@ enum Options
 	GJDFILE,
 	HELP,
 	VERSION,
+	TEST,
 	INVALID
 };
 
@@ -45,7 +46,5 @@ Options switchProc(std::string Q);
 #define CLI_VERSION "\t-v , --version\t\tShow information about this tool."
 #define CLI_HELP "\t-h , --help\t\tDisplay extended help information."
 #define RLFILE_OPEN "\t-r , --rlfile\t\tOpen *.RL file and extract it's contents (*.VDX)"
-
-//-------------------
 
 #endif // __CLI_H

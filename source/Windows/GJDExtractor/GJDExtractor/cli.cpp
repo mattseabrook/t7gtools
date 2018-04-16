@@ -15,6 +15,8 @@ Options switchProc(std::string Q)
 		return RLFILE;
 	if (Q == "-h" || Q == "--help")
 		return HELP;
+	if (Q == "-t" || Q == "--test")
+		return TEST;
 	if (Q == "-v" || Q == "--version")
 		return VERSION;
 	// Everything else...
@@ -36,7 +38,6 @@ void CLI::helpText()
 		<< CLI_VERSION << std::endl
 		<< "\r\n"
 		<< RLFILE_OPEN << std::endl
-		<< "\r\n"
 		<< std::endl;
 }
 
