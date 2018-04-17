@@ -28,8 +28,8 @@ RLFile Class
 class RLFile
 {
 public:
-	void open(const char* filename);
-	void procBlock(std::vector<char> data);
+	static void open(const char* filename);
+	static void procBlock(std::vector<char> data);
 };
 
 //-------------------

@@ -1,4 +1,5 @@
-// RLFile.h
+// utils.h
+
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -31,22 +32,20 @@ static std::vector<char> ReadAllBytes(char const* filename)
 
 /*
 =============================================
-print
+read_u32_le
 
-Log bytes to the consle
+Return an unsigned 32-bit integer
+in Little Endian
 =============================================
 */
-template<typename T>
-void print(std::vector<T> const &v)
+uint32_t read_u32_le(uint8_t* bytes)
 {
-	for (auto &i : v)
-		std::cout << i << ' ';
-
-	std::cout << '\n';
+	uint32_t value;
+	value = bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);
+	return value;
 }
 
 
 //-------------------
-
 
 #endif // __UTILS_H

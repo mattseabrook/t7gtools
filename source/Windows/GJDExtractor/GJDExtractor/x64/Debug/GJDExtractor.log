@@ -1,6 +1,3 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (GJDExtractor.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  RLFile.cpp
-c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(77): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(66): warning C4101: 'gjdOffset': unreferenced local variable
-  GJDExtractor.vcxproj -> C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\t7gtools.exe
+﻿  GJDFile.cpp
+RLFile.obj : error LNK2005: "unsigned int __cdecl read_u32_le(unsigned char *)" (?read_u32_le@@YAIPEAE@Z) already defined in GJDFile.obj
+C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\t7gtools.exe : fatal error LNK1169: one or more multiply defined symbols found

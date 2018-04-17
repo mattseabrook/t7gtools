@@ -9,4 +9,6 @@
 
 ## Introduction
 
-TBD.
+### TODO
+
+Rewrite utils.h as a Class with static public functions so the definitions can be moved into a CPP file.

@@ -73,15 +73,14 @@ int main(int argc, char *argv[])
 
 	SetConsoleTextAttribute(hConsole, 7);
 
-	CLI arguments;
-
 	if (argv[1] != NULL)
 	{
 		switch (switchProc(argv[1]))
 		{
 		case VERSION:
 		{
-			arguments.verInfo();
+			CLI::verInfo();
+
 			return 0;
 		}
 		case HELP:
@@ -90,9 +89,7 @@ int main(int argc, char *argv[])
 		}
 		case RLFILE:
 		{
-			RLFile rlfile;
-
-			rlfile.open(argv[2]);
+			RLFile::open(argv[2]);
 
 			return 0;
 		}
@@ -120,7 +117,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	arguments.helpText();
+	CLI::helpText();
 
 	return 0;
 }

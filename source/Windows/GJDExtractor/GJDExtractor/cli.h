@@ -14,14 +14,14 @@ CLI Interface
 class CLI
 {
 public:
-	void helpText();
-	void verInfo();
+	static void helpText();
+	static void verInfo();
 };
 
 /*
 =============================================================================
 Options
-Enumerate user
+Enumerate user-supplied CLI arguments
 =============================================================================
 */
 

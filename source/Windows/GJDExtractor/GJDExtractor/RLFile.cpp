@@ -7,7 +7,6 @@
 #include "RLFile.h"
 #include "utils.h"
 
-
 /*
 =============================================
 RLFile::open
@@ -22,7 +21,7 @@ void RLFile::open(const char* filename)
 
 	size_t fileSize = rl.size();
 	int blockSize = RL_BLOCKSIZE;
-	int blocks = fileSize / blockSize;
+	size_t blocks = fileSize / blockSize;
 	int byte = 0;
 
 	for (int i = 1; i < blocks; i++) {
@@ -47,14 +46,12 @@ Process *.RL data chunks, based on RL_BLOCKSIZE
 */
 void RLFile::procBlock(std::vector<char> data)
 {
-	int i;
-
 	//
 	// File Name
 	//
 	char name[RL_NAME];
 
-	for (i = 0; i < RL_NAME - 1; i++) {
+	for (int i = 0; i < RL_NAME - 1; i++) {
 		name[i] = data[i];
 	}
 
@@ -63,21 +60,27 @@ void RLFile::procBlock(std::vector<char> data)
 	//
 	// GJD Offset
 	//
-	uint32_t gjdOffset;
+	uint8_t gjdOffset[RL_OFFSET] = { data[12],
+									 data[13],
+									 data[14],
+									 data[15] };
 
-	for (i = 11; i < RL_OFFSET - 1; i++) {
-		//name[i] = data[i];
-		std::cout << i;
-	}
+	uint32_t offset = read_u32_le(gjdOffset);
 
-	//std::cout << "filename: " << name << std::endl;
+	std::cout << "Offset: " << offset << std::endl;
 
+	//
+	// VDX File size
+	//
+	uint8_t vdxFileSize[RL_SIZE] = { data[16],
+									 data[17],
+									 data[18],
+									 data[19] };
 
-	// Raw
-	int len = data.size();
-	for (int j = 0; j < len; j++) {
-		std::cout << data[j];
-	}
+	uint32_t filesize = read_u32_le(vdxFileSize);
 
-	std::cout << '\n';
+	std::cout << "File size: " << filesize << std::endl;
+
+	// Call to break apart GJD file
+	//GJDFile::vdxRip(name, offset, filesize);
 }
