@@ -27,6 +27,9 @@
     <ClCompile Include="GJDFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cli.h">
@@ -35,10 +38,10 @@
     <ClInclude Include="RLFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils.h">
+    <ClInclude Include="GJDFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GJDFile.h">
+    <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

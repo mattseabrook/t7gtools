@@ -6,7 +6,8 @@
 
 class GJDFile
 {
-	static void vdxRipper(char * chunkName, uint32_t chunkOffset, uint32_t chunkSize);
+public:
+	static void vdxRipper(char* filename, char * name, uint32_t offset, uint32_t filesize);
 };
 
 #endif // __GJDFILE_H

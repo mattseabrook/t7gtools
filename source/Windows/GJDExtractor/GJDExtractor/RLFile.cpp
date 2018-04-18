@@ -4,8 +4,10 @@
 #include <fstream>
 #include <vector>
 
-#include "RLFile.h"
 #include "utils.h"
+#include "RLFile.h"
+#include "GJDFile.h"
+
 
 /*
 =============================================
@@ -15,9 +17,9 @@ Open the *.RL file and break it into chunks
 based on RL_BLOCKSIZE
 =============================================
 */
-void RLFile::open(const char* filename)
+void RLFile::open(char* filename)
 {
-	std::vector<char> rl = ReadAllBytes(filename);
+	std::vector<char> rl = Utils::ReadAllBytes(filename);
 
 	size_t fileSize = rl.size();
 	int blockSize = RL_BLOCKSIZE;
@@ -32,7 +34,7 @@ void RLFile::open(const char* filename)
 		std::vector<char>::const_iterator last = rl.begin() + end;
 		std::vector<char> block(first, last);
 
-		procBlock(block);
+		procBlock(block, filename);
 	}
 }
 
@@ -44,7 +46,7 @@ RLFile::procBlock
 Process *.RL data chunks, based on RL_BLOCKSIZE
 =============================================
 */
-void RLFile::procBlock(std::vector<char> data)
+void RLFile::procBlock(std::vector<char> data, char* filename)
 {
 	//
 	// File Name
@@ -55,8 +57,6 @@ void RLFile::procBlock(std::vector<char> data)
 		name[i] = data[i];
 	}
 
-	std::cout << "filename: " << name << std::endl;
-
 	//
 	// GJD Offset
 	//
@@ -65,9 +65,7 @@ void RLFile::procBlock(std::vector<char> data)
 									 data[14],
 									 data[15] };
 
-	uint32_t offset = read_u32_le(gjdOffset);
-
-	std::cout << "Offset: " << offset << std::endl;
+	uint32_t offset = Utils::read_u32_le(gjdOffset);
 
 	//
 	// VDX File size
@@ -77,10 +75,8 @@ void RLFile::procBlock(std::vector<char> data)
 									 data[18],
 									 data[19] };
 
-	uint32_t filesize = read_u32_le(vdxFileSize);
-
-	std::cout << "File size: " << filesize << std::endl;
+	uint32_t filesize = Utils::read_u32_le(vdxFileSize);
 
 	// Call to break apart GJD file
-	//GJDFile::vdxRip(name, offset, filesize);
+	GJDFile::vdxRipper(filename, name, offset, filesize);
 }

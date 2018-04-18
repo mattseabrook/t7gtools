@@ -120,6 +120,7 @@
     <ClCompile Include="GJDFile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RLFile.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cli.h" />

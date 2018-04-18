@@ -6,11 +6,13 @@
 
 #include "GJDFile.h"
 
-#include "utils.h"
-
-void GJDFile::vdxRipper(char * name, uint32_t offset, uint32_t filesize)
+void GJDFile::vdxRipper(char* filename, char * name, uint32_t offset, uint32_t filesize)
 {
-	//
-	// GJD Offset
-	//
+	//...
+	filename[strlen(filename) - 3] = '\0';
+	std::cout << filename << ".GJD";
+
+
+	// for i < filesize
+	// stream vector
 }

@@ -1,3 +1,2 @@
 ﻿  GJDFile.cpp
-RLFile.obj : error LNK2005: "unsigned int __cdecl read_u32_le(unsigned char *)" (?read_u32_le@@YAIPEAE@Z) already defined in GJDFile.obj
-C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\t7gtools.exe : fatal error LNK1169: one or more multiply defined symbols found
+  GJDExtractor.vcxproj -> C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\t7gtools.exe
