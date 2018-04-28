@@ -9,13 +9,15 @@
 
 <h1 id="toc">Table-of-Contents</h1>
 
-1. [Introduction](#intro)
+<ol>
+<li>Introduction
 <OL TYPE="a">
 <LI>Overview
 <LI>Inspiration
 <LI>Credits
 </OL>
-2. [xxx](#intro)
+</li>
+</ol>
 
 <h1 id="intro">Welcome to my... project</h1>
 
