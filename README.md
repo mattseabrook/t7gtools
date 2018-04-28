@@ -27,7 +27,9 @@ This project is a set of non-commercial "mods" and "tools" I've developed for [T
 
 <h2>Overview</h2>
 
-The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. Through these experiments I have
+The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. Through these experiments I have explored file I/O, compression,  with the goal of operating as low-level as I possibly can.
+
+Wolfenstein 3D and Doom were really fantastic, but this was in a completely different universe as far as design and ingenuity goes IMHO. There's no possible comparison, and I am 
 
 <h2>Inspiration</h2>
 
@@ -37,6 +39,13 @@ Sanglard Wolf 3D book.
 <h2>Credits</h2>
 
 x
+
+## For more information...
+
+I'm blogging about this project off and on [here](https://www.mattseabrook.net/blog).
+
+I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net). 
+
 
 ### TODO
 
