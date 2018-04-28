@@ -10,30 +10,30 @@
 <h3 id="toc">Table-of-Contents</h1>
 
 <ol>
-<li>Introduction
+<li><a href="#introduction">Introduction</a>
 <OL TYPE="a">
-<LI>Overview
-<LI>Inspiration
-<LI>Credits
+<LI><a href="#overview">Overview</a>
+<LI><a href="#inspiration">Inspiration</a>
+<LI><a href="#credits">Credits</a>
 </OL>
 </li>
 </ol>
 
-<h1 id="intro">Welcome to my... project</h1>
+<h1 id="introduction">Welcome to my... project</h1>
 
 <img src="https://www.mattseabrook.net/github/t7gtools/asciihouse.png">
 
 This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
 
-<h2 id="overview">Overview</h2>
+<h2>Overview</h2>
 
 The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. This 
 
-<h2 id="inspiration">Inspiration</h2>
+<h2>Inspiration</h2>
 
 Sanglard Wolf 3D book. 
 
-<h2 id="credits">Credits</h2>
+<h2>Credits</h2>
 
 x
 
