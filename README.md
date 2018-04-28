@@ -21,7 +21,7 @@
 
 <h1 id="intro">Welcome to my... project</h1>
 
-This project is x
+This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
 
 <h2 id="overview">Overview</h2>
 
@@ -29,7 +29,7 @@ x
 
 <h2 id="inspiration">Inspiration</h2>
 
-x
+L
 
 <h2 id="credits">Credits</h2>
 
