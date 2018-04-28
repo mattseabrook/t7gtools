@@ -21,6 +21,8 @@
 
 <h1 id="intro">Welcome to my... project</h1>
 
+<img src="https://www.mattseabrook.net/github/t7gtools/house.png">
+
 This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
 
 <h2 id="overview">Overview</h2>
