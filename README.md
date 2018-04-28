@@ -27,11 +27,11 @@ This project is a set of non-commercial "mods" and "tools" I've developed for [T
 
 <h2 id="overview">Overview</h2>
 
-x
+The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. This 
 
 <h2 id="inspiration">Inspiration</h2>
 
-L
+Sanglard Wolf 3D book. 
 
 <h2 id="credits">Credits</h2>
 
