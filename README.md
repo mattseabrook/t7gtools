@@ -19,7 +19,7 @@
 </li>
 </ol>
 
-<h1 id="introduction">Welcome to my... project</h1>
+<h1 id="introduction">Welcome to my... project :)</h1>
 
 <img src="https://www.mattseabrook.net/github/t7gtools/asciihouse.png">
 
@@ -27,10 +27,11 @@ This project is a set of non-commercial "mods" and "tools" I've developed for [T
 
 <h2>Overview</h2>
 
-The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. This 
+The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. Through these experiments I have
 
 <h2>Inspiration</h2>
 
+There is something incredibly zen about this piece of technology that came from the true golden age of personal computing in the late 1980's through early 1990's. There are lots of angles to explore here,  
 Sanglard Wolf 3D book. 
 
 <h2>Credits</h2>
