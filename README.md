@@ -15,6 +15,7 @@
 <LI><a href="#overview">Overview</a>
 <LI><a href="#inspiration">Inspiration</a>
 <LI><a href="#credits">Credits</a>
+<LI><a href="#for-more-information">For more information...</a>
 </OL>
 </li>
 </ol>
@@ -25,20 +26,20 @@
 
 This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
 
-<h2>Overview</h2>
+## Overview
 
 The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. Through these experiments I have explored file I/O, compression,  with the goal of operating as low-level as I possibly can.
 
 Wolfenstein 3D and Doom were really fantastic, but this was in a completely different universe as far as design and ingenuity goes IMHO. There's no possible comparison, and I am 
 
-<h2>Inspiration</h2>
+## Inspiration
 
-There is something incredibly zen about this piece of technology that came from the true golden age of personal computing in the late 1980's through early 1990's. There are lots of angles to explore here,  
+There is something incredibly zen about this piece of technology that came out of the true golden age of personal computing in the late 1980's through early 1990's. There are lots of angles to explore here, such as the deeply inspired artwork and music 
 Sanglard Wolf 3D book. 
 
-<h2>Credits</h2>
+## Credits
 
-x
+Denis
 
 ## For more information...
 
