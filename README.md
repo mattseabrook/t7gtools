@@ -7,7 +7,7 @@
   88    8   88eee8   88  8eee8 8eee8 88eee 8ee88
 </pre>
 
-<h1 id="toc">Table-of-Contents</h1>
+<h3 id="toc">Table-of-Contents</h1>
 
 <ol>
 <li>Introduction
@@ -21,7 +21,19 @@
 
 <h1 id="intro">Welcome to my... project</h1>
 
-This project has been a long time coming and is inspired upon my 
+This project is x
+
+<h2 id="overview">Overview</h2>
+
+x
+
+<h2 id="inspiration">Inspiration</h2>
+
+x
+
+<h2 id="credits">Credits</h2>
+
+x
 
 ### TODO
 
