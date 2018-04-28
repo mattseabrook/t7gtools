@@ -1,2 +1,2 @@
 ﻿  GJDFile.cpp
-  GJDExtractor.vcxproj -> C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\t7gtools.exe
+c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\gjdfile.cpp(14): error C2660: 'strcat_s': function does not take 2 arguments
