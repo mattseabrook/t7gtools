@@ -1,18 +1,21 @@
 // GJDFile.cpp
 
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <vector>
 
 #include "utils.h"
 #include "GJDFile.h"
 
-void GJDFile::vdxRipper(char* filename, char * name, uint32_t offset, uint32_t filesize)
+void GJDFile::vdxRipper(std::string filename, char * name, uint32_t offset, uint32_t filesize)
 {
-	filename[strlen(filename) - 3] = '\0';
+	filename = filename.substr(0, filename.size() - 2);
+	std::string newExt = "GJD";
 
-	strcat_s(filename, ".GJD");
-	std::cout << filename;
+	filename.append(newExt);
+
+	std::cout << filename << std::endl;
 
 	std::vector<char> gjd = Utils::ReadAllBytes(filename);
 

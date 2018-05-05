@@ -34,7 +34,7 @@ Wolfenstein 3D and Doom were really fantastic, but this was in a completely diff
 
 ## Inspiration
 
-There is something incredibly zen about this piece of technology that came out of the true golden age of personal computing in the late 1980's through early 1990's. There are lots of angles to explore here, such as the deeply inspired artwork and music 
+There is something incredibly zen about this piece of technology that came out of the true golden age of personal computing that occured in the late 1980's to early 1990's. There are lots of angles to explore here, such as the . The software is essentially an exhibition that pushed the limits with both the usage of modern day tools () and available hardware of the time (Intel 80386DX.) 
 Sanglard Wolf 3D book. 
 
 ## Credits

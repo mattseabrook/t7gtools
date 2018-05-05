@@ -89,6 +89,8 @@ int main(int argc, char *argv[])
 		}
 		case RLFILE:
 		{
+			// Input validation to prevent opening of any other file type
+
 			RLFile::open(argv[2]);
 
 			return 0;

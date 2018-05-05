@@ -7,7 +7,7 @@
 class GJDFile
 {
 public:
-	static void vdxRipper(char* filename, char * name, uint32_t offset, uint32_t filesize);
+	static void vdxRipper(std::string filename, char * name, uint32_t offset, uint32_t filesize);
 };
 
 #endif // __GJDFILE_H

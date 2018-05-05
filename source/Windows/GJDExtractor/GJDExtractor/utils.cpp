@@ -14,7 +14,7 @@ Stream the binary data to a vector,
 and return that vector.
 =============================================
 */
-std::vector<char> Utils::ReadAllBytes(const char* filename)
+std::vector<char> Utils::ReadAllBytes(std::string filename)
 {
 	std::ifstream ifs(filename, std::ios::binary | std::ios::ate);
 	std::ifstream::pos_type pos = ifs.tellg();

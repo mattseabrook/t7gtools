@@ -1,6 +1,7 @@
 // RLFile.cpp
 
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <vector>
 
@@ -17,8 +18,10 @@ Open the *.RL file and break it into chunks
 based on RL_BLOCKSIZE
 =============================================
 */
-void RLFile::open(char* filename)
+void RLFile::open(std::string filename)
 {
+	std::cout << filename << std::endl;
+	
 	std::vector<char> rl = Utils::ReadAllBytes(filename);
 
 	size_t fileSize = rl.size();
@@ -46,7 +49,7 @@ RLFile::procBlock
 Process *.RL data chunks, based on RL_BLOCKSIZE
 =============================================
 */
-void RLFile::procBlock(std::vector<char> data, char* filename)
+void RLFile::procBlock(std::vector<char> data, std::string filename)
 {
 	//
 	// File Name
