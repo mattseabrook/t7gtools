@@ -9,6 +9,8 @@
 #include "RLFile.h"
 #include "GJDFile.h"
 
+// *.RL Bytestream
+std::vector<char> rlData;
 
 /*
 =============================================
@@ -20,11 +22,21 @@ based on RL_BLOCKSIZE
 */
 void RLFile::open(std::string filename)
 {
-	std::cout << filename << std::endl;
-	
-	std::vector<char> rl = Utils::ReadAllBytes(filename);
+	// Input validation to prevent opening of any other file type
 
-	size_t fileSize = rl.size();
+	std::string gjdFile = filename.substr(0, filename.size() - 2);
+	std::string newExt = "GJD";
+
+	gjdFile.append(newExt);
+
+	std::cout << "*.RL file: " + filename << std::endl;
+	std::cout << "*.GJD file: " + gjdFile << std::endl;
+
+	gjdData = Utils::ReadAllBytes(gjdFile);
+	
+	rlData = Utils::ReadAllBytes(filename);
+
+	size_t fileSize = rlData.size();
 	int blockSize = RL_BLOCKSIZE;
 	size_t blocks = fileSize / blockSize;
 	int byte = 0;
@@ -33,8 +45,8 @@ void RLFile::open(std::string filename)
 		int end = i * blockSize;
 		int start = end - blockSize;
 
-		std::vector<char>::const_iterator first = rl.begin() + start;
-		std::vector<char>::const_iterator last = rl.begin() + end;
+		std::vector<char>::const_iterator first = rlData.begin() + start;
+		std::vector<char>::const_iterator last = rlData.begin() + end;
 		std::vector<char> block(first, last);
 
 		procBlock(block, filename);
