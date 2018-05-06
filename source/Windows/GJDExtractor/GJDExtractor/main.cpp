@@ -1,5 +1,21 @@
 ﻿// main.cpp
 
+/*
+
+"t7gtools"
+
+Author: Matt Seabrook
+Contact: info@mattseabrook.net
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+*/
+
 #include <iostream>
 
 
@@ -30,6 +46,8 @@ int main(int argc, char *argv[])
 		}
 		case HELP:
 		{
+			std::cout << USAGE;
+
 			break;
 		}
 		case RLFILE:
@@ -45,20 +63,21 @@ int main(int argc, char *argv[])
 
 			return 0;
 		}
-		default:
+		case INVALID:
 		{
-			std::cout << "ERROR: Unrecognized switch: '"
-				<< argv[1]
-				<< "', please see --help for more information:"
+			std::cout << "ERROR: Unrecognized switch: '" << argv[1] << "', please see --help for more information:"
 				<< "\r\n"
+				<< USAGE
 				<< std::endl;
-
 			break;
 		}
 		}
 	}
-
-	//CLI::helpText();
+	else {
+		// Earmarked for normal production start-up
+		std::cout << "[Production Launch] - Normal engine start-up"
+			<< std::endl;
+	}
 
 	return 0;
 }

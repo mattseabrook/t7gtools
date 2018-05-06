@@ -24,16 +24,15 @@ void RLFile::open(std::string filename)
 {
 	// Input validation to prevent opening of any other file type
 
+	// Load *.GJD file into memory
 	std::string gjdFile = filename.substr(0, filename.size() - 2);
 	std::string newExt = "GJD";
 
 	gjdFile.append(newExt);
 
-	std::cout << "*.RL file: " + filename << std::endl;
-	std::cout << "*.GJD file: " + gjdFile << std::endl;
-
 	gjdData = Utils::ReadAllBytes(gjdFile);
 	
+	// Load *.RL file into memory
 	rlData = Utils::ReadAllBytes(filename);
 
 	size_t fileSize = rlData.size();
@@ -50,6 +49,11 @@ void RLFile::open(std::string filename)
 		std::vector<char> block(first, last);
 
 		procBlock(block, filename);
+
+		// Free memory
+		if (i == blocks - 1) {
+			std::vector<char>().swap(block);
+		}
 	}
 }
 
@@ -61,7 +65,7 @@ RLFile::procBlock
 Process *.RL data chunks, based on RL_BLOCKSIZE
 =============================================
 */
-void RLFile::procBlock(std::vector<char> data, std::string filename)
+void RLFile::procBlock(std::vector<char> &data, std::string filename)
 {
 	//
 	// File Name

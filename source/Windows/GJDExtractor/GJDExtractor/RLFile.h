@@ -30,7 +30,7 @@ class RLFile
 {
 public:
 	static void open(std::string filename);
-	static void procBlock(std::vector<char> data, std::string filename);
+	static void procBlock(std::vector<char> &data, std::string filename);
 };
 
 //-------------------

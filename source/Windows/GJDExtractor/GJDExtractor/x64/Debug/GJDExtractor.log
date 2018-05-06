@@ -1,2 +1,7 @@
-﻿  main.cpp
+﻿  RLFile.cpp
+c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(85): warning C4838: conversion from 'char' to 'uint8_t' requires a narrowing conversion
+c:\repos\t7gtools\source\windows\gjdextractor\gjdextractor\rlfile.cpp(95): warning C4838: conversion from 'char' to 'uint8_t' requires a narrowing conversion
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
   GJDExtractor.vcxproj -> C:\Repos\t7gtools\source\Windows\GJDExtractor\x64\Debug\t7gtools.exe
