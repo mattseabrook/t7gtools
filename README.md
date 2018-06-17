@@ -18,36 +18,58 @@
 <LI><a href="#for-more-information">For more information...</a>
 </OL>
 </li>
+<li><a href="#todo">TODO</a>
+</li>
+<li><a href="#todo">TODO</a>
+</li>
 </ol>
 
 <h1 id="introduction">Welcome to my... project :)</h1>
 
 <img src="https://www.mattseabrook.net/github/t7gtools/asciihouse.png">
 
-This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
+This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](https://en.wikipedia.org/wiki/The_7th_Guest). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
 
 ## Overview
 
-The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. Through these experiments I have explored file I/O, compression,  with the goal of operating as low-level as I possibly can.
+The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. Through these experiments I have explored file I/O, compression, streaming, and efficient low-level use of resources.
 
-Wolfenstein 3D and Doom were really fantastic, but this was in a completely different universe as far as design and ingenuity goes IMHO. There's no possible comparison, and I am 
+### Inspiration
 
-## Inspiration
+There is something incredibly zen about this piece of technology that came out of the true golden age of personal computing that occured in the late 1980's to early 1990's. There are lots of angles to explore here. The software is essentially an exhibition that pushed the limits with both the usage of modern day tools (such as Autodesk Animator/earliest versions of 3D Studio Max) and available hardware of the time (Intel 80386DX.) It's a hobby of mine to explore software such as this, to learn from it's efficiency and low-level practices.
 
-There is something incredibly zen about this piece of technology that came out of the true golden age of personal computing that occured in the late 1980's to early 1990's. There are lots of angles to explore here, such as the . The software is essentially an exhibition that pushed the limits with both the usage of modern day tools () and available hardware of the time (Intel 80386DX.) 
-Sanglard Wolf 3D book. 
+### Credits
 
-## Credits
+Denis Oezman is created with creating some 7th Guest CLI utilities in Pascal back in 2003. [His page is located here]().
 
-Denis
+The XenTaX community is credited with housing [the wiki]() that contained invaluable information about the file formats.
 
-## For more information...
+### For more information...
 
-I'm blogging about this project off and on [here](https://www.mattseabrook.net/blog).
+I *intend* to be blogging about this project off and on [here](https://www.mattseabrook.net/blog).
 
 I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net). 
 
+## Proprietary file formats (*.RL, *.GJD, *.VDX)
 
-### TODO
+x
 
-Rewrite utils.h as a Class with static public functions so the definitions can be moved into a CPP file.
+### RL
+
+x
+
+### GJD
+
+x
+
+### VDX
+
+x
+
+## TODO
+
+Notes/To-do list:
+
+- Rewrite utils.h as a Class with static public functions so the definitions can be moved into a CPP file.
+- Look into FFMPEG, if there's a low foot-print static library that can write out MP4.
+- Nurse README.md
