@@ -19,6 +19,11 @@
 </OL>
 </li>
 <li><a href="https://github.com/henrystauf/t7gtools#proprietary-file-formats-rl-gjd-vdx">Proprietary file formats</a>
+<OL TYPE="a">
+<LI><a href="#rl">RL</a>
+<LI><a href="#gjd">GJD</a>
+<LI><a href="#vdx">VDX</a>
+</OL>
 </li>
 <li><a href="https://github.com/henrystauf/t7gtools#todo">TODO</a>
 </li>
