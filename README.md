@@ -71,7 +71,7 @@ The following diagram illustrates the relationship between the 3 file types:
 
 ### RL
 
-Here's DR.RL under a microscope (Dining Room, DR.GJD containing VDX asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.)
+Here's DR.RL under a microscope (*Dining Room, DR.GJD containing VDX asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.*)
 
 The last 4 bytes in the sequence provide you the file size of each VDX file:
 
@@ -91,6 +91,5 @@ TBD.
 
 Notes/To-do list:
 
-- Rewrite utils.h as a Class with static public functions so the definitions can be moved into a CPP file.
 - Look into FFMPEG, if there's a low foot-print static library that can write out MP4.
 - Nurse README.md
