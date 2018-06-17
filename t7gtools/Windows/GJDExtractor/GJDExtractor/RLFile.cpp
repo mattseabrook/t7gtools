@@ -13,6 +13,9 @@
 // *.RL Bytestream
 std::vector<char> rlData;
 
+// *.GJD working directory
+std::string GJDFile::gjdDir;
+
 /*
 =============================================
 RLFile::open
@@ -23,16 +26,16 @@ based on RL_BLOCKSIZE
 */
 void RLFile::open(std::string filename)
 {
+	// TODO
 	// Input validation to prevent opening of any other file type
 
-	std::string gjdFile = filename.substr(0, filename.size() - 3);
+	GJDFile::gjdDir = filename.substr(0, filename.size() - 3);
 
-	if (CreateDirectory(gjdFile.c_str(), NULL) ||
+	if (CreateDirectory(GJDFile::gjdDir.c_str(), NULL) ||
 		ERROR_ALREADY_EXISTS == GetLastError()) {
 	}
 
-	std::string newExt = ".GJD";
-	gjdFile.append(newExt);
+	std::string gjdFile = GJDFile::gjdDir + ".GJD";
 
 	// Load *.GJD file into memory
 	gjdData = Utils::ReadAllBytes(gjdFile);

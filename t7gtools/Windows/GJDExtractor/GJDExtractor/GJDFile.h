@@ -16,6 +16,7 @@ GJDFile Class
 class GJDFile
 {
 public:
+	static std::string gjdDir;
 	static void vdxRipper(char * name, uint32_t &offset, uint32_t &filesize);
 };
 

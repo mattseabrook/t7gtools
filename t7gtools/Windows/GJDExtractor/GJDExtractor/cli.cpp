@@ -21,7 +21,6 @@ Options switchProc(std::string Q)
 		return TEST;
 	if (Q == "-v" || Q == "--version")
 		return VERSION;
-	// Everything else...
 	return INVALID;
 }
 

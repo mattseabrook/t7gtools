@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 		{
 			CLI::verInfo();
 
-			return 0;
+			break;
 		}
 		case HELP:
 		{
@@ -54,14 +54,14 @@ int main(int argc, char *argv[])
 		{
 			RLFile::open(argv[2]);
 
-			return 0;
+			break;
 		}
 		case TEST:
 		{
 			//...
-			std::cout << "Nothing right now.";
+			std::cout << "DEBUG-";
 
-			return 0;
+			break;
 		}
 		case INVALID:
 		{
@@ -74,8 +74,8 @@ int main(int argc, char *argv[])
 		}
 	}
 	else {
-		// Earmarked for normal production start-up
-		std::cout << "[Production Launch] - Normal engine start-up"
+		// Display help
+		std::cout << USAGE
 			<< std::endl;
 	}
 
