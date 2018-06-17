@@ -18,9 +18,9 @@
 <LI><a href="#for-more-information">For more information...</a>
 </OL>
 </li>
-<li><a href="#todo">TODO</a>
+<li><a href="https://github.com/henrystauf/t7gtools#proprietary-file-formats-rl-gjd-vdx">Proprietary file formats</a>
 </li>
-<li><a href="#todo">TODO</a>
+<li><a href="https://github.com/henrystauf/t7gtools#todo">TODO</a>
 </li>
 </ol>
 
@@ -52,7 +52,15 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 ## Proprietary file formats (*.RL, *.GJD, *.VDX)
 
-x
+At a high level, a GJD file is a raw binary that contains a bunch of VDX files separated by a 1-byte buffer (FF).
+
+*.RL files are "name mapped" to *.GJD files, and are an index/directory that contains the file name of each *.VDX, it's size in bytes, and it's starting position in the *.GJD file (offset).
+
+*.VDX files contain raw animation frames and WAV format audio data.
+
+The following diagram illustrates the relationship between the 3 file types:
+
+<img src="https://www.mattseabrook.net/github/t7gtools/filearchitecture.png">
 
 ### RL
 
