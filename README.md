@@ -64,15 +64,19 @@ The following diagram illustrates the relationship between the 3 file types:
 
 ### RL
 
-x
+Here's DR.RL under a microscope (Dining Room, DR.GJD containing VDX asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.)
+
+The last 4 bytes in the sequence provide you the file size of each VDX file:
+
+<img src="https://www.mattseabrook.net/github/t7gtools/hex.png">
 
 ### GJD
 
-x
+TBD.
 
 ### VDX
 
-x
+TBD.
 
 ## TODO
 
