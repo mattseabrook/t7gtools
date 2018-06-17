@@ -77,7 +77,9 @@ The last 4 bytes in the sequence provide you the file size of each VDX file:
 
 ### GJD
 
-TBD.
+Here's the new tool extracting all of the VDX files from DR.RL:
+
+<img src="https://www.mattseabrook.net/github/t7gtools/gjd.gif">
 
 ### VDX
 

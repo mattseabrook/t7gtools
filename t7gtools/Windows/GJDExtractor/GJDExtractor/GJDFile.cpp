@@ -24,7 +24,6 @@ void GJDFile::vdxRipper(char * name, uint32_t &offset, uint32_t &filesize)
 
 	if (a == 0) {
 		end = b - 1;
-		std::cout << "BIG TIME OUTAGE: " << end << std::endl;
 	}
 	else {
 		end = a + b;
