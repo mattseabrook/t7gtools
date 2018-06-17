@@ -45,9 +45,11 @@ There is something incredibly zen about this piece of technology that came out o
 
 ### Credits
 
-Denis Oezman is created with creating some 7th Guest CLI utilities in Pascal back in 2003. [His page is located here]().
+Denis Oezman is credited in 2003 with creating some 7th Guest CLI extraction utilities, written in Pascal. [His page is located here]().
 
 The XenTaX community is credited with housing [the wiki]() that contained invaluable information about the file formats.
+
+Thank you so much- The work of the community has saved me a lot of time in research and trial & error.
 
 ### For more information...
 
