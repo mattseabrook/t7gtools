@@ -53,8 +53,6 @@ Thank you so much- The work of the community has saved me a lot of time in resea
 
 ### For more information...
 
-I *intend* to be blogging about this project off and on [here](https://www.mattseabrook.net/blog).
-
 I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net). 
 
 ## Proprietary file formats (*.RL, *.GJD, *.VDX)
