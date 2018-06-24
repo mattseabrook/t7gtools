@@ -1,4 +1,2 @@
-﻿  RLFile.cpp
-d:\repos\t7gtools\windows\t7gtools\rlfile.cpp(93): warning C4838: conversion from 'char' to 'uint8_t' requires a narrowing conversion
-d:\repos\t7gtools\windows\t7gtools\rlfile.cpp(103): warning C4838: conversion from 'char' to 'uint8_t' requires a narrowing conversion
+﻿  LZSS.cpp
   t7gtools.vcxproj -> D:\Repos\t7gtools\Windows\x64\Debug\t7gtools.exe

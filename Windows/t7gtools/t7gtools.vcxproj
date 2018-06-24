@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="cli.cpp" />
     <ClCompile Include="GJDFile.cpp" />
+    <ClCompile Include="LZSS.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RLFile.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -125,6 +126,7 @@
   <ItemGroup>
     <ClInclude Include="cli.h" />
     <ClInclude Include="GJDFile.h" />
+    <ClInclude Include="LZSS.h" />
     <ClInclude Include="RLFile.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
