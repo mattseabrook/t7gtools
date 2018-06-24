@@ -45,7 +45,7 @@ void RLFile::open(std::string filename)
 
 	size_t fileSize = rlData.size();
 	int blockSize = RL_BLOCKSIZE;
-	size_t blocks = fileSize / blockSize;
+	size_t blocks = fileSize / blockSize + 1;
 	int byte = 0;
 
 	for (int i = 1; i < blocks; i++) {
@@ -80,7 +80,7 @@ void RLFile::procBlock(std::vector<char> &data)
 	//
 	char name[RL_NAME];
 
-	for (int i = 0; i < RL_NAME - 1; i++) {
+	for (int i = 0; i < RL_NAME; i++) {
 		name[i] = data[i];
 	}
 
