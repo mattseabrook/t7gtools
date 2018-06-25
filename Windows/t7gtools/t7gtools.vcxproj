@@ -129,6 +129,7 @@
     <ClInclude Include="LZSS.h" />
     <ClInclude Include="RLFile.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="VDXFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

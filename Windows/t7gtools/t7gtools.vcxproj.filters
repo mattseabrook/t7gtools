@@ -50,5 +50,8 @@
     <ClInclude Include="LZSS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VDXFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
