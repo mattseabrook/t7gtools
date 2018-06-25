@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 		}
 		case HELP:
 		{
-			std::cout << USAGE;
+			std::cout << USAGE << std::endl;
 
 			break;
 		}
@@ -74,9 +74,7 @@ int main(int argc, char *argv[])
 		}
 	}
 	else {
-		// Display help
-		std::cout << USAGE
-			<< std::endl;
+		std::cout << USAGE << std::endl;
 	}
 
 	return 0;

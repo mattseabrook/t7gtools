@@ -122,6 +122,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RLFile.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="VDXFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cli.h" />

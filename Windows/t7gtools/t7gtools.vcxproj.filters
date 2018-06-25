@@ -33,6 +33,9 @@
     <ClCompile Include="LZSS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VDXFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cli.h">
