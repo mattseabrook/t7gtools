@@ -68,14 +68,15 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 Blah
 
-|Regular | text | in header | turns bold |
-|-|-|-|-|
-| __So__ | __bold__ | __all__ | __table entries__ |
-| __and__ | __it looks__ | __like a__ | __"headerless table"__ |
-
-| | |
+| Specification | GROOVIE |
+| --- | --- |
 |file|V.EXE|
-|size|24,473 KB|
+|size|24,473 B|
+|header|32 B|
+|image|21,441 B|
+|overlay|0 B|
+|compression|LZEXE 0.91 / 1.00a|
+|decompressed size|97416 B|
 
 ## Proprietary file formats (*.RL, *.GJD, *.VDX)
 
