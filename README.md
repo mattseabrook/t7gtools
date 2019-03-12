@@ -46,6 +46,14 @@ This project is a set of non-commercial "mods" and "tools" I've developed for [T
 
 The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. Through these experiments I have explored file I/O, compression, streaming, and efficient low-level use of resources.
 
+This document covers the full taxonomy of my custom C++ software, as well as my research into ```The 7th Guest```.
+
+- Download
+- Usage
+- Features link
+- Engine
+- File formats/design
+
 ### Inspiration
 
 There is something incredibly zen about this piece of technology that came out of the true golden age of personal computing that occured in the late 1980's to early 1990's. There are lots of angles to explore here. The software is essentially an exhibition that pushed the limits with both the usage of modern day tools (such as Autodesk Animator/earliest versions of 3D Studio Max) and available hardware of the time (Intel 80386DX.) It's a hobby of mine to explore software such as this, to learn from it's efficiency and low-level practices.
