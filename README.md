@@ -14,7 +14,6 @@
 <OL TYPE="a">
 <LI><a href="#overview">Overview</a>
 <LI><a href="#inspiration">Inspiration</a>
-<LI><a href="#credits">Credits</a>
 <LI><a href="#for-more-information">For more information...</a>
 </OL>
 </li>
@@ -58,7 +57,19 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 ### 1.26
 
-This is the original executable that shipped with the game in 1993.
+This is the original executable that shipped with the game in 1993. 
+
+| Specification | GROOVIE |
+| --- | --- |
+|file|V.EXE|
+|size|24,473 B|
+|header|32 B|
+|image|21,441 B|
+|overlay|0 B|
+|compression|LZEXE 0.91 / 1.00a|
+|decompressed size|97416 B|
+
+Default execution:
 
 ```
 GROOVIE Player (c) 1993 Trilobyte
@@ -77,15 +88,10 @@ XMS driver version 3.0 installed
 00,300 ticks per second internal clock
 ```
 
-| Specification | GROOVIE |
-| --- | --- |
-|file|V.EXE|
-|size|24,473 B|
-|header|32 B|
-|image|21,441 B|
-|overlay|0 B|
-|compression|LZEXE 0.91 / 1.00a|
-|decompressed size|97416 B|
+**Switches**
+
+```v !```: launch the game normally
+``` v @```: launc the game into a DEMO mode
 
 ## Proprietary file formats (*.RL, *.GJD, *.VDX)
 
