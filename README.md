@@ -18,21 +18,21 @@
 <LI><a href="#for-more-information">For more information...</a>
 </OL>
 </li>
-<li><a href="https://github.com/henrystauf/t7gtools#GROOVIE-engine">GROOVIE engine</a>
+<li><a href="#GROOVIE-engine">GROOVIE engine</a>
 <OL TYPE="a">
 <LI><a href="#rl">1.26</a>
 <LI><a href="#gjd">1.30</a>
 <LI><a href="#vdx">2.x</a>
 </OL>
 </li>
-<li><a href="https://github.com/henrystauf/t7gtools#proprietary-file-formats-rl-gjd-vdx">Proprietary file formats</a>
+<li><a href="#proprietary-file-formats-rl-gjd-vdx">Proprietary file formats</a>
 <OL TYPE="a">
 <LI><a href="#rl">RL</a>
 <LI><a href="#gjd">GJD</a>
 <LI><a href="#vdx">VDX</a>
 </OL>
 </li>
-<li><a href="https://github.com/henrystauf/t7gtools#todo">TODO</a>
+<li><a href="#todo">TODO</a>
 </li>
 </ol>
 
