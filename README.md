@@ -19,9 +19,9 @@
 </li>
 <li><a href="#GROOVIE-engine">GROOVIE engine</a>
 <OL TYPE="a">
-<LI><a href="#1.26">1.26</a>
-<LI><a href="#1.30">1.30</a>
-<LI><a href="#2.x">2.x</a>
+<LI><a href="#1.26">126</a>
+<LI><a href="#1.30">130</a>
+<LI><a href="#2.x">2x</a>
 <LI><a href="#CLI-switches">CLI switches</a>
 </OL>
 </li>
@@ -94,6 +94,8 @@ XMS driver version 3.0 installed
 ```v !``` launch the game normally
 
 ``` v @``` launch the game into a DEMO mode
+
+```v <filename>``` Attempts to open the specified file. Unknown functionality at this time.
 
 ## Proprietary file formats (*.RL, *.GJD, *.VDX)
 
