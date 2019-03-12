@@ -18,6 +18,13 @@
 <LI><a href="#for-more-information">For more information...</a>
 </OL>
 </li>
+<li><a href="https://github.com/henrystauf/t7gtools#GROOVIE-engine">GROOVIE engine</a>
+<OL TYPE="a">
+<LI><a href="#rl">1.26</a>
+<LI><a href="#gjd">1.30</a>
+<LI><a href="#vdx">2.x</a>
+</OL>
+</li>
 <li><a href="https://github.com/henrystauf/t7gtools#proprietary-file-formats-rl-gjd-vdx">Proprietary file formats</a>
 <OL TYPE="a">
 <LI><a href="#rl">RL</a>
@@ -53,7 +60,11 @@ Thank you so much- The work of the community has saved me a lot of time in resea
 
 ### For more information...
 
-I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net). 
+I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net).
+
+## GROOVIE Engine
+
+x
 
 ## Proprietary file formats (*.RL, *.GJD, *.VDX)
 
