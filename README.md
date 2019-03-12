@@ -22,7 +22,7 @@
 <LI><a href="#1.26">1.26</a>
 <LI><a href="#1.30">1.30</a>
 <LI><a href="#2.x">2.x</a>
-<LI><a href="#switches">CLI switches</a>
+<LI><a href="#CLI-switches">CLI switches</a>
 </OL>
 </li>
 <li><a href="#proprietary-file-formats-rl-gjd-vdx">Proprietary file formats</a>
@@ -89,11 +89,11 @@ XMS driver version 3.0 installed
 00,300 ticks per second internal clock
 ```
 
-### Switches
+### CLI switches
 
-```v !```: launch the game normally
+```v !``` launch the game normally
 
-``` v @```: launch the game into a DEMO mode
+``` v @``` launch the game into a DEMO mode
 
 ## Proprietary file formats (*.RL, *.GJD, *.VDX)
 
