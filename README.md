@@ -66,7 +66,24 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 ### 1.26
 
-Blah
+This is the original executable that shipped with the game in 1993.
+
+```
+GROOVIE Player (c) 1993 Trilobyte
+Version 1.26: 05/20/93 @ 15:54:08
+
+VESA Compatible video card
+
+Mouse driver installed
+
+Running on an 80486DX CPU
+
+XMS driver version 3.0 installed
+ - 15,168 KBytes largest free XMS block
+
+16,384 bytes for DMA transfer
+00,300 ticks per second internal clock
+```
 
 | Specification | GROOVIE |
 | --- | --- |
