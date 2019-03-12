@@ -19,9 +19,9 @@
 </li>
 <li><a href="#GROOVIE-engine">GROOVIE engine</a>
 <OL TYPE="a">
-<LI><a href="#1.26">126</a>
-<LI><a href="#1.30">130</a>
-<LI><a href="#2.x">2x</a>
+<LI><a href="#126">1.26</a>
+<LI><a href="#130">1.30</a>
+<LI><a href="#2x">2.x</a>
 <LI><a href="#CLI-switches">CLI switches</a>
 </OL>
 </li>
