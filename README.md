@@ -54,7 +54,7 @@ There is something incredibly zen about this piece of technology that came out o
 
 I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net).
 
-## GROOVIE Engine
+# GROOVIE Engine
 
 ### 1.26
 
@@ -97,7 +97,7 @@ XMS driver version 3.0 installed
 
 ```v <filename>``` Attempts to open the specified file. Unknown functionality at this time.
 
-## Proprietary file formats (*.RL, *.GJD, *.VDX)
+# Proprietary file formats (*.RL, *.GJD, *.VDX)
 
 At a high level, a GJD file is a raw binary that contains a bunch of VDX files separated by a 1-byte buffer (FF).
 
