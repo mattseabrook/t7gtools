@@ -64,7 +64,11 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 ## GROOVIE Engine
 
-x
+### 1.26
+
+|--|--
+|file|V.EXE
+|size|24,473 KB
 
 ## Proprietary file formats (*.RL, *.GJD, *.VDX)
 
