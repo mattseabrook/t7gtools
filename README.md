@@ -76,6 +76,12 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 This is the original executable the CD-ROM shipped with in 199x.
 
+It is referenced in the ```readme.txt``` file for the Trilobyte ```1.30``` patch, but I do not have access to a copy to conduct testing.
+
+### 1.24
+
+Same as above.
+
 ### 1.26
 
 This is the executable currently posted on Steam. It could be, for some reason I won't be looking into, the most compatible with ScummVM. 
