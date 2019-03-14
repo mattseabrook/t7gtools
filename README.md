@@ -19,14 +19,14 @@
 </li>
 <li><a href="#GROOVIE-engine">GROOVIE engine</a>
 <OL TYPE="a">
-<LI><a href="#126">MS-DOS</a>
+<LI><a href="#ms-dos">MS-DOS</a>
 <OL TYPE="a">
 <LI><a href="#126">1.26</a>
 <LI><a href="#130">1.30</a>
 </OL>
 <LI><a href="#windows">Windows</a>
 <OL TYPE="a">
-<LI><a href="#126">Trilobyte Media Player (v32tng.exe)</a>
+<LI><a href="#trilobyte-media-player-v32tngexe">Trilobyte Media Player (v32tng.exe)</a>
 </OL>
 <LI><a href="#CLI-switches">CLI switches</a>
 </OL>
