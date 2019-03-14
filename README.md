@@ -19,12 +19,12 @@
 </li>
 <li><a href="#GROOVIE-engine">GROOVIE engine</a>
 <OL TYPE="a">
-<LI><a href="#126">DOS</a>
+<LI><a href="#126">MS-DOS</a>
 <OL TYPE="a">
 <LI><a href="#126">1.26</a>
 <LI><a href="#130">1.30</a>
 </OL>
-<LI><a href="#130">Windows</a>
+<LI><a href="#windows">Windows</a>
 <OL TYPE="a">
 <LI><a href="#126">Trilobyte Media Player (v32tng.exe)</a>
 </OL>
@@ -69,6 +69,12 @@ There is something incredibly zen about this piece of technology that came out o
 I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net).
 
 # GROOVIE Engine
+
+## MS-DOS
+
+### 1.22
+
+This is the original executable the CD-ROM shipped with in 199x.
 
 ### 1.26
 
@@ -136,7 +142,13 @@ XMS driver version 3.0 installed
    300 ticks per second internal clock
 ```
 
-### CLI switches
+## Windows
+
+### Trilobyte Media Player (v32tng.exe)
+
+xxx
+
+## CLI switches
 
 ```v !``` launch the game normally
 
