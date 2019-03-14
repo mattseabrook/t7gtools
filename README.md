@@ -66,19 +66,19 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 ### 1.26
 
-This is the original executable that shipped with the game in 1993. 
+This is the executable currently posted on Steam. It could be, for some reason I won't be looking into, the most compatible with ScummVM. 
 
 | Specification | GROOVIE |
 | --- | --- |
 |file|V.EXE|
-|size|24,473 B|
-|header|32 B|
-|image|21,441 B|
-|overlay|0 B|
+|size (bytes)|21,473|
+|header (bytes)|32|
+|image (bytes)|21,441|
+|overlay (bytes)|0|
 |compression|LZEXE 0.91 / 1.00a|
-|decompressed size|97416 B|
+|decompressed size (bytes)|97,416|
 
-Default execution:
+**Default execution**:
 
 ```
 GROOVIE Player (c) 1993 Trilobyte
@@ -95,6 +95,39 @@ XMS driver version 3.0 installed
 
 16,384 bytes for DMA transfer
 00,300 ticks per second internal clock
+```
+
+### 1.30
+
+This patch reduces the conventional memory requirement to 450K~. 
+
+| Specification | GROOVIE |
+| --- | --- |
+|file|V.EXE|
+|size (bytes)|23,425|
+|header (bytes)|32|
+|image (bytes)|23,393|
+|overlay (bytes)|0|
+|compression|LZEXE 0.91 / 1.00a|
+|decompressed size (bytes)|102,072|
+
+**Default execution**:
+
+```
+GROOVIE Player (c) 1993 Trilobyte
+Version 1.30: 07/16/93 @ 14:52:40
+
+VESA compatible video card
+
+Mouse driver installed
+
+Running on an 80486DX CPU
+
+XMS driver version 3.0 installed
+ - 15,168 KBytes largest free XMS block
+
+16,384 bytes for DMA transfer
+   300 ticks per second internal clock
 ```
 
 ### CLI switches
