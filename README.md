@@ -43,6 +43,8 @@
 </OL>
 </li>
 </li>
+<li><a href="#reverse-engineering">Reverse Engineering</a>
+</li>
 <li><a href="#usage">Usage</a>
 </li>
 <li><a href="#todo">TODO</a>
@@ -287,6 +289,10 @@ x
 ### 0x80 - Raw WAV audio data
 
 x
+
+# Reverse Engineering
+
+This is where we will outline the process of retrieving the raw ```640x480``` bitmap frame data contained in the ```*.VDX``` files.
 
 # Usage
 
