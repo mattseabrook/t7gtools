@@ -21,8 +21,9 @@
 <OL TYPE="a">
 <LI><a href="#ms-dos">MS-DOS</a>
 <OL TYPE="a">
-<LI><a href="#126">1.26</a>
 <LI><a href="#130">1.30</a>
+<LI><a href="#126">1.26</a>
+<LI><a href="#legacy-versions">Legacy versions</a>
 </OL>
 <LI><a href="#windows">Windows</a>
 <OL TYPE="a">
@@ -55,11 +56,9 @@
 
 <img src="https://www.mattseabrook.net/github/t7gtools/asciihouse.png">
 
-This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](https://en.wikipedia.org/wiki/The_7th_Guest). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
-
 ## Overview
 
-The primary reason for this project was for me to dive back into C++ head first with some interesting subject matter. Through these experiments I have explored file I/O, compression, streaming, and efficient low-level use of resources.
+This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](https://en.wikipedia.org/wiki/The_7th_Guest). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
 
 This document covers the full taxonomy of my custom C++ software, as well as my research into ```The 7th Guest```.
 
@@ -81,15 +80,38 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 ## MS-DOS
 
-### 1.22
+### 1.30
 
-This is the original executable the CD-ROM shipped with in 199x.
+This patch reduces the conventional memory requirement to 450K~. 
 
-It is referenced in the ```readme.txt``` file for the Trilobyte ```1.30``` patch, but I do not have access to a copy to conduct testing.
+| Specification | GROOVIE |
+| --- | --- |
+|file|V.EXE|
+|size (bytes)|23,425|
+|header (bytes)|32|
+|image (bytes)|23,393|
+|overlay (bytes)|0|
+|compression|LZEXE 0.91 / 1.00a|
+|decompressed size (bytes)|102,072|
 
-### 1.24
+**Default execution**:
 
-Same as above.
+```
+GROOVIE Player (c) 1993 Trilobyte
+Version 1.30: 07/16/93 @ 14:52:40
+
+VESA compatible video card
+
+Mouse driver installed
+
+Running on an 80486DX CPU
+
+XMS driver version 3.0 installed
+ - 15,168 KBytes largest free XMS block
+
+16,384 bytes for DMA transfer
+   300 ticks per second internal clock
+```
 
 ### 1.26
 
@@ -124,38 +146,17 @@ XMS driver version 3.0 installed
 00,300 ticks per second internal clock
 ```
 
-### 1.30
+### Legacy versions
 
-This patch reduces the conventional memory requirement to 450K~. 
+**1.22**
 
-| Specification | GROOVIE |
-| --- | --- |
-|file|V.EXE|
-|size (bytes)|23,425|
-|header (bytes)|32|
-|image (bytes)|23,393|
-|overlay (bytes)|0|
-|compression|LZEXE 0.91 / 1.00a|
-|decompressed size (bytes)|102,072|
+This is the original executable the CD-ROM shipped with in 1991.
 
-**Default execution**:
+It is referenced in the ```readme.txt``` file for the Trilobyte ```1.30``` patch, but I do not have access to a copy to conduct testing.
 
-```
-GROOVIE Player (c) 1993 Trilobyte
-Version 1.30: 07/16/93 @ 14:52:40
+**1.24**
 
-VESA compatible video card
-
-Mouse driver installed
-
-Running on an 80486DX CPU
-
-XMS driver version 3.0 installed
- - 15,168 KBytes largest free XMS block
-
-16,384 bytes for DMA transfer
-   300 ticks per second internal clock
-```
+Same as above.
 
 ### Debug
 
