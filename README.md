@@ -42,6 +42,9 @@
 </OL>
 </OL>
 </li>
+</li>
+<li><a href="#usage">Usage</a>
+</li>
 <li><a href="#todo">TODO</a>
 </li>
 </ol>
