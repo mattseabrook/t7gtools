@@ -247,11 +247,25 @@ Here's the new tool extracting all of the VDX files from DR.RL:
 
 ### VDX
 
-Endianness: Little Endian
+**Endianness**: Little Endian
+
+#### Header
 
 | Type | Bytes | Description
 | --- | --- | --- |
 |uint16|2|Identifier|
+|byte|6|Unknown|
+
+#### Block header
+
+| Type | Bytes | Description
+| --- | --- | --- |
+|byte|1|Identifies the type of data stored in the VDX data chunk (block.)|
+|byte|1|Unknown|
+|uint32|4|VDX chunk/block size in bytes.|
+|byte|1|Length Mask|
+|byte|1|Length Bits|
+|byte|x|Raw VDX chunk/block data.|
 
 ## TODO
 
