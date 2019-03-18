@@ -231,7 +231,7 @@ The following diagram illustrates the relationship between the 3 file types:
 
 <img src="https://www.mattseabrook.net/github/t7gtools/filearchitecture.png">
 
-### RL
+## RL
 
 Here's DR.RL under a microscope (*Dining Room, DR.GJD containing VDX asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.*)
 
@@ -239,35 +239,53 @@ The last 4 bytes in the sequence provide you the file size of each VDX file:
 
 <img src="https://www.mattseabrook.net/github/t7gtools/hex.png">
 
-### GJD
+## GJD
 
 Here's the new tool extracting all of the VDX files from DR.RL:
 
 <img src="https://www.mattseabrook.net/github/t7gtools/gjd.gif">
 
-### VDX
+## VDX
 
 **Endianness**: Little Endian
 
-#### Header
+### Header
 
 | Type | Bytes | Description
 | --- | --- | --- |
 |uint16|2|Identifier|
 |byte|6|Unknown|
 
-#### Block header
+## Block header
 
 | Type | Bytes | Description
 | --- | --- | --- |
-|byte|1|Identifies the type of data stored in the VDX data chunk (block.)|
+|byte|1|Identifies the type of data stored in the VDX data chunk (block.) Types are as follows:
+
+**0x00**: Unknown, |
 |byte|1|Unknown|
 |uint32|4|VDX chunk/block size in bytes.|
 |byte|1|Length Mask|
 |byte|1|Length Bits|
 |byte|x|Raw VDX chunk/block data.|
 
-## TODO
+## 0x00
+
+x
+
+## 0x20 - Bitmap frame data
+
+x
+
+## 0x25 - Delta bitmap frame data
+
+x
+
+## 0x?? - Raw WAV audio data
+
+x
+
+# TODO
 
 Notes/To-do list:
 
