@@ -36,6 +36,10 @@
 <LI><a href="#rl">RL</a>
 <LI><a href="#gjd">GJD</a>
 <LI><a href="#vdx">VDX</a>
+<OL TYPE="a">
+<LI><a href="#header">Header</a>
+<LI><a href="#chunk-header">Chunk header</a>
+</OL>
 </OL>
 </li>
 <li><a href="#todo">TODO</a>
@@ -150,7 +154,7 @@ XMS driver version 3.0 installed
 
 ### Debug
 
-For the purposes of my research I am focusing on the synchronous interactions ```V.EXE``` performs with the file system. This is the lowest effort strategy to reconstruct the architecture of the engine/game. The following information has been collected using the ```DOSBox debugger``` utility.
+For the purposes of my research I am focusing on the synchronous interactions ```V.EXE``` performs with the file system. This is the lowest effort strategy to reconstruct the architecture of the engine/game. The following information has been collected using the ```DOSBox debugger``` utility:
 
 ```asm
 17994083: EXEC:Parsing command line: v !
@@ -241,9 +245,7 @@ The last 4 bytes in the sequence provide you the file size of each VDX file:
 
 ## GJD
 
-Here's the new tool extracting all of the VDX files from DR.RL:
-
-<img src="https://www.mattseabrook.net/github/t7gtools/gjd.gif">
+x
 
 ## VDX
 
@@ -256,32 +258,40 @@ Here's the new tool extracting all of the VDX files from DR.RL:
 |uint16|2|Identifier|
 |byte|6|Unknown|
 
-## Block header
+### Chunk header
 
 | Type | Bytes | Description
 | --- | --- | --- |
-|byte|1|Identifies the type of data stored in the VDX data chunk (block.) Types are as follows:<br />**0x00**: Unknown, |
+|byte|1|Identifies the type of data stored in the VDX data chunk block. Types are as follows:<br />&nbsp;<br />**0x00**: Unknown. |
 |byte|1|Unknown|
-|uint32|4|VDX chunk/block size in bytes.|
+|uint32|4|VDX chunk size in bytes.|
 |byte|1|Length Mask|
 |byte|1|Length Bits|
-|byte|x|Raw VDX chunk/block data.|
+|byte|x|Raw VDX chunk data.|
 
-## 0x00
-
-x
-
-## 0x20 - Bitmap frame data
+### 0x00
 
 x
 
-## 0x25 - Delta bitmap frame data
+### 0x20 - Bitmap frame data
 
 x
 
-## 0x?? - Raw WAV audio data
+### 0x25 - Delta bitmap frame data
 
 x
+
+### 0x?? - Raw WAV audio data
+
+x
+
+# Usage
+
+## ?
+
+Here's the new tool extracting all of the VDX files from DR.RL:
+
+<img src="https://www.mattseabrook.net/github/t7gtools/gjd.gif">
 
 # TODO
 
