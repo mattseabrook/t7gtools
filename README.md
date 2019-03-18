@@ -260,9 +260,7 @@ Here's the new tool extracting all of the VDX files from DR.RL:
 
 | Type | Bytes | Description
 | --- | --- | --- |
-|byte|1|Identifies the type of data stored in the VDX data chunk (block.) Types are as follows:
-
-**0x00**: Unknown, |
+|byte|1|Identifies the type of data stored in the VDX data chunk (block.) Types are as follows:<br />**0x00**: Unknown, |
 |byte|1|Unknown|
 |uint32|4|VDX chunk/block size in bytes.|
 |byte|1|Length Mask|
