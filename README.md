@@ -284,7 +284,7 @@ x
 
 x
 
-### 0x?? - Raw WAV audio data
+### 0x80 - Raw WAV audio data
 
 x
 
