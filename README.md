@@ -247,7 +247,11 @@ Here's the new tool extracting all of the VDX files from DR.RL:
 
 ### VDX
 
-TBD.
+Endianness: Little Endian
+
+| Type | Bytes | Description
+| --- | --- | --- |
+|uint16|2|Identifier|
 
 ## TODO
 
