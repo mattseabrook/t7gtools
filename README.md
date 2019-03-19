@@ -76,6 +76,8 @@ There is something incredibly zen about this piece of technology that came out o
 
 I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net).
 
+<a href="#table-of-contents">&#x2191; Top</a>
+
 # GROOVIE Engine
 
 ## MS-DOS
@@ -113,6 +115,8 @@ XMS driver version 3.0 installed
    300 ticks per second internal clock
 ```
 
+<a href="#table-of-contents">&#x2191; Top</a>
+
 ### 1.26
 
 This is the executable currently posted on Steam. It could be, for some reason I won't be looking into, the most compatible with ScummVM. 
@@ -146,6 +150,8 @@ XMS driver version 3.0 installed
 00,300 ticks per second internal clock
 ```
 
+<a href="#table-of-contents">&#x2191; Top</a>
+
 ### Legacy versions
 
 **1.22**
@@ -157,6 +163,8 @@ It is referenced in the ```readme.txt``` file for the Trilobyte ```1.30``` patch
 **1.24**
 
 Same as above.
+
+<a href="#table-of-contents">&#x2191; Top</a>
 
 ### Debug
 
@@ -215,11 +223,15 @@ For the purposes of my research I am focusing on the synchronous interactions ``
 362153484: EXEC:Parsing command line: exit
 ```
 
+<a href="#table-of-contents">&#x2191; Top</a>
+
 ## Windows
 
 ### Trilobyte Media Player (v32tng.exe)
 
 xxx
+
+<a href="#table-of-contents">&#x2191; Top</a>
 
 ## CLI switches
 
@@ -228,6 +240,8 @@ xxx
 ``` v @``` launch the game into a DEMO mode
 
 ```v <filename>``` Attempts to open the specified file. Unknown functionality at this time, but it is assumed the end-user supplies a *.GRV (custom script/player instructions for the GROOVIE engine) file. 
+
+<a href="#table-of-contents">&#x2191; Top</a>
 
 # Proprietary file formats (*.RL, *.GJD, *.VDX)
 
@@ -241,6 +255,8 @@ The following diagram illustrates the relationship between the 3 file types:
 
 <img src="https://www.mattseabrook.net/github/t7gtools/filearchitecture.png">
 
+<a href="#table-of-contents">&#x2191; Top</a>
+
 ## RL
 
 Here's DR.RL under a microscope (*Dining Room, DR.GJD containing VDX asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.*)
@@ -249,9 +265,13 @@ The last 4 bytes in the sequence provide you the file size of each VDX file:
 
 <img src="https://www.mattseabrook.net/github/t7gtools/hex.png">
 
+<a href="#table-of-contents">&#x2191; Top</a>
+
 ## GJD
 
 x
+
+<a href="#table-of-contents">&#x2191; Top</a>
 
 ## VDX
 
@@ -264,6 +284,8 @@ x
 |uint16|2|Identifier|
 |byte|6|Unknown|
 
+<a href="#table-of-contents">&#x2191; Top</a>
+
 ### Chunk header
 
 | Type | Bytes | Description
@@ -274,6 +296,8 @@ x
 |byte|1|Length Mask|
 |byte|1|Length Bits|
 |byte|x|Raw VDX chunk data.|
+
+<a href="#table-of-contents">&#x2191; Top</a>
 
 ### 0x00
 
@@ -291,9 +315,13 @@ x
 
 x
 
+<a href="#table-of-contents">&#x2191; Top</a>
+
 # Reverse Engineering
 
 This is where we will outline the process of retrieving the raw ```640x480``` bitmap frame data contained in the ```*.VDX``` files.
+
+<a href="#table-of-contents">&#x2191; Top</a>
 
 # Usage
 
@@ -302,6 +330,8 @@ This is where we will outline the process of retrieving the raw ```640x480``` bi
 Here's the new tool extracting all of the VDX files from DR.RL:
 
 <img src="https://www.mattseabrook.net/github/t7gtools/gjd.gif">
+
+<a href="#table-of-contents">&#x2191; Top</a>
 
 # TODO
 
