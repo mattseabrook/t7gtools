@@ -229,7 +229,7 @@ For the purposes of my research I am focusing on the synchronous interactions ``
 
 ### Trilobyte Media Player (v32tng.exe)
 
-xxx
+*Coming soon*!
 
 <a href="#table-of-contents">&#x2191; Top</a>
 
@@ -243,7 +243,7 @@ xxx
 
 <a href="#table-of-contents">&#x2191; Top</a>
 
-# Proprietary file formats (*.RL, *.GJD, *.VDX)
+# Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)
 
 At a high level, a GJD file is a raw binary that contains a bunch of VDX (and other media) files separated by a 1-byte buffer (FF).
 
@@ -256,6 +256,14 @@ The following diagram illustrates the relationship between the 3 file types:
 <img src="https://www.mattseabrook.net/github/t7gtools/filearchitecture.png">
 
 <a href="#table-of-contents">&#x2191; Top</a>
+
+## GRV
+
+Proprietary script files for the ```GROOVIE``` engine. They provide the engine instructions on which assets to load, how to configure the various game scenes, and presumably the state information required for the puzzles is in there as well.
+
+*More coming!*
+
+(See opcodes)
 
 ## RL
 
