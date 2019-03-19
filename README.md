@@ -308,3 +308,5 @@ Here's the new tool extracting all of the VDX files from DR.RL:
 Notes/To-do list:
 
 - VDX file architecture- reverse engineer LZSS algo
+
+<a href="#table-of-contents">&#x2191; Top</a>
