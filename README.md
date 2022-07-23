@@ -37,8 +37,11 @@ The 7th Guest was a popular CD-ROM game, release in 1991. This repository contai
 - [Reverse Engineering](#reverse-engineering)
   - [GROOVIE](#groovie)
     - [Debug](#debug)
-  - [VDX Bitmap Data](#vdx-bitmap-data)
-- [Usage](#usage-1)
+  - [Bitmap Data](#bitmap-data)
+  - [Audio Data](#audio-data)
+  - [MIDI Data](#midi-data)
+- [Developers](#developers)
+  - [Statically Linked Executable](#statically-linked-executable)
 - [TODO](#todo)
 
 # Overview
@@ -287,11 +290,25 @@ For the purposes of my research I am focusing on the synchronous interactions ``
 362153484: EXEC:Parsing command line: exit
 ```
 
-## VDX Bitmap Data
+## Bitmap Data
 
 This is where we will outline the process of retrieving the raw ```640x480``` bitmap frame data contained in the ```*.VDX``` files.
 
-# Usage
+## Audio Data
+
+x
+
+## MIDI Data
+
+x
+
+# Developers
+
+## Statically Linked Executable
+
+```text
+glfw3.lib; opengl32.lib; user32.lib; gdi32.lib; shell32.lib
+```
 
 x
 
