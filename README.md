@@ -1,10 +1,18 @@
 # t7gtools
 
 The 7th Guest was a popular CD-ROM game, release in 1991. This repository contains the source code for the reverse engineering tools I've created for it.
-
+<pre>
+""8"" eeeee 8""""8                               
+  8   8   8 8    " eeeee eeeee eeeee e     eeeee 
+  8e     e' 8e       8   8  88 8  88 8     8   " 
+  88    e'  88  ee   8e  8   8 8   8 8e    8eeee 
+  88    8   88   8   88  8   8 8   8 88       88 
+  88    8   88eee8   88  8eee8 8eee8 88eee 8ee88
+</pre>
 **Table-of-Contents**
 - [t7gtools](#t7gtools)
 - [Overview](#overview)
+  - [Usage](#usage)
   - [Inspiration](#inspiration)
   - [For more information...](#for-more-information)
 - [GROOVIE Engine](#groovie-engine)
@@ -30,23 +38,18 @@ The 7th Guest was a popular CD-ROM game, release in 1991. This repository contai
   - [GROOVIE](#groovie)
     - [Debug](#debug)
   - [VDX Bitmap Data](#vdx-bitmap-data)
-- [Usage](#usage)
+- [Usage](#usage-1)
 - [TODO](#todo)
 
 # Overview
 
-<pre>
-""8"" eeeee 8""""8                               
-  8   8   8 8    " eeeee eeeee eeeee e     eeeee 
-  8e     e' 8e       8   8  88 8  88 8     8   " 
-  88    e'  88  ee   8e  8   8 8   8 8e    8eeee 
-  88    8   88   8   88  8   8 8   8 88       88 
-  88    8   88eee8   88  8eee8 8eee8 88eee 8ee88
-</pre>
-
 This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](https://en.wikipedia.org/wiki/The_7th_Guest). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
 
 This document covers the full taxonomy of my custom C++ software, as well as my research into ```The 7th Guest```. I hope you enjoy it!
+
+## Usage
+
+x
 
 ## Inspiration
 
