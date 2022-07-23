@@ -41,8 +41,12 @@ The 7th Guest was a popular CD-ROM game, release in 1991. This repository contai
   - [Audio Data](#audio-data)
   - [MIDI Data](#midi-data)
 - [Developers](#developers)
+  - [Dependencies](#dependencies)
   - [Statically Linked Executable](#statically-linked-executable)
 - [TODO](#todo)
+  - [General](#general)
+  - [Reverse Eng](#reverse-eng)
+  - [Documentation](#documentation)
 
 # Overview
 
@@ -304,6 +308,12 @@ x
 
 # Developers
 
+## Dependencies
+
+| Library | Description              | Version | Link                                           |
+| ------- | ------------------------ | ------- | ---------------------------------------------- |
+| GLFW    | OpenGL windowing library | 3.3     | [https://www.glfw.org/](https://www.glfw.org/) |
+
 ## Statically Linked Executable
 
 ```text
@@ -314,7 +324,16 @@ x
 
 # TODO
 
+## General
+
+- [ ] Port over code from existing projects that are further ahead
+  
+## Reverse Eng
+
 - [ ] Add support for extracting audio data from VDX files.
 - [ ] Add support for extracting bitmap data from VDX files.
+
+## Documentation
+
 - [ ] Document VDX file architecture
-- [ ] Document & reverse engineer LZSS algo
+- [ ] Document LZSS algo (`clang` -> `llvm` -> `dot`)
