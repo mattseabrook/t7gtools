@@ -1,3 +1,19 @@
+# t7gtools
+
+Table-of-Contents
+
+1. [t7gtools](#t7gtools)
+2. [Overview](#overview)
+   1. [Inspiration](#inspiration)
+   2. [For more information...](#for-more-information)
+3. [GROOVIE Engine](#groovie-engine)
+
+
+
+
+
+# Overview
+
 <pre>
 ""8"" eeeee 8""""8                               
   8   8   8 8    " eeeee eeeee eeeee e     eeeee 
@@ -7,76 +23,17 @@
   88    8   88eee8   88  8eee8 8eee8 88eee 8ee88
 </pre>
 
-<h3 id="toc">Table-of-Contents</h1>
-
-<ol>
-<li><a href="#introduction">Introduction</a>
-<OL TYPE="a">
-<LI><a href="#overview">Overview</a>
-<LI><a href="#inspiration">Inspiration</a>
-<LI><a href="#for-more-information">For more information...</a>
-</OL>
-</li>
-<li><a href="#GROOVIE-engine">GROOVIE engine</a>
-<OL TYPE="a">
-<LI><a href="#ms-dos">MS-DOS</a>
-<OL TYPE="a">
-<LI><a href="#130">1.30</a>
-<LI><a href="#126">1.26</a>
-<LI><a href="#legacy-versions">Legacy versions</a>
-</OL>
-<LI><a href="#windows">Windows</a>
-<OL TYPE="a">
-<LI><a href="#trilobyte-media-player-v32tngexe">Trilobyte Media Player (v32tng.exe)</a>
-</OL>
-<LI><a href="#CLI-switches">CLI switches</a>
-</OL>
-</li>
-<li><a href="#proprietary-file-formats-rl-gjd-vdx">Proprietary file formats</a>
-<OL TYPE="a">
-<LI><a href="#rl">RL</a>
-<LI><a href="#gjd">GJD</a>
-<LI><a href="#vdx">VDX</a>
-<OL TYPE="a">
-<LI><a href="#header">Header</a>
-<LI><a href="#chunk-header">Chunk header</a>
-</OL>
-</OL>
-</li>
-</li>
-<li><a href="#reverse-engineering">Reverse Engineering</a>
-</li>
-<li><a href="#usage">Usage</a>
-</li>
-<li><a href="#todo">TODO</a>
-</li>
-</ol>
-
-<h1 id="introduction">Welcome to my... project :)</h1>
-
-<img src="https://www.mattseabrook.net/github/t7gtools/asciihouse.png">
-
-## Overview
-
 This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](https://en.wikipedia.org/wiki/The_7th_Guest). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
 
-This document covers the full taxonomy of my custom C++ software, as well as my research into ```The 7th Guest```.
+This document covers the full taxonomy of my custom C++ software, as well as my research into ```The 7th Guest```. I hope you enjoy it!
 
-- Download
-- Usage
-- Features link
-- Engine
-- File formats/design
-
-### Inspiration
+## Inspiration
 
 There is something incredibly zen about this piece of technology that came out of the true golden age of personal computing that occured in the late 1980's to early 1990's. There are lots of angles to explore here. The software is essentially an exhibition that pushed the limits with both the usage of modern day tools (such as Autodesk Animator/earliest versions of 3D Studio Max) and available hardware of the time (Intel 80386DX.) It's a hobby of mine to explore software such as this, to learn from it's efficiency and low-level practices.
 
-### For more information...
+## For more information...
 
 I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net).
-
-<a href="#table-of-contents">&#x2191; Top</a>
 
 # GROOVIE Engine
 
@@ -86,15 +43,15 @@ I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabro
 
 This patch reduces the conventional memory requirement to 450K~. 
 
-| Specification | GROOVIE |
-| --- | --- |
-|file|V.EXE|
-|size (bytes)|23,425|
-|header (bytes)|32|
-|image (bytes)|23,393|
-|overlay (bytes)|0|
-|compression|LZEXE 0.91 / 1.00a|
-|decompressed size (bytes)|102,072|
+| Specification             | GROOVIE            |
+| ------------------------- | ------------------ |
+| file                      | V.EXE              |
+| size (bytes)              | 23,425             |
+| header (bytes)            | 32                 |
+| image (bytes)             | 23,393             |
+| overlay (bytes)           | 0                  |
+| compression               | LZEXE 0.91 / 1.00a |
+| decompressed size (bytes) | 102,072            |
 
 **Default execution**:
 
@@ -121,15 +78,15 @@ XMS driver version 3.0 installed
 
 This is the executable currently posted on Steam. It could be, for some reason I won't be looking into, the most compatible with ScummVM. 
 
-| Specification | GROOVIE |
-| --- | --- |
-|file|V.EXE|
-|size (bytes)|21,473|
-|header (bytes)|32|
-|image (bytes)|21,441|
-|overlay (bytes)|0|
-|compression|LZEXE 0.91 / 1.00a|
-|decompressed size (bytes)|97,416|
+| Specification             | GROOVIE            |
+| ------------------------- | ------------------ |
+| file                      | V.EXE              |
+| size (bytes)              | 21,473             |
+| header (bytes)            | 32                 |
+| image (bytes)             | 21,441             |
+| overlay (bytes)           | 0                  |
+| compression               | LZEXE 0.91 / 1.00a |
+| decompressed size (bytes) | 97,416             |
 
 **Default execution**:
 
@@ -163,8 +120,6 @@ It is referenced in the ```readme.txt``` file for the Trilobyte ```1.30``` patch
 **1.24**
 
 Same as above.
-
-<a href="#table-of-contents">&#x2191; Top</a>
 
 ### Debug
 
@@ -287,23 +242,23 @@ x
 
 ### Header
 
-| Type | Bytes | Description
-| --- | --- | --- |
-|uint16|2|Identifier|
-|byte|6|Unknown|
+| Type   | Bytes | Description |
+| ------ | ----- | ----------- |
+| uint16 | 2     | Identifier  |
+| byte   | 6     | Unknown     |
 
 <a href="#table-of-contents">&#x2191; Top</a>
 
 ### Chunk header
 
-| Type | Bytes | Description
-| --- | --- | --- |
-|byte|1|Identifies the type of data stored in the VDX data chunk block. Types are as follows:<br />&nbsp;<br />**0x00**: Unknown. |
-|byte|1|Unknown|
-|uint32|4|VDX chunk size in bytes.|
-|byte|1|Length Mask|
-|byte|1|Length Bits|
-|byte|x|Raw VDX chunk data.|
+| Type   | Bytes | Description                                                                                                               |
+| ------ | ----- | ------------------------------------------------------------------------------------------------------------------------- |
+| byte   | 1     | Identifies the type of data stored in the VDX data chunk block. Types are as follows:<br />&nbsp;<br />**0x00**: Unknown. |
+| byte   | 1     | Unknown                                                                                                                   |
+| uint32 | 4     | VDX chunk size in bytes.                                                                                                  |
+| byte   | 1     | Length Mask                                                                                                               |
+| byte   | 1     | Length Bits                                                                                                               |
+| byte   | x     | Raw VDX chunk data.                                                                                                       |
 
 <a href="#table-of-contents">&#x2191; Top</a>
 
@@ -333,18 +288,11 @@ This is where we will outline the process of retrieving the raw ```640x480``` bi
 
 # Usage
 
-## ?
-
-Here's the new tool extracting all of the VDX files from DR.RL:
-
-<img src="https://www.mattseabrook.net/github/t7gtools/gjd.gif">
-
-<a href="#table-of-contents">&#x2191; Top</a>
+x
 
 # TODO
 
-Notes/To-do list:
-
-- VDX file architecture- reverse engineer LZSS algo
-
-<a href="#table-of-contents">&#x2191; Top</a>
+- [ ] Add support for extracting audio data from VDX files.
+- [ ] Add support for extracting bitmap data from VDX files.
+- [ ] Document VDX file architecture
+- [ ] Document & reverse engineer LZSS algo
