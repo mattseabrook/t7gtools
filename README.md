@@ -1,16 +1,35 @@
 # t7gtools
 
-Table-of-Contents
+The 7th Guest was a popular CD-ROM game, release in 1991. This repository contains the source code for the reverse engineering tools I've created for it.
 
-1. [t7gtools](#t7gtools)
-2. [Overview](#overview)
-   1. [Inspiration](#inspiration)
-   2. [For more information...](#for-more-information)
-3. [GROOVIE Engine](#groovie-engine)
-
-
-
-
+**Table-of-Contents**
+- [t7gtools](#t7gtools)
+- [Overview](#overview)
+  - [Inspiration](#inspiration)
+  - [For more information...](#for-more-information)
+- [GROOVIE Engine](#groovie-engine)
+  - [MS-DOS](#ms-dos)
+    - [1.30](#130)
+    - [1.26](#126)
+    - [Legacy versions](#legacy-versions)
+    - [Debug](#debug)
+  - [Windows](#windows)
+    - [Trilobyte Media Player (v32tng.exe)](#trilobyte-media-player-v32tngexe)
+  - [CLI switches](#cli-switches)
+- [Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)](#proprietary-file-formats-grv-rl-gjd-vdx)
+  - [GRV](#grv)
+  - [RL](#rl)
+  - [GJD](#gjd)
+  - [VDX](#vdx)
+    - [Header](#header)
+    - [Chunk header](#chunk-header)
+    - [0x00](#0x00)
+    - [0x20 - Bitmap frame data](#0x20---bitmap-frame-data)
+    - [0x25 - Delta bitmap frame data](#0x25---delta-bitmap-frame-data)
+    - [0x80 - Raw WAV audio data](#0x80---raw-wav-audio-data)
+- [Reverse Engineering](#reverse-engineering)
+- [Usage](#usage)
+- [TODO](#todo)
 
 # Overview
 
