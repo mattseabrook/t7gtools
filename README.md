@@ -12,7 +12,6 @@ The 7th Guest was a popular CD-ROM game, release in 1991. This repository contai
     - [1.30](#130)
     - [1.26](#126)
     - [Legacy versions](#legacy-versions)
-    - [Debug](#debug)
   - [Windows](#windows)
     - [Trilobyte Media Player (v32tng.exe)](#trilobyte-media-player-v32tngexe)
   - [CLI switches](#cli-switches)
@@ -28,6 +27,9 @@ The 7th Guest was a popular CD-ROM game, release in 1991. This repository contai
     - [0x25 - Delta bitmap frame data](#0x25---delta-bitmap-frame-data)
     - [0x80 - Raw WAV audio data](#0x80---raw-wav-audio-data)
 - [Reverse Engineering](#reverse-engineering)
+  - [GROOVIE](#groovie)
+    - [Debug](#debug)
+  - [VDX Bitmap Data](#vdx-bitmap-data)
 - [Usage](#usage)
 - [TODO](#todo)
 
@@ -91,8 +93,6 @@ XMS driver version 3.0 installed
    300 ticks per second internal clock
 ```
 
-<a href="#table-of-contents">&#x2191; Top</a>
-
 ### 1.26
 
 This is the executable currently posted on Steam. It could be, for some reason I won't be looking into, the most compatible with ScummVM. 
@@ -126,8 +126,6 @@ XMS driver version 3.0 installed
 00,300 ticks per second internal clock
 ```
 
-<a href="#table-of-contents">&#x2191; Top</a>
-
 ### Legacy versions
 
 **1.22**
@@ -139,6 +137,95 @@ It is referenced in the ```readme.txt``` file for the Trilobyte ```1.30``` patch
 **1.24**
 
 Same as above.
+
+## Windows
+
+### Trilobyte Media Player (v32tng.exe)
+
+*Coming soon*!
+
+## CLI switches
+
+```v !``` launch the game normally
+
+``` v @``` launch the game into a DEMO mode
+
+```v <filename>``` Attempts to open the specified file. Unknown functionality at this time, but it is assumed the end-user supplies a *.GRV (custom script/player instructions for the GROOVIE engine) file. 
+
+# Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)
+
+At a high level, a GJD file is a raw binary that contains a bunch of VDX (and other media) files separated by a 1-byte buffer (FF).
+
+```*.RL``` files are "name mapped" to ```*.GJD``` files, and are an index/directory that, for example contain a number of ```*.VDX``` files, their respective size in bytes, and the starting position of each one in the *.GJD file (offset).
+
+```*.VDX``` files contain raw animation frames and WAV format audio data.
+
+The following diagram illustrates the relationship between the 3 file types:
+
+<img src="https://www.mattseabrook.net/github/t7gtools/filearchitecture.png">
+
+## GRV
+
+Proprietary script files for the ```GROOVIE``` engine. They provide the engine instructions on which assets to load, how to configure the various game scenes, and presumably the state information required for the puzzles is in there as well.
+
+*More coming!*
+
+(See opcodes)
+
+## RL
+
+Here's DR.RL under a microscope (*Dining Room, DR.GJD containing VDX asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.*)
+
+The last 4 bytes in the sequence provide you the file size of each VDX file:
+
+<img src="https://www.mattseabrook.net/github/t7gtools/hex.png">
+
+## GJD
+
+x
+
+## VDX
+
+**Endianness**: Little Endian
+
+### Header
+
+| Type   | Bytes | Description |
+| ------ | ----- | ----------- |
+| uint16 | 2     | Identifier  |
+| byte   | 6     | Unknown     |
+
+### Chunk header
+
+| Type   | Bytes | Description                                                                                                               |
+| ------ | ----- | ------------------------------------------------------------------------------------------------------------------------- |
+| byte   | 1     | Identifies the type of data stored in the VDX data chunk block. Types are as follows:<br />&nbsp;<br />**0x00**: Unknown. |
+| byte   | 1     | Unknown                                                                                                                   |
+| uint32 | 4     | VDX chunk size in bytes.                                                                                                  |
+| byte   | 1     | Length Mask                                                                                                               |
+| byte   | 1     | Length Bits                                                                                                               |
+| byte   | x     | Raw VDX chunk data.                                                                                                       |
+
+### 0x00
+
+x
+
+### 0x20 - Bitmap frame data
+
+x
+
+### 0x25 - Delta bitmap frame data
+
+x
+
+### 0x80 - Raw WAV audio data
+
+x
+
+# Reverse Engineering
+
+## GROOVIE
+
 
 ### Debug
 
@@ -197,113 +284,9 @@ For the purposes of my research I am focusing on the synchronous interactions ``
 362153484: EXEC:Parsing command line: exit
 ```
 
-<a href="#table-of-contents">&#x2191; Top</a>
-
-## Windows
-
-### Trilobyte Media Player (v32tng.exe)
-
-*Coming soon*!
-
-<a href="#table-of-contents">&#x2191; Top</a>
-
-## CLI switches
-
-```v !``` launch the game normally
-
-``` v @``` launch the game into a DEMO mode
-
-```v <filename>``` Attempts to open the specified file. Unknown functionality at this time, but it is assumed the end-user supplies a *.GRV (custom script/player instructions for the GROOVIE engine) file. 
-
-<a href="#table-of-contents">&#x2191; Top</a>
-
-# Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)
-
-At a high level, a GJD file is a raw binary that contains a bunch of VDX (and other media) files separated by a 1-byte buffer (FF).
-
-```*.RL``` files are "name mapped" to ```*.GJD``` files, and are an index/directory that, for example contain a number of ```*.VDX``` files, their respective size in bytes, and the starting position of each one in the *.GJD file (offset).
-
-```*.VDX``` files contain raw animation frames and WAV format audio data.
-
-The following diagram illustrates the relationship between the 3 file types:
-
-<img src="https://www.mattseabrook.net/github/t7gtools/filearchitecture.png">
-
-<a href="#table-of-contents">&#x2191; Top</a>
-
-## GRV
-
-Proprietary script files for the ```GROOVIE``` engine. They provide the engine instructions on which assets to load, how to configure the various game scenes, and presumably the state information required for the puzzles is in there as well.
-
-*More coming!*
-
-(See opcodes)
-
-## RL
-
-Here's DR.RL under a microscope (*Dining Room, DR.GJD containing VDX asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.*)
-
-The last 4 bytes in the sequence provide you the file size of each VDX file:
-
-<img src="https://www.mattseabrook.net/github/t7gtools/hex.png">
-
-<a href="#table-of-contents">&#x2191; Top</a>
-
-## GJD
-
-x
-
-<a href="#table-of-contents">&#x2191; Top</a>
-
-## VDX
-
-**Endianness**: Little Endian
-
-### Header
-
-| Type   | Bytes | Description |
-| ------ | ----- | ----------- |
-| uint16 | 2     | Identifier  |
-| byte   | 6     | Unknown     |
-
-<a href="#table-of-contents">&#x2191; Top</a>
-
-### Chunk header
-
-| Type   | Bytes | Description                                                                                                               |
-| ------ | ----- | ------------------------------------------------------------------------------------------------------------------------- |
-| byte   | 1     | Identifies the type of data stored in the VDX data chunk block. Types are as follows:<br />&nbsp;<br />**0x00**: Unknown. |
-| byte   | 1     | Unknown                                                                                                                   |
-| uint32 | 4     | VDX chunk size in bytes.                                                                                                  |
-| byte   | 1     | Length Mask                                                                                                               |
-| byte   | 1     | Length Bits                                                                                                               |
-| byte   | x     | Raw VDX chunk data.                                                                                                       |
-
-<a href="#table-of-contents">&#x2191; Top</a>
-
-### 0x00
-
-x
-
-### 0x20 - Bitmap frame data
-
-x
-
-### 0x25 - Delta bitmap frame data
-
-x
-
-### 0x80 - Raw WAV audio data
-
-x
-
-<a href="#table-of-contents">&#x2191; Top</a>
-
-# Reverse Engineering
+## VDX Bitmap Data
 
 This is where we will outline the process of retrieving the raw ```640x480``` bitmap frame data contained in the ```*.VDX``` files.
-
-<a href="#table-of-contents">&#x2191; Top</a>
 
 # Usage
 
