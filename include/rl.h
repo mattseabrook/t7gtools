@@ -1,11 +1,13 @@
-// gui.h
+// rl.h
 
-#ifndef GUI_H
-#define GUI_H
+#ifndef RL_H
+#define RL_H
+
+#include <string>
 
 //===========================================================================
 
-int openWindow();
+void openRLFile(std::string filename);
 
 //===========================================================================
 
