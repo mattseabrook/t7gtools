@@ -8,8 +8,9 @@
 
 void openRLFile(std::string filename)
 {
+#ifdef _DEBUG
 	std::string rlData;
-	// Above to replaced with some validation once this all working
+#endif
 
 	std::ifstream rlFile;
 	rlFile.open(filename, std::ios::binary);
@@ -37,13 +38,14 @@ void openRLFile(std::string filename)
 				VDXFileInfo.offset = *(uint32_t*)(buffer + 12);			// $12 - $15 : Offset
 				VDXFileInfo.length = *(uint32_t*)(buffer + 16);			// $16 - $19 : Length
 
-				// Temporary for debug
+#ifdef _DEBUG
 				rlData += VDXFileInfo.filename +
 					"," +
 					std::to_string(VDXFileInfo.offset) +
 					"," +
 					std::to_string(VDXFileInfo.length) +
 					"\n";
+#endif
 
 				// Empty the buffer
 				for (int j = 0; j < 20; j++)
@@ -57,8 +59,14 @@ void openRLFile(std::string filename)
 			}
 		}
 
-		// Open a MessageBox to display rlData
+#ifdef _DEBUG
 		MessageBox(NULL, rlData.c_str(), "RL File", MB_OK);
+
+		std::ofstream rlDataFile;
+		rlDataFile.open("rlData.txt", std::ios::binary);
+		rlDataFile << rlData;
+		rlDataFile.close();
+#endif
 
 		rlFile.close();
 	}
