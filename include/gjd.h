@@ -7,7 +7,7 @@
 
 //===========================================================================
 
-void openGJDFile(std::string filename, GJDFileInfo* gjdContent);
+void openGJDFile(std::string filename, GJDFileInfo* gjdFileList);
 
 //===========================================================================
 

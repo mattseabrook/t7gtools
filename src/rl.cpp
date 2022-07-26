@@ -17,7 +17,7 @@ GJDFileInfo* openRLFile(std::string filename)
 	if (rlFile.is_open())
 	{
 		rlFile.seekg(0, std::ios::end);
-		int fileSize = rlFile.tellg();									// Size of the *.RL file in bytes
+		const int fileSize = rlFile.tellg();									// Size of the *.RL file in bytes
 		rlFile.seekg(0, std::ios::beg);
 
 		GJDFileInfo* array = new GJDFileInfo[fileSize / 20];			// Dynamic array of VDXFileInfo structs

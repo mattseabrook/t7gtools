@@ -10,5 +10,4 @@ Here we are going to initialize the game as per the DOSBox Debugger data referen
 int init() {
 	if (!loadMusic())
 		return -1;
-	
 }
