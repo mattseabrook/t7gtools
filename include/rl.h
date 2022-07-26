@@ -7,7 +7,15 @@
 
 //===========================================================================
 
-void openRLFile(std::string filename);
+struct VDXFileInfo {
+	std::string filename;
+	uint32_t offset;
+	uint32_t length;
+};
+
+//===========================================================================
+
+VDXFileInfo* openRLFile(std::string filename);
 
 //===========================================================================
 

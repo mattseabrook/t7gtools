@@ -24,7 +24,7 @@ MB_ICONINFORMATION
 	}
 	else if ((strcmp(__argv[1], "-R") == 0 || strcmp(__argv[1], "-rl") == 0))
 	{
-		openRLFile(__argv[2]);
+		VDXFileInfo * rl_file_opened = openRLFile(__argv[2]);
 	}
 	else
 	{

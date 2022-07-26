@@ -2,6 +2,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include "init.h"
+
 int openWindow()
 {
 	GLFWwindow* window;
@@ -20,7 +22,10 @@ int openWindow()
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-
+	
+	/* Initialize Game State */
+	init();
+	
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{

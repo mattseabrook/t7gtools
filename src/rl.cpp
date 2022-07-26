@@ -6,44 +6,45 @@
 
 #include "rl.h"
 
-void openRLFile(std::string filename)
+VDXFileInfo* openRLFile(std::string filename)
 {
 #ifdef _DEBUG
-	std::string rlData;
+	std::string rlStringData;
 #endif
 
 	std::ifstream rlFile;
 	rlFile.open(filename, std::ios::binary);
 	if (rlFile.is_open())
 	{
-		struct {
-			std::string filename;
-			uint32_t offset;
-			uint32_t length;
-		} VDXFileInfo;
+		rlFile.seekg(0, std::ios::end);
+		int fileSize = rlFile.tellg();									// Size of the *.RL file in bytes
+		rlFile.seekg(0, std::ios::beg);
+
+		VDXFileInfo* array = new VDXFileInfo[fileSize / 20];			// Dynamic array of VDXFileInfo structs
+		int i = 0;														// Counter for the array
 
 		char buffer[20]{};												// Buffer that holds 20 bytes
 		char c;															// single character byte $xx
-		int i = 0;														// counter for buffer
+		int n = 0;														// counter for buffer
 
 		while (rlFile.get(c))
 		{
 			// push c into buffer
-			buffer[i] = c;
+			buffer[n] = c;
 
 			// check if buffer is full
-			if (i == 19)
+			if (n == 19)
 			{
-				VDXFileInfo.filename = std::string(buffer, 0, 12);		// $00 - $11 : Filename
-				VDXFileInfo.offset = *(uint32_t*)(buffer + 12);			// $12 - $15 : Offset
-				VDXFileInfo.length = *(uint32_t*)(buffer + 16);			// $16 - $19 : Length
+				array[i].filename = std::string(buffer, 0, 12);			// $00 - $11 : Filename
+				array[i].offset = *(uint32_t*)(buffer + 12);			// $12 - $15 : Offset
+				array[i].length = *(uint32_t*)(buffer + 16);			// $16 - $19 : Length
 
 #ifdef _DEBUG
-				rlData += VDXFileInfo.filename +
+				rlStringData += array[i].filename +
 					"," +
-					std::to_string(VDXFileInfo.offset) +
+					std::to_string(array[i].offset) +
 					"," +
-					std::to_string(VDXFileInfo.length) +
+					std::to_string(array[i].length) +
 					"\n";
 #endif
 
@@ -52,23 +53,32 @@ void openRLFile(std::string filename)
 				{
 					buffer[j] = '\0';
 				}
-				i = 0;
+
+				n = 0;
+
+				i++;
 			}
 			else {
-				i++;
+				n++;
 			}
 		}
 
 #ifdef _DEBUG
-		MessageBox(NULL, rlData.c_str(), "RL File", MB_OK);
+		if ((strcmp(__argv[1], "-R") == 0 || strcmp(__argv[1], "-rl") == 0))
+		{
+			MessageBox(NULL, rlStringData.c_str(), "RL File", MB_OK);
 
-		std::ofstream rlDataFile;
-		rlDataFile.open("rlData.txt", std::ios::binary);
-		rlDataFile << rlData;
-		rlDataFile.close();
+			std::ofstream rlDataFile;
+			rlDataFile.open("rlData.txt", std::ios::binary);
+			rlDataFile << rlStringData;
+			rlDataFile.close();
+		}
 #endif
 
 		rlFile.close();
+
+		// Return array
+		return array;
 	}
 	else
 	{

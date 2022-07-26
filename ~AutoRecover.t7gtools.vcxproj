@@ -137,15 +137,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\cli.cpp" />
+    <ClCompile Include="src\dr.cpp" />
     <ClCompile Include="src\gui.cpp" />
     <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\rl.cpp" />
+    <ClCompile Include="src\xmi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\cli.h" />
+    <ClInclude Include="include\gjd.h" />
     <ClInclude Include="include\gui.h" />
+    <ClInclude Include="include\init.h" />
     <ClInclude Include="include\rl.h" />
+    <ClInclude Include="include\xmi.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
