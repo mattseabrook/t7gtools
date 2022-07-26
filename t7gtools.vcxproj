@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClCompile Include="src\cli.cpp" />
     <ClCompile Include="src\dr.cpp" />
+    <ClCompile Include="src\gjd.cpp" />
     <ClCompile Include="src\gui.cpp" />
     <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\cli.h" />
+    <ClInclude Include="include\gjd.h" />
     <ClInclude Include="include\gui.h" />
     <ClInclude Include="include\init.h" />
     <ClInclude Include="include\rl.h" />

@@ -6,7 +6,7 @@
 
 #include "rl.h"
 
-VDXFileInfo* openRLFile(std::string filename)
+GJDFileInfo* openRLFile(std::string filename)
 {
 #ifdef _DEBUG
 	std::string rlStringData;
@@ -20,7 +20,7 @@ VDXFileInfo* openRLFile(std::string filename)
 		int fileSize = rlFile.tellg();									// Size of the *.RL file in bytes
 		rlFile.seekg(0, std::ios::beg);
 
-		VDXFileInfo* array = new VDXFileInfo[fileSize / 20];			// Dynamic array of VDXFileInfo structs
+		GJDFileInfo* array = new GJDFileInfo[fileSize / 20];			// Dynamic array of VDXFileInfo structs
 		int i = 0;														// Counter for the array
 
 		char buffer[20]{};												// Buffer that holds 20 bytes
@@ -92,5 +92,8 @@ t7gtools.exe [-d | -demo]",
 "t7gtools",
 MB_ICONERROR
 );
+
+		// Exit w/error
+		exit(1);
 	}
 }

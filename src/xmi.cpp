@@ -1,11 +1,17 @@
 // xmi.cpp
 
 #include "rl.h"
+#include "gjd.h"
 #include "xmi.h"
 
 bool loadMusic()
 {
-	VDXFileInfo* xmiFileData = openRLFile("xmi.rl");
-	
+	GJDFileInfo* xmiFileList = openRLFile("xmi.rl");
+
+	if (!xmiFileList)
+		return false;
+
+	openGJDFile("xmi.gjd", xmiFileList);
+
 	return true;
 }

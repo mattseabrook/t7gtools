@@ -7,7 +7,7 @@
 
 //===========================================================================
 
-struct VDXFileInfo {
+struct GJDFileInfo {
 	std::string filename;
 	uint32_t offset;
 	uint32_t length;
@@ -15,7 +15,7 @@ struct VDXFileInfo {
 
 //===========================================================================
 
-VDXFileInfo* openRLFile(std::string filename);
+GJDFileInfo* openRLFile(std::string filename);
 
 //===========================================================================
 
