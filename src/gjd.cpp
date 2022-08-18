@@ -25,7 +25,11 @@ char** openGJDFile(std::string filename, GJDFileInfo* gjdFiles, int entries)
 		{
 #ifdef _DEBUG			
 			test += gjdFiles[i].name + " - ";
-#endif			
+#endif	
+			gjdFileData[i] = new char[gjdFiles[i].size];
+			
+			gjdFile.seekg(gjdFiles[i].offset, std::ios::beg);
+			gjdFile.read(gjdFileData[i], gjdFiles[i].size);
 		}
 
 #ifdef _DEBUG
@@ -34,6 +38,10 @@ char** openGJDFile(std::string filename, GJDFileInfo* gjdFiles, int entries)
 		ss << entries;
 		std::string s = ss.str();
 		MessageBox(NULL, s.c_str(), "GJD.CPP - Count", MB_OK);
+
+		std::string folderName = filename.substr(0, filename.find_last_of('.'));
+		CreateDirectory(folderName.c_str(), NULL);
+		
 #endif	
 		
 		return gjdFileData;
