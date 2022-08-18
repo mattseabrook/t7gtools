@@ -1,6 +1,9 @@
-# t7gtools
+The 7th Guest was a popular CD-ROM game released in 1993. This repository contains the source code for my hobby projects related to the game:
 
-The 7th Guest was a popular CD-ROM game, release in 1993. This repository contains the source code for the reverse engineering tools I've created for it.
+- Reverse Engineering Tools
+- Asset Extraction
+- Game Engine Re-creation
+  
 <pre>
 ""8"" eeeee 8""""8                               
   8   8   8 8    " eeeee eeeee eeeee e     eeeee 
@@ -10,7 +13,6 @@ The 7th Guest was a popular CD-ROM game, release in 1993. This repository contai
   88    8   88eee8   88  8eee8 8eee8 88eee 8ee88
 </pre>
 **Table-of-Contents**
-- [t7gtools](#t7gtools)
 - [Overview](#overview)
   - [Usage](#usage)
   - [Inspiration](#inspiration)
