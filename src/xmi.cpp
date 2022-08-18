@@ -13,7 +13,7 @@ bool loadMusic()
 	if (!xmiFileList)
 		return false;
 	
-	openGJDFile("xmi.gjd", xmiFileList);
+	char** xmiData = openGJDFile("xmi.gjd", xmiFileList, ini_sc);
 
 	return true;
 }

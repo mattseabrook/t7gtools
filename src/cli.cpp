@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-#include "gui.h"
+#include "window.h"
 #include "rl.h"
 
 void proc_cli()

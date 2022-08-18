@@ -17,7 +17,7 @@ GJDFileInfo* openRLFile(std::string filename)
 	if (rlFile.is_open())
 	{
 		rlFile.seekg(0, std::ios::end);
-		const int fileSize = rlFile.tellg();									// Size of the *.RL file in bytes
+		const int fileSize = rlFile.tellg();							// Size of the *.RL file in bytes
 		rlFile.seekg(0, std::ios::beg);
 
 		GJDFileInfo* array = new GJDFileInfo[fileSize / 20];			// Dynamic array of VDXFileInfo structs
@@ -35,16 +35,16 @@ GJDFileInfo* openRLFile(std::string filename)
 			// check if buffer is full
 			if (n == 19)
 			{
-				array[i].filename = std::string(buffer, 0, 12);			// $00 - $11 : Filename
+				array[i].name = std::string(buffer, 0, 12);				// $00 - $11 : Filename
 				array[i].offset = *(uint32_t*)(buffer + 12);			// $12 - $15 : Offset
-				array[i].length = *(uint32_t*)(buffer + 16);			// $16 - $19 : Length
+				array[i].size = *(uint32_t*)(buffer + 16);			// $16 - $19 : Length
 
 #ifdef _DEBUG
-				rlStringData += array[i].filename +
+				rlStringData += array[i].name +
 					"," +
 					std::to_string(array[i].offset) +
 					"," +
-					std::to_string(array[i].length) +
+					std::to_string(array[i].size) +
 					"\n";
 #endif
 

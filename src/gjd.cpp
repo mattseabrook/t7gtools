@@ -3,34 +3,40 @@
 #include <Windows.h>
 #include <string>
 #include <fstream>
-
+#include <sstream>
 #include "gjd.h"
 #include "rl.h"
 
 #include "xmi.h"
 
-void openGJDFile(std::string filename, GJDFileInfo* gjdFileList)
+char** openGJDFile(std::string filename, GJDFileInfo* gjdFiles, int entries)
 {
+#ifdef _DEBUG
+	std::string test;
+#endif		
+	
 	std::ifstream gjdFile;
 	gjdFile.open(filename, std::ios::binary);
 	if (gjdFile.is_open())
 	{
-		/*
+		char** gjdFileData = new char* [entries];
+
+		for (int i = 0; i < entries; i++)
+		{
+#ifdef _DEBUG			
+			test += gjdFiles[i].name + " - ";
+#endif			
+		}
+
+#ifdef _DEBUG
+		MessageBox(NULL, test.c_str(), "GJD.CPP - Names", MB_OK);
+		std::stringstream ss;
+		ss << entries;
+		std::string s = ss.str();
+		MessageBox(NULL, s.c_str(), "GJD.CPP - Count", MB_OK);
+#endif	
 		
-		OK so it's looking like you should do a for loop
-		i = 0,
-		i is less than whatever the last enum is
-		
-		This is totally a perfect solution since this can't be 
-		dynamic to begin with, working  with enums is a good idea.
-		
-		Add a 3rd paramenter to this function
-		the last enum of WHATEVER.RL needs to be passed in,
-		as the length so this function can be as dynamic as possible
-		
-		Return type should be - an array of char bytestreams?
-		
-		*/
+		return gjdFileData;
 	}
 	else {
 		std::string error = filename + " could not be opened.";
@@ -41,5 +47,7 @@ void openGJDFile(std::string filename, GJDFileInfo* gjdFileList)
 			"t7gtools",
 			MB_ICONERROR
 		);
+
+		exit(1);
 	}
 }

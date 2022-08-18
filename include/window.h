@@ -1,7 +1,7 @@
-// gui.h
+// window.h
 
-#ifndef GUI_H
-#define GUI_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 //===========================================================================
 

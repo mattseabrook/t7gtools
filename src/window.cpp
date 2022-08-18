@@ -1,7 +1,8 @@
-// gui.cpp
+// window.cpp
 
 #include <GLFW/glfw3.h>
 
+#include "window.h"
 #include "init.h"
 
 int openWindow()
