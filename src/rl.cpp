@@ -37,7 +37,7 @@ GJDFileInfo* openRLFile(std::string filename)
 			{
 				array[i].name = std::string(buffer, 0, 12);				// $00 - $11 : Filename
 				array[i].offset = *(uint32_t*)(buffer + 12);			// $12 - $15 : Offset
-				array[i].size = *(uint32_t*)(buffer + 16);			// $16 - $19 : Length
+				array[i].size = *(uint32_t*)(buffer + 16);				// $16 - $19 : Length
 
 #ifdef _DEBUG
 				rlStringData += array[i].name +

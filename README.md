@@ -1,6 +1,6 @@
 # t7gtools
 
-The 7th Guest was a popular CD-ROM game, release in 1991. This repository contains the source code for the reverse engineering tools I've created for it.
+The 7th Guest was a popular CD-ROM game, release in 1993. This repository contains the source code for the reverse engineering tools I've created for it.
 <pre>
 ""8"" eeeee 8""""8                               
   8   8   8 8    " eeeee eeeee eeeee e     eeeee 
@@ -15,14 +15,13 @@ The 7th Guest was a popular CD-ROM game, release in 1991. This repository contai
   - [Usage](#usage)
   - [Inspiration](#inspiration)
   - [For more information...](#for-more-information)
-- [GROOVIE Engine](#groovie-engine)
-  - [MS-DOS](#ms-dos)
-    - [1.30](#130)
-    - [1.26](#126)
-    - [Legacy versions](#legacy-versions)
-  - [Windows](#windows)
-    - [Trilobyte Media Player (v32tng.exe)](#trilobyte-media-player-v32tngexe)
-  - [CLI switches](#cli-switches)
+- [Developers](#developers)
+  - [Dependencies](#dependencies)
+  - [Statically Linked Executable](#statically-linked-executable)
+  - [TODO](#todo)
+    - [General](#general)
+    - [Reverse Eng](#reverse-eng)
+    - [Documentation](#documentation)
 - [Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)](#proprietary-file-formats-grv-rl-gjd-vdx)
   - [GRV](#grv)
   - [RL](#rl)
@@ -37,20 +36,18 @@ The 7th Guest was a popular CD-ROM game, release in 1991. This repository contai
 - [Reverse Engineering](#reverse-engineering)
   - [GROOVIE](#groovie)
     - [Debug](#debug)
-  - [Bitmap Data](#bitmap-data)
-  - [Audio Data](#audio-data)
-  - [MIDI Data](#midi-data)
-- [Developers](#developers)
-  - [Dependencies](#dependencies)
-  - [Statically Linked Executable](#statically-linked-executable)
-- [TODO](#todo)
-  - [General](#general)
-  - [Reverse Eng](#reverse-eng)
-  - [Documentation](#documentation)
+  - [MS-DOS](#ms-dos)
+    - [1.30](#130)
+    - [1.26](#126)
+    - [Legacy versions](#legacy-versions)
+  - [Windows](#windows)
+    - [Trilobyte Media Player (v32tng.exe)](#trilobyte-media-player-v32tngexe)
+  - [CLI switches](#cli-switches)
+- [References](#references)
 
 # Overview
 
-This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](https://en.wikipedia.org/wiki/The_7th_Guest). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1991 game to use.
+This project is a set of non-commercial "mods" and "tools" I've developed for [The 7th Guest](https://en.wikipedia.org/wiki/The_7th_Guest). They are strictly for educational and entertainment purposes, and require a legal copy of the original 1993 game to use.
 
 This document covers the full taxonomy of my custom C++ software, as well as my research into ```The 7th Guest```. I hope you enjoy it!
 
@@ -66,102 +63,38 @@ There is something incredibly zen about this piece of technology that came out o
 
 I can be reached through email at [info@mattseabrook.net](mailto:info@mattseabrook.net).
 
-# GROOVIE Engine
+# Developers
 
-## MS-DOS
+## Dependencies
 
-### 1.30
+| Library | Description              | Version | Link                                           |
+| ------- | ------------------------ | ------- | ---------------------------------------------- |
+| GLFW    | OpenGL windowing library | 3.3     | [https://www.glfw.org/](https://www.glfw.org/) |
 
-This patch reduces the conventional memory requirement to 450K~. 
+## Statically Linked Executable
 
-| Specification             | GROOVIE            |
-| ------------------------- | ------------------ |
-| file                      | V.EXE              |
-| size (bytes)              | 23,425             |
-| header (bytes)            | 32                 |
-| image (bytes)             | 23,393             |
-| overlay (bytes)           | 0                  |
-| compression               | LZEXE 0.91 / 1.00a |
-| decompressed size (bytes) | 102,072            |
-
-**Default execution**:
-
-```
-GROOVIE Player (c) 1993 Trilobyte
-Version 1.30: 07/16/93 @ 14:52:40
-
-VESA compatible video card
-
-Mouse driver installed
-
-Running on an 80486DX CPU
-
-XMS driver version 3.0 installed
- - 15,168 KBytes largest free XMS block
-
-16,384 bytes for DMA transfer
-   300 ticks per second internal clock
+```text
+glfw3.lib; opengl32.lib; user32.lib; gdi32.lib; shell32.lib
 ```
 
-### 1.26
+x
 
-This is the executable currently posted on Steam. It could be, for some reason I won't be looking into, the most compatible with ScummVM. 
+## TODO
 
-| Specification             | GROOVIE            |
-| ------------------------- | ------------------ |
-| file                      | V.EXE              |
-| size (bytes)              | 21,473             |
-| header (bytes)            | 32                 |
-| image (bytes)             | 21,441             |
-| overlay (bytes)           | 0                  |
-| compression               | LZEXE 0.91 / 1.00a |
-| decompressed size (bytes) | 97,416             |
+### General
 
-**Default execution**:
+- [ ] Port over code from existing projects that are further ahead
+  
+### Reverse Eng
 
-```
-GROOVIE Player (c) 1993 Trilobyte
-Version 1.26: 05/20/93 @ 15:54:08
+- [ ] Add support for extracting audio data from VDX files.
+- [ ] Add support for extracting bitmap data from VDX files.
 
-VESA Compatible video card
+### Documentation
 
-Mouse driver installed
-
-Running on an 80486DX CPU
-
-XMS driver version 3.0 installed
- - 15,168 KBytes largest free XMS block
-
-16,384 bytes for DMA transfer
-00,300 ticks per second internal clock
-```
-
-### Legacy versions
-
-**1.22**
-
-This is the original executable the CD-ROM shipped with in 1991.
-
-It is referenced in the ```readme.txt``` file for the Trilobyte ```1.30``` patch, but I do not have access to a copy to conduct testing.
-
-**1.24**
-
-Same as above.
-
-## Windows
-
-### Trilobyte Media Player (v32tng.exe)
-
-*Coming soon*!
-
-## CLI switches
-
-```v !``` launch the game normally
-
-``` v @``` launch the game into a DEMO mode
-
-```v <filename>``` Attempts to open the specified file. Unknown functionality at this time, but it is assumed the end-user supplies a *.GRV (custom script/player instructions for the GROOVIE engine) file. 
-
+- [ ] Document VDX file architecture
+- [ ] Document LZSS algo (`clang` -> `llvm` -> `dot`)
+ 
 # Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)
 
 At a high level, a GJD file is a raw binary that contains a bunch of VDX (and other media) files separated by a 1-byte buffer (FF).
@@ -294,46 +227,98 @@ For the purposes of my research I am focusing on the synchronous interactions ``
 362153484: EXEC:Parsing command line: exit
 ```
 
-## Bitmap Data
+## MS-DOS
 
-This is where we will outline the process of retrieving the raw ```640x480``` bitmap frame data contained in the ```*.VDX``` files.
+### 1.30
 
-## Audio Data
+This patch reduces the conventional memory requirement to 450K~. 
 
-x
+| Specification             | GROOVIE            |
+| ------------------------- | ------------------ |
+| file                      | V.EXE              |
+| size (bytes)              | 23,425             |
+| header (bytes)            | 32                 |
+| image (bytes)             | 23,393             |
+| overlay (bytes)           | 0                  |
+| compression               | LZEXE 0.91 / 1.00a |
+| decompressed size (bytes) | 102,072            |
 
-## MIDI Data
+**Default execution**:
 
-x
+```
+GROOVIE Player (c) 1993 Trilobyte
+Version 1.30: 07/16/93 @ 14:52:40
 
-# Developers
+VESA compatible video card
 
-## Dependencies
+Mouse driver installed
 
-| Library | Description              | Version | Link                                           |
-| ------- | ------------------------ | ------- | ---------------------------------------------- |
-| GLFW    | OpenGL windowing library | 3.3     | [https://www.glfw.org/](https://www.glfw.org/) |
+Running on an 80486DX CPU
 
-## Statically Linked Executable
+XMS driver version 3.0 installed
+ - 15,168 KBytes largest free XMS block
 
-```text
-glfw3.lib; opengl32.lib; user32.lib; gdi32.lib; shell32.lib
+16,384 bytes for DMA transfer
+   300 ticks per second internal clock
 ```
 
-x
+### 1.26
 
-# TODO
+This is the executable currently posted on Steam. It could be, for some reason I won't be looking into, the most compatible with ScummVM. 
 
-## General
+| Specification             | GROOVIE            |
+| ------------------------- | ------------------ |
+| file                      | V.EXE              |
+| size (bytes)              | 21,473             |
+| header (bytes)            | 32                 |
+| image (bytes)             | 21,441             |
+| overlay (bytes)           | 0                  |
+| compression               | LZEXE 0.91 / 1.00a |
+| decompressed size (bytes) | 97,416             |
 
-- [ ] Port over code from existing projects that are further ahead
-  
-## Reverse Eng
+**Default execution**:
 
-- [ ] Add support for extracting audio data from VDX files.
-- [ ] Add support for extracting bitmap data from VDX files.
+```
+GROOVIE Player (c) 1993 Trilobyte
+Version 1.26: 05/20/93 @ 15:54:08
 
-## Documentation
+VESA Compatible video card
 
-- [ ] Document VDX file architecture
-- [ ] Document LZSS algo (`clang` -> `llvm` -> `dot`)
+Mouse driver installed
+
+Running on an 80486DX CPU
+
+XMS driver version 3.0 installed
+ - 15,168 KBytes largest free XMS block
+
+16,384 bytes for DMA transfer
+00,300 ticks per second internal clock
+```
+
+### Legacy versions
+
+**1.22**
+
+This is the original executable the CD-ROM shipped with in 1991.
+
+It is referenced in the ```readme.txt``` file for the Trilobyte ```1.30``` patch, but I do not have access to a copy to conduct testing.
+
+**1.24**
+
+Same as above.
+
+## Windows
+
+### Trilobyte Media Player (v32tng.exe)
+
+*Coming soon*!
+
+## CLI switches
+
+```v !``` launch the game normally
+
+``` v @``` launch the game into a DEMO mode
+
+```v <filename>``` Attempts to open the specified file. Unknown functionality at this time, but it is assumed the end-user supplies a *.GRV (custom script/player instructions for the GROOVIE engine) file. 
+
+# References
