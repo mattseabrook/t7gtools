@@ -24,9 +24,13 @@ The 7th Guest was a popular CD-ROM game released in 1993. This repository contai
     - [General](#general)
     - [Reverse Eng](#reverse-eng)
     - [Documentation](#documentation)
+- [Standard file formats (*.XMI, *.WAV)](#standard-file-formats-xmi-wav)
+  - [XMI](#xmi)
+  - [WAV](#wav)
 - [Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)](#proprietary-file-formats-grv-rl-gjd-vdx)
   - [GRV](#grv)
   - [RL](#rl)
+    - [Format](#format)
   - [GJD](#gjd)
   - [VDX](#vdx)
     - [Header](#header)
@@ -39,12 +43,14 @@ The 7th Guest was a popular CD-ROM game released in 1993. This repository contai
   - [GROOVIE](#groovie)
     - [Debug](#debug)
   - [MS-DOS](#ms-dos)
+    - [CLI switches](#cli-switches)
     - [1.30](#130)
     - [1.26](#126)
     - [Legacy versions](#legacy-versions)
   - [Windows](#windows)
     - [Trilobyte Media Player (v32tng.exe)](#trilobyte-media-player-v32tngexe)
-  - [CLI switches](#cli-switches)
+- [Puzzles](#puzzles)
+  - [Cake](#cake)
 - [References](#references)
 
 # Overview
@@ -96,7 +102,17 @@ x
 
 - [ ] Document VDX file architecture
 - [ ] Document LZSS algo (`clang` -> `llvm` -> `dot`)
- 
+
+# Standard file formats (*.XMI, *.WAV)
+
+## XMI
+
+x
+
+## WAV
+
+x
+
 # Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)
 
 At a high level, a GJD file is a raw binary that contains a bunch of VDX (and other media) files separated by a 1-byte buffer (FF).
@@ -119,9 +135,21 @@ Proprietary script files for the ```GROOVIE``` engine. They provide the engine i
 
 ## RL
 
-Here's DR.RL under a microscope (*Dining Room, DR.GJD containing VDX asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.*)
+This file consists of `20` byte blocks, each of which holds key data to access the content inside of `*.GJD` files.
 
-The last 4 bytes in the sequence provide you the file size of each VDX file:
+### Format
+
+**Endian**: Little
+
+| Data Type | Length (size in bytes) | Description                                                               |
+| --------- | ---------------------- | ------------------------------------------------------------------------- |
+| char      | 12                     | Name of the file stored in this particular chunk of the GJD file          |
+| uint32_t  | 4                      | Size of the file stored in this particular chunk of the GJD file          |
+| uint32_t  | 4                      | Offset/Index/Location of this particular chunk, which represents the file |
+
+Here's `DR.RL` under a microscope (*Dining Room, corresponds to `DR.GJD` containing asset files for the dining room navigation sequences, actor sequences, and cake puzzle animation sequences.*)
+
+The last `4` bytes in the `20` byte sequence represents a `uint32_t` that provides you the file size (in bytes) of each asset file contained within said `*.GJD` file:
 
 <img src="https://www.mattseabrook.net/github/t7gtools/hex.png">
 
@@ -231,9 +259,21 @@ For the purposes of my research I am focusing on the synchronous interactions ``
 
 ## MS-DOS
 
+### CLI switches
+
+```v !``` launch the game normally
+
+``` v @``` launch the game into a DEMO mode
+
+```v <filename>``` Attempts to open the specified file. Unknown functionality at this time, but it is assumed the end-user supplies a *.GRV (custom script/player instructions for the GROOVIE engine) file. 
+
 ### 1.30
 
 This patch reduces the conventional memory requirement to 450K~. 
+
+```text
+MS-DOS executable, LZEXE v0.91 compressed
+```
 
 | Specification             | GROOVIE            |
 | ------------------------- | ------------------ |
@@ -313,14 +353,18 @@ Same as above.
 
 ### Trilobyte Media Player (v32tng.exe)
 
-*Coming soon*!
+```text
+PE32 executable (GUI) Intel 80386, for MS Windows
+```
 
-## CLI switches
+# Puzzles
 
-```v !``` launch the game normally
+All or most of the puzzles were sourced from a 19th century puzzle book, to avoid having to pay licensing fees.
 
-``` v @``` launch the game into a DEMO mode
+## Cake
 
-```v <filename>``` Attempts to open the specified file. Unknown functionality at this time, but it is assumed the end-user supplies a *.GRV (custom script/player instructions for the GROOVIE engine) file. 
+x
 
 # References
+
+1. [Page 38 of CGW Magazine (August 1993)](https://www.cgwmuseum.org/galleries/issues/cgw_109.pdf)
