@@ -118,7 +118,7 @@ x
 
 # Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)
 
-At a high level, a GJD file is a raw binary that contains a bunch of VDX (and other media) files separated by a 1-byte buffer (FF).
+At a high level, a GJD file is a raw binary that contains a bunch of VDX (and other media) files separated by a 1-byte buffer `0xFF`.
 
 ```*.RL``` files are "name mapped" to ```*.GJD``` files, and are an index/directory that, for example contain a number of ```*.VDX``` files, their respective size in bytes, and the starting position of each one in the *.GJD file (offset).
 
@@ -130,12 +130,9 @@ The following diagram illustrates the relationship between the 3 file types:
 
 ## GRV
 
-Proprietary script files for the ```GROOVIE``` engine. They provide the engine instructions on which assets to load, how to configure the various game scenes, and presumably the state information required for the puzzles is in there as well.
+Proprietary script files for the ```GROOVIE``` engine. They provide the engine instructions on which assets to load, how to configure the various game scenes, and presumably the state information required for the puzzles is in there as well. For the purposes of my project, these are not needed. The time spent performing hard-core reverse engineering on these files, while playing through the entire game several times, is a ton more time than would be needed to simply program a fresh engine.
 
-*More coming!*
-
-(See opcodes)
-
+For more information about this file format, see the [ScummVM ](#groovie) section.
 ## RL
 
 This file consists of `20` byte blocks, each of which holds key data to access the content inside of `*.GJD` files.
@@ -410,3 +407,6 @@ x
 # References
 
 1. [Page 38 of CGW Magazine (August 1993)](https://www.cgwmuseum.org/galleries/issues/cgw_109.pdf)
+2. [XeNTaX Game File Format Central - The 7th Guest GJD + RL](http://wiki.xentax.com/index.php/The_7th_Guest_GJD)
+3. [ScummVM GROOVIE Documentation](https://wiki.scummvm.org/index.php?title=Groovie)
+4. [ScummVM The 7th Guest](https://wiki.scummvm.org/index.php?title=The_7th_Guest)
