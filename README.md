@@ -32,6 +32,7 @@ The 7th Guest was a popular CD-ROM game released in 1993. This repository contai
   - [RL](#rl)
     - [Format](#format)
   - [GJD](#gjd)
+    - [Format](#format-1)
   - [VDX](#vdx)
     - [Header](#header)
     - [Chunk header](#chunk-header)
@@ -41,6 +42,8 @@ The 7th Guest was a popular CD-ROM game released in 1993. This repository contai
     - [0x80 - Raw WAV audio data](#0x80---raw-wav-audio-data)
 - [Reverse Engineering](#reverse-engineering)
   - [GROOVIE](#groovie)
+  - [File & Directory Structure](#file--directory-structure)
+    - [Proprietary](#proprietary)
     - [Debug](#debug)
   - [MS-DOS](#ms-dos)
     - [CLI switches](#cli-switches)
@@ -155,11 +158,20 @@ The last `4` bytes in the `20` byte sequence represents a `uint32_t` that provid
 
 ## GJD
 
-x
+This file is a custom archive format, where the individual asset files are store separated by a 1-byte buffer `0xFF`.
+
+### Format
+
+**Endian**: Little
+
+| Data Type | Length (size in bytes) | Description                                                    |
+| --------- | ---------------------- | -------------------------------------------------------------- |
+| byte      | *                      | File Data - `*.VDX`, `*.XMI`, `*.WAV`                          |
+| byte      | 1                      | `null` padding between asset files stored in the `GJD` archive |
 
 ## VDX
 
-**Endianness**: Little Endian
+**Endian**: Little
 
 ### Header
 
@@ -199,7 +211,37 @@ x
 
 ## GROOVIE
 
+## File & Directory Structure
 
+### Proprietary
+
+The following is a table containing details about all of the proprietary Trilobyte software files that are included in the original game:
+
+| Name  | Type | Size (in bytes) | Description |
+| ----- | ---- | --------------- | ----------- |
+| AT.RL | `RL` | 760             |             |
+| B.RL  | `RL` | 2800            |             |
+| CH.RL | `RL` | 1620            |             |
+| D.RL  | `RL` | 7100            |             |
+| DR.RL | `RL` | 2140            |             |
+| FH.RL | `RL` | 3960            |             |
+
+-rwxr--r-- 1 info info  3960 Jan 21  2017 FH.RL
+-rwxr--r-- 1 info info  2860 Jan 21  2017 GA.RL
+-rwxr--r-- 1 info info  3700 Jan 21  2017 GAMWAV.RL
+-rwxr--r-- 1 info info   160 Jan 21  2017 HDISK.RL
+-rwxr--r-- 1 info info  3960 Jan 21  2017 HTBD.RL
+-rwxr--r-- 1 info info  1960 Jan 21  2017 INTRO.RL
+-rwxr--r-- 1 info info  4760 Jan 21  2017 JHEK.RL
+-rwxr--r-- 1 info info 16360 Jan 21  2017 K.RL
+-rwxr--r-- 1 info info  2500 Jan 21  2017 LA.RL
+-rwxr--r-- 1 info info  2000 Jan 21  2017 LI.RL
+-rwxr--r-- 1 info info  1280 Jan 21  2017 MB.RL
+-rwxr--r-- 1 info info  2240 Jan 21  2017 MC.RL
+-rwxr--r-- 1 info info   860 Jan 21  2017 MU.RL
+-rwxr--r-- 1 info info 10920 Jan 21  2017 N.RL
+-rwxr--r-- 1 info info   880 Jan 21  2017 P.RL
+-rwxr--r-- 1 info info  1420 Jan 21  2017 XMI.RL
 ### Debug
 
 For the purposes of my research I am focusing on the synchronous interactions ```V.EXE``` performs with the file system. This is the lowest effort strategy to reconstruct the architecture of the engine/game. The following information has been collected using the ```DOSBox debugger``` utility:
