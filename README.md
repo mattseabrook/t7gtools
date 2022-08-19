@@ -172,10 +172,10 @@ This file is a custom archive format, where the individual asset files are store
 
 ### Header
 
-| Type   | Bytes | Description |
-| ------ | ----- | ----------- |
-| uint16 | 2     | Identifier  |
-| byte   | 6     | Unknown     |
+| Type   | Bytes | Description                          |
+| ------ | ----- | ------------------------------------ |
+| uint16 | 2     | Identifier - Value should be `0x6792 |
+| byte   | 6     | Unknown                              |
 
 ### Chunk header
 
@@ -214,14 +214,14 @@ x
 
 The following is a table containing details about all of the proprietary Trilobyte software files that are included in the original game:
 
-| Name  | Type | Size (in bytes) | Description |
-| ----- | ---- | --------------- | ----------- |
-| AT.RL | `RL` | 760             |             |
-| B.RL  | `RL` | 2800            |             |
-| CH.RL | `RL` | 1620            |             |
-| D.RL  | `RL` | 7100            |             |
-| DR.RL | `RL` | 2140            |             |
-| FH.RL | `RL` | 3960            |             |
+| Name  | Type | Size (in bytes) | Description                                      |
+| ----- | ---- | --------------- | ------------------------------------------------ |
+| AT.RL | `RL` | 760             |                                                  |
+| B.RL  | `RL` | 2800            |                                                  |
+| CH.RL | `RL` | 1620            |                                                  |
+| D.RL  | `RL` | 7100            |                                                  |
+| DR.RL | `RL` | 2140            | Index file for the **Dining Room** `GJD` archive |
+| FH.RL | `RL` | 3960            |                                                  |
 
 -rwxr--r-- 1 info info  3960 Jan 21  2017 FH.RL
 -rwxr--r-- 1 info info  2860 Jan 21  2017 GA.RL
