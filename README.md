@@ -410,3 +410,6 @@ x
 2. [XeNTaX Game File Format Central - The 7th Guest GJD + RL](http://wiki.xentax.com/index.php/The_7th_Guest_GJD)
 3. [ScummVM GROOVIE Documentation](https://wiki.scummvm.org/index.php?title=Groovie)
 4. [ScummVM The 7th Guest](https://wiki.scummvm.org/index.php?title=The_7th_Guest)
+5. [ScummVM Github Groovie Repository](https://github.com/scummvm/scummvm/tree/master/engines/groovie)
+6. [MultimediaWiki - VDX format](https://wiki.multimedia.cx/index.php?title=VDX)
+7. [XeNTaX Game File Format Central - The 7th Guest VDX](http://wiki.xentax.com/index.php/The_7th_Guest_VDX)
