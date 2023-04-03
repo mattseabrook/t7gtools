@@ -1,19 +1,36 @@
 @echo off
 setlocal
 
-set PROJECT_ROOT=E:\t7gtools
-set INCLUDE_DIRS=C:\libs\glfw-3.3.8.bin.WIN64\include
-set LIB_DIRS=C:\libs\glfw-3.3.8.bin.WIN64\lib-vc2022
+set CONFIG=Release
+set PLATFORM=x64
 
-set CL_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\cl.exe"
-set LINK_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64\link.exe"
+if "%1" == "clean" (
+    echo Cleaning build files...
+    rmdir /s /q bin
+    rmdir /s /q obj
+    exit /b
+)
 
-set CL_ARGS=/std:c++latest /EHsc /O2 /I"%INCLUDE_DIRS%"
-set LINK_ARGS=/SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LIBPATH:"%LIB_DIRS%" glfw3.lib opengl32.lib user32.lib gdi32.lib shell32.lib
+if "%1" == "-target" (
+    set CONFIG=%2
+    set PLATFORM=%3
+)
 
-set SOURCE_FILES=%PROJECT_ROOT%\src\*.cpp
+set OUTPUT_DIR=bin\%PLATFORM%_%CONFIG%
+set INTERMEDIATE_DIR=obj\%PLATFORM%_%CONFIG%
 
-%CL_PATH% %CL_ARGS% %SOURCE_FILES%
-%LINK_PATH% %LINK_ARGS%
+if not exist %OUTPUT_DIR% mkdir %OUTPUT_DIR%
+if not exist %INTERMEDIATE_DIR% mkdir %INTERMEDIATE_DIR%
 
-endlocal"
+echo Building %CONFIG% %PLATFORM% configuration...
+
+for %%i in (src\*.cpp) do (
+    echo Compiling %%i...
+    cl /nologo /W3 /WX- /EHsc /MD /GS /Fo"%INTERMEDIATE_DIR%\" /c "%%i"
+)
+
+echo Linking...
+
+link /NOLOGO /SUBSYSTEM:WINDOWS /INCREMENTAL:NO /ENTRY:WinMainCRTStartup /OUT:"%OUTPUT_DIR%\t7gtools.exe" %INTERMEDIATE_DIR%\*.obj glfw3.lib opengl32.lib user32.lib gdi32.lib shell32.lib
+
+endlocal
