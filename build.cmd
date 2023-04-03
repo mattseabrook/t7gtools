@@ -24,13 +24,12 @@ if not exist %INTERMEDIATE_DIR% mkdir %INTERMEDIATE_DIR%
 
 echo Building %CONFIG% %PLATFORM% configuration...
 
+echo Compiling source files...
 for %%i in (src\*.cpp) do (
-    echo Compiling %%i...
-    cl /nologo /W3 /WX- /EHsc /MD /GS /Fo"%INTERMEDIATE_DIR%\" /c "%%i"
+    cl /nologo /W3 /WX- /EHsc /MD /GS /Fo"%INTERMEDIATE_DIR%\%%~ni.obj" /c "%%i"
 )
 
 echo Linking...
-
 link /NOLOGO /SUBSYSTEM:WINDOWS /INCREMENTAL:NO /ENTRY:WinMainCRTStartup /OUT:"%OUTPUT_DIR%\t7gtools.exe" %INTERMEDIATE_DIR%\*.obj glfw3.lib opengl32.lib user32.lib gdi32.lib shell32.lib
 
 endlocal
