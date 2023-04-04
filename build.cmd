@@ -16,6 +16,10 @@ if "%1" == "-target" (
     set PLATFORM=%3
 )
 
+set GLFW_DIR=C:\libs\glfw-3.3.8.bin.WIN64
+set GLFW_INCLUDE_DIR=%GLFW_DIR%\include
+set GLFW_LIB_DIR=%GLFW_DIR%\lib-vc2022
+
 set OUTPUT_DIR=bin\%PLATFORM%_%CONFIG%
 set INTERMEDIATE_DIR=obj\%PLATFORM%_%CONFIG%
 
@@ -26,10 +30,10 @@ echo Building %CONFIG% %PLATFORM% configuration...
 
 echo Compiling source files...
 for %%i in (src\*.cpp) do (
-    cl /nologo /W3 /WX- /EHsc /MD /GS /Fo"%INTERMEDIATE_DIR%\%%~ni.obj" /c /I include "%%i"
+    cl /nologo /W3 /WX- /EHsc /MD /GS /Fo"%INTERMEDIATE_DIR%\%%~ni.obj" /c /I "%GLFW_INCLUDE_DIR%" /I include "%%i"
 )
 
 echo Linking...
-link /NOLOGO /SUBSYSTEM:WINDOWS /INCREMENTAL:NO /ENTRY:WinMainCRTStartup /OUT:"%OUTPUT_DIR%\t7gtools.exe" %INTERMEDIATE_DIR%\*.obj glfw3.lib opengl32.lib user32.lib gdi32.lib shell32.lib
+link /NOLOGO /SUBSYSTEM:WINDOWS /INCREMENTAL:NO /ENTRY:WinMainCRTStartup /OUT:"%OUTPUT_DIR%\t7gtools.exe" %INTERMEDIATE_DIR%\*.obj "%GLFW_LIB_DIR%\glfw3.lib" opengl32.lib user32.lib gdi32.lib shell32.lib /LIBPATH:"%GLFW_LIB_DIR%"
 
 endlocal
