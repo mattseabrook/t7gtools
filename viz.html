@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Control Flow Diagram</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+      .node {
+        cursor: pointer;
+      }
+
+      .node circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 3px;
+      }
+
+      .node text {
+        font: 12px sans-serif;
+      }
+
+      .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      d3.json("decomp.js", function (error, data) {
+        if (error) throw error;
+
+        var svg = d3
+          .select("body")
+          .append("svg")
+          .attr("width", window.innerWidth)
+          .attr("height", window.innerHeight);
+
+        var i = 0,
+          duration = 750,
+          root;
+
+        var tree = d3.tree().size([window.innerWidth, window.innerHeight]);
+
+        root = d3.hierarchy(data, function (d) {
+          return d.children;
+        });
+        root.x0 = window.innerHeight / 2;
+        root.y0 = 0;
+
+        function update(source) {
+          var nodes = root.descendants().reverse(),
+            links = root.links();
+
+          nodes.forEach(function (d) {
+            d.y = d.depth * 180;
+          });
+
+          var node = svg.selectAll("g.node").data(nodes, function (d) {
+            return d.id || (d.id = ++i);
+          });
+
+          var nodeEnter = node
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) {
+              return "translate(" + source.y0 + "," + source.x0 + ")";
+            })
+            .on("click", click);
+
+          nodeEnter
+            .append("circle")
+            .attr("r", 1e-6)
+            .style("fill", function (d) {
+              return d._children ? "lightsteelblue" : "#fff";
+            });
+
+          nodeEnter
+            .append("text")
+            .attr("x", function (d) {
+              return d.children || d._children ? -13 : 13;
+            })
+            .attr("dy", ".35em")
+            .attr("text-anchor", function (d) {
+              return d.children || d._children ? "end" : "start";
+            })
+            .text(function (d) {
+              return d.data.name;
+            })
+            .style("fill-opacity", 1e-6);
+
+          var nodeUpdate = nodeEnter.merge(node);
+
+          nodeUpdate
+            .transition()
+            .duration(duration)
+            .attr("transform", function (d) {
+              return "translate(" + d.y + "," + d.x + ")";
+            });
+
+          nodeUpdate
+            .select("circle")
+            .attr("r", 10)
+            .style("fill", function (d) {
+              return d._children ? "lightsteelblue" : "#fff";
+            })
+            .attr("cursor", "pointer");
+
+          nodeUpdate.select("text").style("fill-opacity", 1);
+
+          var link = svg.selectAll("path.link").data(links, function (d) {
+            return d.target.id;
+          });
+
+          var linkEnter = link
+            .enter()
+            .insert("path", "g")
+            .attr("class", "link")
+            .attr("d", function (d) {
+              var o = { x: source.x0, y: source.y0 };
+              return diagonal(o, o);
+            });
+          var linkUpdate = linkEnter.merge(link);
+
+          linkUpdate
+            .transition()
+            .duration(duration)
+            .attr("d", function (d) {
+              return diagonal(d, d.parent);
+            });
+
+          var linkExit = link
+            .exit()
+            .transition()
+            .duration(duration)
+            .attr("d", function (d) {
+              var o = { x: source.x, y: source.y };
+              return diagonal(o, o);
+            })
+            .remove();
+
+          nodes.forEach(function (d) {
+            d.x0 = d.x;
+            d.y0 = d.y;
+          });
+        }
+
+        function diagonal(s, d) {
+          path =
+            "M" +
+            s.y +
+            "," +
+            s.x +
+            "C" +
+            (s.y + d.y) / 2 +
+            "," +
+            s.x +
+            " " +
+            (s.y + d.y) / 2 +
+            "," +
+            d.x +
+            " " +
+            d.y +
+            "," +
+            d.x;
+
+          return path;
+        }
+
+        function click(d) {
+          if (d.children) {
+            d._children = d.children;
+            d.children = null;
+          } else {
+            d.children = d._children;
+            d._children = null;
+          }
+          update(d);
+        }
+
+        update(root);
+      });
+    </script>
+
+    <!-- load d3.js -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!-- load the decomp.js file -->
+    <script src="decomp.js"></script>
+
+    <script>
+      // create the svg element
+      var svg = d3
+        .select("body")
+        .append("svg")
+        .attr("width", 800)
+        .attr("height", 600);
+
+      // create the tree layout
+      var tree = d3.tree().size([600, 400]);
+
+      // create a root node for the tree
+      var root = d3.hierarchy(decompressBlock);
+
+      // assign positions to the nodes
+      tree(root);
+
+      // create links between the nodes
+      var link = svg
+        .selectAll(".link")
+        .data(root.links())
+        .enter()
+        .append("path")
+        .attr("class", "link")
+        .attr(
+          "d",
+          d3
+            .linkHorizontal()
+            .x((d) => d.y)
+            .y((d) => d.x)
+        );
+
+      // create nodes for the tree
+      var node = svg
+        .selectAll(".node")
+        .data(root.descendants())
+        .enter()
+        .append("g")
+        .attr("class", "node")
+        .attr("transform", (d) => `translate(${d.y},${d.x})`);
+
+      // create circles for the nodes
+      node.append("circle").attr("r", 5);
+
+      // add text to the nodes
+      node
+        .append("text")
+        .attr("dy", "0.35em")
+        .attr("x", (d) => (d.children ? -8 : 8))
+        .attr("text-anchor", (d) => (d.children ? "end" : "start"))
+        .text((d) => d.data.name);
+    </script>
+  </body>
+</html>
