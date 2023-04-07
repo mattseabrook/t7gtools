@@ -351,8 +351,11 @@ MigrationBackup/
 
 # 7th Guest Commercial Assets
 *.rl
+*.RL
 *.gjd
+*.GJD
 *.vdx
+*.VDX
 AT/
 B/
 CH/
