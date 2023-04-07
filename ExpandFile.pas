@@ -46,6 +46,7 @@ begin
                ' found in block of type 0x20')
            end;
        37: case BlockHeader.PlayCmd of
+       
              103: WriteVidFrame(VDXName, OutBuf);
              119: WriteVidFrame(VDXName, OutBuf)
            else
