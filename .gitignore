@@ -348,3 +348,29 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# 7th Guest Commercial Assets
+*.rl
+*.gjd
+*.vdx
+AT/
+B/
+CH/
+D/
+DR/
+FH/
+GA/
+GAMWAV/
+HDISK/
+HTBD/
+INTRO/
+JHEK/
+K/
+LA/
+LI/
+MB/
+MC/
+MU/
+N/
+P/
+XMI/
