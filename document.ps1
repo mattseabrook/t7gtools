@@ -1,3 +1,86 @@
+# document.ps1 - The 7th Guest : Documentation Tools
+# Author: Matt Seabrook, 2023
+
+# This script is used to generate the HTML documentation for the 7th Guest.
+
+
+<#
+.SYNOPSIS
+Converts a binary file to a Markdown table.
+
+.DESCRIPTION
+This function takes in the path of a binary file as input, extracts data from the file, sorts it by size in descending order, and generates a Markdown table that displays the extracted data. The table includes columns for Filename, Size (in bytes), GJD Index, and Description.
+
+.PARAMETER Path
+The path of the binary file to convert to a Markdown table.
+
+.EXAMPLE
+Convert-BinaryToMarkdownTable -Path $inputFile
+
+This example converts the binary file located at $inputFile to a Markdown table and returns the table as a string.
+
+.OUTPUTS
+A string representing the Markdown table that displays the extracted data.
+
+#>
+function Convert-BinaryToMarkdownTable {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Path
+    )
+
+    # Open the binary file
+    $binaryFile = Get-Content -Path $Path -Encoding Byte
+
+    # Initialize an empty list to store the data
+    $dataList = @()
+
+    # Loop through the binary file, 20 bytes at a time
+    for ($i = 0; $i -lt $binaryFile.Length; $i += 20) {
+
+        # Extract the filename, GJD index, and size in bytes
+        $filenameBytes = $binaryFile[$i..($i + 11)]
+        $filename = [System.Text.Encoding]::ASCII.GetString($filenameBytes)
+        $gjdIndex = [BitConverter]::ToUInt32($binaryFile[($i + 12)..($i + 15)], 0)
+        $size = [BitConverter]::ToUInt32($binaryFile[($i + 16)..($i + 19)], 0)
+
+        # Create a custom object to store the extracted data
+        $dataObject = New-Object -TypeName psobject -Property @{
+            Filename = $filename
+            GjdIndex = $gjdIndex
+            Size = $size
+            Description = $null
+        }
+
+        # Add the object to the list
+        $dataList += $dataObject
+    }
+
+    # Sort the data by Size column in descending order
+    $dataList = $dataList | Sort-Object -Property Size -Descending
+
+    # Generate the Markdown table
+    $header = @'
+| Filename | Size (Bytes) | GJD Index | Description |
+| --- | --- | --- | --- |
+'@
+
+    foreach ($item in $dataList) {
+        $filename = $item.Filename
+        $size = "{0:N0}" -f $item.Size
+        $gjdIndex = $item.GjdIndex
+        $markdown += "| $filename | $size | $gjdIndex |  |`n"
+    }
+
+    # Return the Markdown table
+    return $markdown
+}
+
+
+#
+# Main Entry Point
+#
 $inputFile = $args[0]
 
 if (-not ($inputFile -match '\.rl$')) {
@@ -5,16 +88,17 @@ if (-not ($inputFile -match '\.rl$')) {
     exit
 }
 
-$markdownFile = $inputFile -replace '\.rl$', '.md'
 $HTMLFile = $inputFile -replace '\.rl$', '.html'
 
-$markdownContent = Get-Content -Path $markdownFile
-$markdownContent = $markdownContent[2..($markdownContent.Length - 1)]
+$markdownContent = Convert-BinaryToMarkdownTable -Path $inputFile
 
 $convertedRows = @()
 $additionalContent = @()
 
-foreach ($line in $markdownContent) {
+# Split the Markdown table into separate lines
+$markdownLines = $markdownContent -split '\r?\n'
+
+foreach ($line in $markdownLines) {
     if ($line -match '^\|[^|]*\|[^|]*\|[^|]*\|[^|]*\|\s*$') {
         $row = $line -replace '\|', '' -split '\s+'
         $filename = $row[1] -replace '(?<=\..{3}).*', ''
@@ -68,7 +152,7 @@ $CSS = @"
         width: 7.5%;
     }
     .cell:nth-child(4) {
-        width: 56.5%;
+        width: 56.5 %;
     }
 </style>
 "@
