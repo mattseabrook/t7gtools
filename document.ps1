@@ -59,16 +59,16 @@ $CSS = @"
         border: 1px solid #ddd;
     }
     .cell:nth-child(1) {
-        width: 5%;
+        width: 7.5%;
     }
     .cell:nth-child(2) {
-        width: 5%;
+        width: 7.5%;
     }
     .cell:nth-child(3) {
-        width: 5%;
+        width: 7.5%;
     }
     .cell:nth-child(4) {
-        width: 65%;
+        width: 56.5%;
     }
 </style>
 "@
@@ -78,8 +78,11 @@ $JavaScript = @"
     function sortTable(column, dataType) {
         const table = document.querySelector('.table-responsive');
         const rows = Array.from(table.querySelectorAll('.row:not(.header)'));
-        const sortType = table.getAttribute('data-sort-type') === 'asc' ? 'desc' : 'asc';
+        const currentSortType = table.getAttribute('data-sort-type');
+        const currentSortedColumn = parseInt(table.getAttribute('data-sorted-column'), 10);
+        const sortType = currentSortType === 'desc' && column === currentSortedColumn ? 'asc' : 'desc';
         table.setAttribute('data-sort-type', sortType);
+        table.setAttribute('data-sorted-column', column);
 
         rows.sort((a, b) => {
             let aValue = a.children[column].innerText;
@@ -93,7 +96,27 @@ $JavaScript = @"
         });
 
         rows.forEach(row => table.appendChild(row));
+        setSortedColumnIndicator(column, sortType);
     }
+
+    function setSortedColumnIndicator(column, sortType) {
+        const table = document.querySelector('.table-responsive');
+        const columnHeader = table.querySelector('.header > .cell:nth-child(' + (column + 1) + ')');
+        const sortedColumnIndicator = sortType === 'asc' ? '&uarr;' : '&darr;';
+        const previousSortedColumn = parseInt(table.getAttribute('data-previous-sorted-column'), 10);
+
+        if (previousSortedColumn >= 0) {
+            const previousColumnHeader = table.querySelector('.header > .cell:nth-child(' + (previousSortedColumn + 1) + ')');
+            previousColumnHeader.innerHTML = previousColumnHeader.innerHTML.slice(0, -1).trim(); // Remove last character (arrow)
+        }
+
+        columnHeader.innerHTML = columnHeader.innerHTML.trim() + ' ' + sortedColumnIndicator; // Add new arrow
+        table.setAttribute('data-previous-sorted-column', column);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        sortTable(1, 'int');
+    });
 </script>
 "@
 
@@ -104,22 +127,22 @@ $html = @"
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown to DIV Table</title>
+    <title>Index of $($inputFile.Split("\")[-1])</title>
     $CSS
+    $JavaScript
 </head>
 <body>
     <h1>$($inputFile.Split("\")[-1])</h1>
     <div class="table-responsive" data-sort-type="asc">
         <div class="row header">
-            <div class="cell" onclick="sortTable(0, 'string')">Filename</div>
-            <div class="cell" onclick="sortTable(1, 'int')">Size</div>
-            <div class="cell" onclick="sortTable(2, 'int')">GJD Index</div>
-            <div class="cell" onclick="sortTable(3, 'string')">Description</div>
+            <div class="cell" data-sort-type="asc" onclick="sortTable(0, 'string')">Filename</div>
+            <div class="cell" data-sort-type="desc" onclick="sortTable(1, 'int')">Size</div>
+            <div class="cell" data-sort-type="asc" onclick="sortTable(2, 'int')">GJD Index</div>
+            <div class="cell" data-sort-type="asc" onclick="sortTable(3, 'string')">Description</div>
         </div>
         $convertedRowsString
     </div>
     $additionalContentString
-    $JavaScript
 </body>
 </html>
 "@

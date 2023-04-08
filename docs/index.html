@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The 7th Guest</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      #map-container {
+        position: relative;
+      }
+      #map {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+      #click-area {
+        position: absolute;
+        top: 20%; /* Adjust these values according to the desired clickable area */
+        left: 30%;
+        width: 10%;
+        height: 10%;
+        cursor: pointer;
+      }
+    </style>
+    <script>
+      function openDrHtml() {
+        window.location.href = "dr.html";
+      }
+    </script>
+  </head>
+  <body>
+    <div id="map-container">
+      <img id="map" src="map.jpg" alt="1st Floor of the 7th Guest House" />
+      <div id="click-area" onclick="openDrHtml()"></div>
+    </div>
+  </body>
+</html>
