@@ -15,7 +15,7 @@ This function takes in the path of a binary file as input, extracts data from th
 The path of the binary file to convert to a Markdown table.
 
 .EXAMPLE
-Convert-BinaryToMarkdownTable -Path $inputFile
+Convert-RLToMarkdownTable -Path $inputFile
 
 This example converts the binary file located at $inputFile to a Markdown table and returns the table as a string.
 
@@ -23,7 +23,7 @@ This example converts the binary file located at $inputFile to a Markdown table 
 A string representing the Markdown table that displays the extracted data.
 
 #>
-function Convert-BinaryToMarkdownTable {
+function Convert-RLToMarkdownTable {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -79,6 +79,14 @@ function Convert-BinaryToMarkdownTable {
 
 
 #
+#
+#
+function Get-VDXData {
+
+}
+
+
+#
 # Main Entry Point
 #
 $inputFile = $args[0]
@@ -90,13 +98,13 @@ if (-not ($inputFile -match '\.rl$')) {
 
 $HTMLFile = $inputFile -replace '\.rl$', '.html'
 
-$markdownContent = Convert-BinaryToMarkdownTable -Path $inputFile
+$RLMarkdownContent = Convert-RLToMarkdownTable -Path $inputFile
 
 $convertedRows = @()
 $additionalContent = @()
 
 # Split the Markdown table into separate lines
-$markdownLines = $markdownContent -split '\r?\n'
+$markdownLines = $RLMarkdownContent -split '\r?\n'
 
 foreach ($line in $markdownLines) {
     if ($line -match '^\|[^|]*\|[^|]*\|[^|]*\|[^|]*\|\s*$') {
