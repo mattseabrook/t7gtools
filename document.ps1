@@ -78,11 +78,95 @@ function Convert-RLToMarkdownTable {
 }
 
 
-#
-#
-#
-function Get-VDXData {
+<#
+.SYNOPSIS
+   This function reads binary data from a file and extracts header and smaller file information.
+.DESCRIPTION
+   This function takes two integer parameters: index and bytes, which represent the offset and number of bytes to read from the file. It then opens the binary file specified by the $inputFile variable, seeks to the specified offset, and reads the specified number of bytes. After that, it extracts the header information from the binary data, constructs an HTML structure containing the header information, and parses the rest of the binary data to create a Markdown table of smaller file information. Finally, it returns the HTML and Markdown as output.
 
+.PARAMETER index
+   The offset in bytes to start reading the binary data.
+
+.PARAMETER bytes
+   The number of bytes to read from the binary data.
+
+.EXAMPLE
+   Get-VDXData -index 0 -bytes 1024
+   This command reads 1024 bytes of binary data starting at offset 0 and returns an HTML structure containing header information and a Markdown table of all the header information of the smaller files that are contained within the larger VDX structure/.
+
+.OUTPUTS
+   This function returns an array containing two strings: an HTML structure containing header information, and a Markdown table of smaller file information.
+#>
+function Get-VDXData {
+    param(
+        [int]$index,
+        [int]$bytes
+    )
+    
+    $GJDFile = $inputFile -replace '\.rl$', '.gjd'
+    $fileStream = New-Object System.IO.FileStream($GJDFile, [System.IO.FileMode]::Open)
+
+    # Seek to the specified offset
+    $fileStream.Seek($index, [System.IO.SeekOrigin]::Begin) | Out-Null
+
+    # Read the specified number of bytes and store them in a variable
+    $VDXFile = New-Object byte[] $bytes
+    $fileStream.Read($VDXFile, 0, $bytes) | Out-Null
+    $fileStream.Close()     # Close the file stream
+
+    $binaryReader = New-Object System.IO.BinaryReader($fileStream)
+    $identifier = $binaryReader.ReadUInt16()
+    $unknownBytes = $binaryReader.ReadBytes(6)
+
+    # Construct the HTML that contains the header information
+    $html = "<p>`n"
+    $html += "    Identifier: <code>0x$($identifier.ToString('X4'))</code>`n"
+    $html += "    Unknown: <code>0x$($unknownBytes[0].ToString('X2'))</code> <code>0x$($unknownBytes[1].ToString('X2'))</code> <code>0x$($unknownBytes[2].ToString('X2'))</code> <code>0x$($unknownBytes[3].ToString('X2'))</code> <code>0x$($unknownBytes[4].ToString('X2'))</code> <code>0x$($unknownBytes[5].ToString('X2'))</code>`n"
+    $html += "</p>`n"
+
+    # Parse the smaller files and create the Markdown table
+    $markdown = '| Index | chunkType | dataSize | lengthMask | lengthBits | Type | Compressed |
+    | --- | --- | --- | --- | --- | --- | --- |
+    '
+
+    $index = 0
+    while ($fileStream.Position -lt $fileStream.Length) {
+        $chunkType = $binaryReader.ReadByte()
+        $unknown1 = $binaryReader.ReadByte()
+        $dataSize = $binaryReader.ReadUInt32()
+        $lengthMask = $binaryReader.ReadByte()
+        $lengthBits = $binaryReader.ReadByte()
+
+        # Determine the type of the smaller file based on the chunk type
+        if ($chunkType -eq 0x00) {
+        $type = "Replay"
+        } elseif ($chunkType -eq 0x20) {
+        $type = "Bitmap"
+        } elseif ($chunkType -eq 0x25) {
+        $type = "Delta Frame"
+        } elseif ($chunkType -eq 0x80) {
+        $type = "Raw WAV data - 8-bit, Mono, 22kHz"
+        } else {
+        $type = "Unknown"
+        }
+
+        # Determine if the smaller file is compressed based on the lengthMask and lengthBits values
+        if ($lengthMask -eq 0 -and $lengthBits -eq 0) {
+        $compressed = "false"
+        } else {
+        $compressed = "true"
+        }
+
+        # Add the smaller file information to the Markdown table
+        $markdown += '| ' + $index + ' | 0x' + $chunkType.ToString('X2') + ' | ' + $dataSize.ToString('N0') + ' | 0x' + $lengthMask.ToString('X2') + ' | 0x' + $lengthBits.ToString('X2') + ' | ' + $type + ' | ' + $compressed + ' | 
+        '
+
+        $index++
+        # Skip over the actual data of the smaller file
+        $fileStream.Seek($dataSize, [System.IO.SeekOrigin]::Current) | Out-Null
+    }
+
+    return $html, $markdown
 }
 
 
@@ -99,14 +183,12 @@ if (-not ($inputFile -match '\.rl$')) {
 $HTMLFile = $inputFile -replace '\.rl$', '.html'
 
 $RLMarkdownContent = Convert-RLToMarkdownTable -Path $inputFile
+$RLentries = $RLMarkdownContent -split '\r?\n'      # Split the Markdown table into separate lines
 
 $convertedRows = @()
 $additionalContent = @()
 
-# Split the Markdown table into separate lines
-$markdownLines = $RLMarkdownContent -split '\r?\n'
-
-foreach ($line in $markdownLines) {
+foreach ($line in $RLentries) {
     if ($line -match '^\|[^|]*\|[^|]*\|[^|]*\|[^|]*\|\s*$') {
         $row = $line -replace '\|', '' -split '\s+'
         $filename = $row[1] -replace '(?<=\..{3}).*', ''
@@ -118,16 +200,37 @@ foreach ($line in $markdownLines) {
     <div class="cell">$($row[4])</div>
 </div>
 "@
-        $additionalContent += @"
-<h2 id="$filename">$filename</h2>
-<p>Placeholder for $filename file info</p>
-<span><a href="#">Back to the table</a></span>
+
+        $VDXHeader, $VDXData = Get-VDXData -index $row[3] -bytes $row[2] -replace ',', ''
+
+        $additionalContent += "<h2 id='$filename'>$filename</h2>`n"
+        $additionalContent += $VDXHeader
+
+        $VDXDataEntries = $VDXData -split '\r?\n'      # Split the Markdown table into separate lines
+        $VDXDataConvertedRows = @()
+
+        foreach ($VDXDataLine in $VDXDataEntries) {
+            if ($VDXDataLine -match '^\|[^|]*\|[^|]*\|[^|]*\|[^|]*\|\s*$') {
+                $VDXDataRow = $VDXDataLine -replace '\|', '' -split '\s+'
+                $VDXDataConvertedRows += @"
+<div class="row">
+    <div class="cell">$($VDXDataRow[1])</div>
+    <div class="cell">$($VDXDataRow[2])</div>
+    <div class="cell">$($VDXDataRow[3])</div>
+    <div class="cell">$($VDXDataRow[4])</div>
+</div>
 "@
+            }
+        }
+
+        $additionalContent += $VDXDataConvertedRows
+
+        $additionalContent += '<span><a href="#">Back to the table</a></span>'
     }
 }
 
 $convertedRowsString = $convertedRows -join "`n"
-$additionalContentString = ($additionalContent | Sort-Object) -join "`n"
+$additionalContentString = $additionalContent -join "`n"
 
 # Define the CSS and JavaScript code
 $CSS = @"
