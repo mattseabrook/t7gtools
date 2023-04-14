@@ -29,6 +29,7 @@ function Convert-RLToMarkdownTable {
         [Parameter(Mandatory = $true)]
         [string]$Path
     )
+    Write-Host $Path
 
     # Open the binary file
     $binaryFile = Get-Content -Path $Path -Encoding Byte
@@ -98,44 +99,52 @@ function Convert-RLToMarkdownTable {
    This function returns an array containing two strings: an HTML structure containing header information, and a Markdown table of smaller file information.
 #>
 function Get-VDXData {
-    param(
+        [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
         [int]$index,
         [int]$bytes
     )
     
-    $GJDFile = $inputFile -replace '\.rl$', '.gjd'
-    $fileStream = New-Object System.IO.FileStream($GJDFile, [System.IO.FileMode]::Open)
+    $Path = $Path -replace '^\.\[\\\/]', ''
+    $GJDFile = Join-Path -Path (Get-Location) -ChildPath $Path
 
-    # Seek to the specified offset
-    $fileStream.Seek($index, [System.IO.SeekOrigin]::Begin) | Out-Null
+    Write-Host $GJDFile
 
-    # Read the specified number of bytes and store them in a variable
-    $VDXFile = New-Object byte[] $bytes
-    $fileStream.Read($VDXFile, 0, $bytes) | Out-Null
-    $fileStream.Close()     # Close the file stream
+    Write-Host "Opening VDX File..."
+    $stream = [System.IO.File]::OpenRead($GJDFile)
+    $stream.Position = $index
+    $VDXFile = New-Object Byte[] $bytes
+    $stream.Read($VDXFile, 0, $bytes)
+    $stream.Close()
 
-    $binaryReader = New-Object System.IO.BinaryReader($fileStream)
-    $identifier = $binaryReader.ReadUInt16()
-    $unknownBytes = $binaryReader.ReadBytes(6)
+    Write-Host "Reading VDX Header..."
+
+    $identifier = $VDXFile.ReadUInt16()
+    $unknownBytes = $VDXFile.ReadBytes(6)
 
     # Construct the HTML that contains the header information
     $html = "<p>`n"
-    $html += "    Identifier: <code>0x$($identifier.ToString('X4'))</code>`n"
+    $html += "    Identifier: <code>$($identifier.ToString('X4'))</code>`n"
     $html += "    Unknown: <code>0x$($unknownBytes[0].ToString('X2'))</code> <code>0x$($unknownBytes[1].ToString('X2'))</code> <code>0x$($unknownBytes[2].ToString('X2'))</code> <code>0x$($unknownBytes[3].ToString('X2'))</code> <code>0x$($unknownBytes[4].ToString('X2'))</code> <code>0x$($unknownBytes[5].ToString('X2'))</code>`n"
     $html += "</p>`n"
-
-    # Parse the smaller files and create the Markdown table
+    
+    # Create the Markdown table
     $markdown = '| Index | chunkType | dataSize | lengthMask | lengthBits | Type | Compressed |
     | --- | --- | --- | --- | --- | --- | --- |
     '
 
+    # Debug
+    Write-Host "VDX While loop---"
+
     $index = 0
-    while ($fileStream.Position -lt $fileStream.Length) {
-        $chunkType = $binaryReader.ReadByte()
-        $unknown1 = $binaryReader.ReadByte()
-        $dataSize = $binaryReader.ReadUInt32()
-        $lengthMask = $binaryReader.ReadByte()
-        $lengthBits = $binaryReader.ReadByte()
+    while ($VDXFile.Position -lt $VDXFile.Length) {
+        $chunkType = $VDXFile.ReadByte()
+        $unknown1 = $VDXFile.ReadByte()
+        $dataSize = $VDXFile.ReadUInt32()
+        $lengthMask = $VDXFile.ReadByte()
+        $lengthBits = $VDXFile.ReadByte()
 
         # Determine the type of the smaller file based on the chunk type
         if ($chunkType -eq 0x00) {
@@ -158,12 +167,12 @@ function Get-VDXData {
         }
 
         # Add the smaller file information to the Markdown table
-        $markdown += '| ' + $index + ' | 0x' + $chunkType.ToString('X2') + ' | ' + $dataSize.ToString('N0') + ' | 0x' + $lengthMask.ToString('X2') + ' | 0x' + $lengthBits.ToString('X2') + ' | ' + $type + ' | ' + $compressed + ' | 
+        $markdown += '| ' + $index + ' | 0x' + $chunkType.ToString('X2') + ' | ' + $dataSize.ToString('N0') + ' | 0x' + $lengthMask.ToString('X2') + ' | 0x' + $lengthBits.ToString('X2') + ' | ' + $type + ' | ' + $compressed + ' |
         '
 
         $index++
         # Skip over the actual data of the smaller file
-        $fileStream.Seek($dataSize, [System.IO.SeekOrigin]::Current) | Out-Null
+        $VDXFile.Seek($dataSize, [System.IO.SeekOrigin]::Current) | Out-Null
     }
 
     return $html, $markdown
@@ -179,8 +188,6 @@ if (-not ($inputFile -match '\.rl$')) {
     Write-Host "Invalid input file. Please provide a *.rl file."
     exit
 }
-
-$HTMLFile = $inputFile -replace '\.rl$', '.html'
 
 $RLMarkdownContent = Convert-RLToMarkdownTable -Path $inputFile
 $RLentries = $RLMarkdownContent -split '\r?\n'      # Split the Markdown table into separate lines
@@ -200,8 +207,7 @@ foreach ($line in $RLentries) {
     <div class="cell">$($row[4])</div>
 </div>
 "@
-
-        $VDXHeader, $VDXData = Get-VDXData -index $row[3] -bytes $row[2] -replace ',', ''
+        $VDXHeader, $VDXData = Get-VDXData -Path ($inputFile -replace '\.rl$', '.GJD') -index $row[3] -bytes ($row[2] -replace ',', '')
 
         $additionalContent += "<h2 id='$filename'>$filename</h2>`n"
         $additionalContent += $VDXHeader
@@ -343,6 +349,7 @@ $html = @"
 "@
 
 Write-Host $html    # Echo and write HTML to file
+$HTMLFile = $inputFile -replace '\.rl$', '.html'
 
 if (Test-Path -Path $HTMLFile) {
     Remove-Item -Path $HTMLFile
