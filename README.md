@@ -24,10 +24,10 @@ The 7th Guest was a popular CD-ROM game released in 1993. This repository contai
     - [General](#general)
     - [Reverse Eng](#reverse-eng)
     - [Documentation](#documentation)
-- [Standard file formats (*.XMI, *.WAV)](#standard-file-formats-xmi-wav)
+- [Standard file formats (\*.XMI, \*.WAV)](#standard-file-formats-xmi-wav)
   - [XMI](#xmi)
   - [WAV](#wav)
-- [Proprietary file formats (*.GRV, *.RL, *.GJD, *.VDX)](#proprietary-file-formats-grv-rl-gjd-vdx)
+- [Proprietary file formats (\*.GRV, \*.RL, \*.GJD, \*.VDX)](#proprietary-file-formats-grv-rl-gjd-vdx)
   - [GRV](#grv)
   - [RL](#rl)
     - [Format](#format)
@@ -41,8 +41,9 @@ The 7th Guest was a popular CD-ROM game released in 1993. This repository contai
     - [0x25 - Delta bitmap frame data](#0x25---delta-bitmap-frame-data)
     - [0x80 - Raw WAV audio data](#0x80---raw-wav-audio-data)
 - [Reverse Engineering](#reverse-engineering)
+  - [LZSS](#lzss)
   - [GROOVIE](#groovie)
-  - [File & Directory Structure](#file--directory-structure)
+  - [File \& Directory Structure](#file--directory-structure)
     - [Proprietary](#proprietary)
     - [Debug](#debug)
   - [MS-DOS](#ms-dos)
@@ -205,6 +206,23 @@ x
 x
 
 # Reverse Engineering
+
+## LZSS
+
+Placeholder for LZSS algo documentation.
+
+| Variable  | Type | Description                                                                                     |
+| --------- | ---- | ----------------------------------------------------------------------------------------------- |
+| N         | int  | The size of the history buffer, derived from the BitsForLen value in the BlockHeader.           |
+| F         | int  | The maximum match length, derived from the BitsForLen value in the BlockHeader.                 |
+| Threshold | int  | The minimum match length, set to 3.                                                             |
+| Flags     | int  | A variable to hold the flags byte, used to determine if the next input is a match or a literal. |
+| b         | int  | A temporary variable to hold a byte value, used during processing matches and literals.         |
+| i         | int  | Loop variable for the for i in range(8) loop, used for processing each bit in the Flags byte.   |
+| j         | int  | Loop variable for the for j in range(Length) loop, used for copying matched data.               |
+| InBufPos  | int  | The current position in the input buffer InBuf.                                                 |
+| OutBufPos | int  | The current position in the output buffer OutBuf.                                               |
+| HisBufPos | int  | The current position in the history buffer HisBuf.                                              |
 
 ## GROOVIE
 

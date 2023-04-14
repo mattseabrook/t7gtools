@@ -1,0 +1,39 @@
+digraph G {
+    rankdir=LR;
+    node [shape=rect];
+
+    InitializeVariables [label="(1) Initialize Variables\nN: int\nF: int\nThreshold: int\nFlags: int\nb: int\ni: int\nj: int\nInBufPos: int\nOutBufPos: int\nHisBufPos: int\nHisBuf: list of int"];
+    WhileLoop [label="(2) While Loop: bufferPosition < blockSize - 1"];
+    ForLoop [label="(3) For Loop: for i in range(8)"];
+    IfFlags [label="(4a) If: Flags & 1 == 0"];
+    ProcessMatch [label="(4b) Process Match"];
+    ElseFlags [label="(4c) Else: Flags & 1 != 0"];
+    ProcessLiteral [label="(4d) Process Literal"];
+    ShiftFlags [label="(5) Shift Flags: Flags >>= 1"];
+    ReturnOutBuf [label="(6) Return decompressedBytes"];
+
+    InitializeVariables -> WhileLoop [minlen=2];
+    WhileLoop -> ForLoop [minlen=2];
+    ForLoop -> IfFlags [minlen=2];
+    IfFlags -> ProcessMatch;
+    IfFlags -> ElseFlags [label="Else"];
+    ProcessMatch -> ShiftFlags;
+    ElseFlags -> ProcessLiteral;
+    ProcessLiteral -> ShiftFlags;
+    ShiftFlags -> ForLoop [label="Next iteration", minlen=2];
+    ForLoop -> ReturnOutBuf [label="Exit loop", minlen=4];
+
+    { rank=same; InitializeVariables WhileLoop ForLoop }
+    { rank=same; IfFlags ElseFlags }
+    { rank=same; ProcessMatch ProcessLiteral }
+    { rank=same; ShiftFlags ReturnOutBuf }
+
+    labelloc="b";
+    labeljust="r";
+    fontsize=14;
+    label="\n\nProject: 7th Guest LZSS Implementation\nDate: 2023-04-14 18:35 PM EST\nReverse-Engineering: Matt Seabrook";
+    bgcolor="white";
+    pad="0.5";
+    edge [color="black"];
+    node [color="black"];
+}
