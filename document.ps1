@@ -29,7 +29,6 @@ function Convert-RLToMarkdownTable {
         [Parameter(Mandatory = $true)]
         [string]$Path
     )
-    Write-Host $Path
 
     # Open the binary file
     $binaryFile = Get-Content -Path $Path -Encoding Byte
@@ -93,7 +92,7 @@ function Convert-RLToMarkdownTable {
 
 .EXAMPLE
    Get-VDXData -index 0 -bytes 1024
-   This command reads 1024 bytes of binary data starting at offset 0 and returns an HTML structure containing header information and a Markdown table of all the header information of the smaller files that are contained within the larger VDX structure/.
+   This command reads 1024 bytes of binary data starting at offset 0 and returns an HTML structure containing header information and a Markdown table of all the header information of the smaller files that are contained within the larger VDX structure.
 
 .OUTPUTS
    This function returns an array containing two strings: an HTML structure containing header information, and a Markdown table of smaller file information.
@@ -110,72 +109,37 @@ function Get-VDXData {
     $Path = $Path -replace '^\.\[\\\/]', ''
     $GJDFile = Join-Path -Path (Get-Location) -ChildPath $Path
 
-    Write-Host $GJDFile
-
-    Write-Host "Opening VDX File..."
     $stream = [System.IO.File]::OpenRead($GJDFile)
     $stream.Position = $index
+
     $VDXFile = New-Object Byte[] $bytes
+
     $stream.Read($VDXFile, 0, $bytes)
     $stream.Close()
 
-    Write-Host "Reading VDX Header..."
-
-    $identifier = $VDXFile.ReadUInt16()
-    $unknownBytes = $VDXFile.ReadBytes(6)
+    $identifier = [BitConverter]::ToUInt16($VDXFile, 0)
+    $unknownBytes = $VDXFile[2..7]
 
     # Construct the HTML that contains the header information
     $html = "<p>`n"
-    $html += "    Identifier: <code>$($identifier.ToString('X4'))</code>`n"
-    $html += "    Unknown: <code>0x$($unknownBytes[0].ToString('X2'))</code> <code>0x$($unknownBytes[1].ToString('X2'))</code> <code>0x$($unknownBytes[2].ToString('X2'))</code> <code>0x$($unknownBytes[3].ToString('X2'))</code> <code>0x$($unknownBytes[4].ToString('X2'))</code> <code>0x$($unknownBytes[5].ToString('X2'))</code>`n"
-    $html += "</p>`n"
-    
+    $html += "Identifier: <code>" + $identifier.ToString('X4') + "</code><br>`n"
+    $html += "UnknownBytes: <code>0x" + $unknownBytes[0].ToString('X2') + "</code> <code>0x" + $unknownBytes[1].ToString('X2') + "</code> <code>0x" + $unknownBytes[2].ToString('X2') + "</code> <code>0x" + $unknownBytes[3].ToString('X2') + "</code> <code>0x" + $unknownBytes[4].ToString('X2') + "</code> <code>0x" + $unknownBytes[5].ToString('X2') + "</code>`n"
+    $html += "</p>"
+     
     # Create the Markdown table
     $markdown = '| Index | chunkType | dataSize | lengthMask | lengthBits | Type | Compressed |
     | --- | --- | --- | --- | --- | --- | --- |
     '
 
-    # Debug
-    Write-Host "VDX While loop---"
+    # VDX While Loop
 
-    $index = 0
-    while ($VDXFile.Position -lt $VDXFile.Length) {
-        $chunkType = $VDXFile.ReadByte()
-        $unknown1 = $VDXFile.ReadByte()
-        $dataSize = $VDXFile.ReadUInt32()
-        $lengthMask = $VDXFile.ReadByte()
-        $lengthBits = $VDXFile.ReadByte()
-
-        # Determine the type of the smaller file based on the chunk type
-        if ($chunkType -eq 0x00) {
-        $type = "Replay"
-        } elseif ($chunkType -eq 0x20) {
-        $type = "Bitmap"
-        } elseif ($chunkType -eq 0x25) {
-        $type = "Delta Frame"
-        } elseif ($chunkType -eq 0x80) {
-        $type = "Raw WAV data - 8-bit, Mono, 22kHz"
-        } else {
-        $type = "Unknown"
-        }
-
-        # Determine if the smaller file is compressed based on the lengthMask and lengthBits values
-        if ($lengthMask -eq 0 -and $lengthBits -eq 0) {
-        $compressed = "false"
-        } else {
-        $compressed = "true"
-        }
-
-        # Add the smaller file information to the Markdown table
-        $markdown += '| ' + $index + ' | 0x' + $chunkType.ToString('X2') + ' | ' + $dataSize.ToString('N0') + ' | 0x' + $lengthMask.ToString('X2') + ' | 0x' + $lengthBits.ToString('X2') + ' | ' + $type + ' | ' + $compressed + ' |
-        '
-
-        $index++
-        # Skip over the actual data of the smaller file
-        $VDXFile.Seek($dataSize, [System.IO.SeekOrigin]::Current) | Out-Null
+    # Create a custom object with named properties
+    $output = New-Object -TypeName PSObject -Property @{
+        HTML = $html
+        Markdown = $markdown
     }
 
-    return $html, $markdown
+    return $output
 }
 
 
@@ -207,16 +171,17 @@ foreach ($line in $RLentries) {
     <div class="cell">$($row[4])</div>
 </div>
 "@
-        $VDXHeader, $VDXData = Get-VDXData -Path ($inputFile -replace '\.rl$', '.GJD') -index $row[3] -bytes ($row[2] -replace ',', '')
+        $VDXData = Get-VDXData -Path ($inputFile -replace '\.rl$', '.GJD') -index $row[3] -bytes ($row[2] -replace ',', '')
 
         $additionalContent += "<h2 id='$filename'>$filename</h2>`n"
-        $additionalContent += $VDXHeader
+        $additionalContent += "<h3>Header</h3>`n"
+        $additionalContent += $VDXData.HTML
 
-        $VDXDataEntries = $VDXData -split '\r?\n'      # Split the Markdown table into separate lines
+        $VDXDataEntries = $VDXData.Markdown -split '\r?\n'      # Split the Markdown table into separate lines
         $VDXDataConvertedRows = @()
 
         foreach ($VDXDataLine in $VDXDataEntries) {
-            if ($VDXDataLine -match '^\|[^|]*\|[^|]*\|[^|]*\|[^|]*\|\s*$') {
+            if ($VDXDataLine -match '^|[^|]|[^|]|[^|]|[^|]|[^|]|[^|]|[^|]|\s$') {
                 $VDXDataRow = $VDXDataLine -replace '\|', '' -split '\s+'
                 $VDXDataConvertedRows += @"
 <div class="row">
@@ -224,6 +189,9 @@ foreach ($line in $RLentries) {
     <div class="cell">$($VDXDataRow[2])</div>
     <div class="cell">$($VDXDataRow[3])</div>
     <div class="cell">$($VDXDataRow[4])</div>
+    <div class="cell">$($VDXDataRow[5])</div>
+    <div class="cell">$($VDXDataRow[6])</div>
+    <div class="cell">$($VDXDataRow[7])</div>
 </div>
 "@
             }
@@ -336,10 +304,10 @@ $html = @"
     <h1>$($inputFile.Split("\")[-1])</h1>
     <div class="table-responsive" data-sort-type="asc">
         <div class="row header">
-            <div class="cell" data-sort-type="asc" onclick="sortTable(0, 'string')">Filename</div>
+            <div class="cell" data-sort-type="desc" onclick="sortTable(0, 'string')">Filename</div>
             <div class="cell" data-sort-type="desc" onclick="sortTable(1, 'int')">Size</div>
-            <div class="cell" data-sort-type="asc" onclick="sortTable(2, 'int')">GJD Index</div>
-            <div class="cell" data-sort-type="asc" onclick="sortTable(3, 'string')">Description</div>
+            <div class="cell" data-sort-type="desc" onclick="sortTable(2, 'int')">GJD Index</div>
+            <div class="cell" data-sort-type="desc" onclick="sortTable(3, 'string')">Description</div>
         </div>
         $convertedRowsString
     </div>
