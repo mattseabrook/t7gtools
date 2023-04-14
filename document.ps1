@@ -212,7 +212,6 @@ foreach ($line in $RLentries) {
         $additionalContent += $VDXData.HTML
 
         $VDXDataEntries = $VDXData.Markdown -split '\r?\n'
-        # Remove the last entry because it is empty
         $VDXDataEntries = $VDXDataEntries[0..($VDXDataEntries.Length - 2)]
 
         $VDXDataConvertedRows = @()
@@ -234,9 +233,22 @@ foreach ($line in $RLentries) {
             }
         }
 
+        $additionalContent += @"
+<div class="table-responsive">
+    <div class="row header">
+        <div class="cell">Index</div>
+        <div class="cell">chunkType</div>
+        <div class="cell">dataSize</div>
+        <div class="cell">lengthMask</div>
+        <div class="cell">lengthBits</div>
+        <div class="cell">Type</div>
+        <div class="cell">Compressed</div>
+    </div>
+"@
+  
         $additionalContent += $VDXDataConvertedRows
 
-        $additionalContent += '<span><a href="#">Back to the table</a></span>'
+        $additionalContent += '</div><span><a href="#">Back to the table</a></span>'
     }
 }
 
@@ -348,7 +360,7 @@ $html = @"
         </div>
         $convertedRowsString
     </div>
-    <div class="vdx-info">
+    <div id="vdx-info">
         $additionalContentString
     </div>
 </body>
