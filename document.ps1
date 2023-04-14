@@ -146,9 +146,9 @@ function Get-VDXData {
         } elseif ($chunkType -eq 0x20) {
         $type = "Bitmap"
         } elseif ($chunkType -eq 0x25) {
-        $type = "Delta Frame"
+        $type = "Delta"
         } elseif ($chunkType -eq 0x80) {
-        $type = "Raw WAV data - 8-bit, Mono, 22kHz"
+        $type = "WAV"
         } else {
         $type = "Unknown"
         }
@@ -161,7 +161,7 @@ function Get-VDXData {
         }
         
         # Add the header information to the Markdown table
-        $markdown += "| $index | $chunkType | $dataSize | $lengthMask | $lengthBits | $type | $compressed |\n"
+        $markdown += "| $index | $($chunkType.ToString('X2')) | $($dataSize.ToString('N0')) | $($lengthMask.ToString('X2')) | $($lengthBits.ToString('X2')) | $type | $compressed |`n"
 
         # Increment the index to the next smaller file
         $index += 8 + $dataSize
@@ -211,7 +211,7 @@ foreach ($line in $RLentries) {
         $additionalContent += "<h3>Header</h3>"
         $additionalContent += $VDXData.HTML
 
-        $VDXDataEntries = $VDXData.Markdown -split '\r?\n'      # Split the Markdown table into separate lines
+        $VDXDataEntries = $VDXData.Markdown -split '\r?\n'
         $VDXDataConvertedRows = @()
 
         foreach ($VDXDataLine in $VDXDataEntries) {
@@ -336,7 +336,7 @@ $html = @"
 </head>
 <body>
     <h1>$($inputFile.Split("\")[-1])</h1>
-    <div class="table-responsive" data-sort-type="asc">
+    <div class="table-responsive" data-sort-type="desc">
         <div class="row header">
             <div class="cell" data-sort-type="desc" onclick="sortTable(0, 'string')">Filename</div>
             <div class="cell" data-sort-type="desc" onclick="sortTable(1, 'int')">Size</div>
@@ -345,7 +345,9 @@ $html = @"
         </div>
         $convertedRowsString
     </div>
-    $additionalContentString
+    <div class="vdx-info">
+        $additionalContentString
+    </div>
 </body>
 </html>
 "@
