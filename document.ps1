@@ -161,7 +161,7 @@ function Get-VDXData {
         }
         
         # Add the header information to the Markdown table
-        $markdown += "| $index | $($chunkType.ToString('X2')) | $($dataSize.ToString('N0')) | $($lengthMask.ToString('X2')) | $($lengthBits.ToString('X2')) | $type | $compressed |`n"
+        $markdown += "| $index | 0x$($chunkType.ToString('X2')) | $($dataSize.ToString('N0')) | 0x$($lengthMask.ToString('X2')) | 0x$($lengthBits.ToString('X2')) | $type | $compressed |`n"
 
         # Increment the index to the next smaller file
         $index += 8 + $dataSize
@@ -212,6 +212,9 @@ foreach ($line in $RLentries) {
         $additionalContent += $VDXData.HTML
 
         $VDXDataEntries = $VDXData.Markdown -split '\r?\n'
+        # Remove the last entry because it is empty
+        $VDXDataEntries = $VDXDataEntries[0..($VDXDataEntries.Length - 2)]
+
         $VDXDataConvertedRows = @()
 
         foreach ($VDXDataLine in $VDXDataEntries) {
@@ -220,10 +223,10 @@ foreach ($line in $RLentries) {
                 $VDXDataConvertedRows += @"
 <div class="row">
     <div class="cell">$($VDXDataRow[1])</div>
-    <div class="cell">$($VDXDataRow[2])</div>
+    <div class="cell"><code>$($VDXDataRow[2])</code></div>
     <div class="cell">$($VDXDataRow[3])</div>
-    <div class="cell">$($VDXDataRow[4])</div>
-    <div class="cell">$($VDXDataRow[5])</div>
+    <div class="cell"><code>$($VDXDataRow[4])</code></div>
+    <div class="cell"><code>$($VDXDataRow[5])</code></div>
     <div class="cell">$($VDXDataRow[6])</div>
     <div class="cell">$($VDXDataRow[7])</div>
 </div>
