@@ -62,7 +62,7 @@ foreach ($file in $vdxFiles) {
 
   Write-Host $markdown
   Write-Host ""   
-
+  
   # Close the file stream
   $stream.Close()
 }

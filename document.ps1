@@ -127,11 +127,45 @@ function Get-VDXData {
     $html += "</p>"
      
     # Create the Markdown table
-    $markdown = '| Index | chunkType | dataSize | lengthMask | lengthBits | Type | Compressed |
+    $header = '| Index | chunkType | dataSize | lengthMask | lengthBits | Type | Compressed |
     | --- | --- | --- | --- | --- | --- | --- |
     '
 
-    # VDX While Loop
+    $index = 8
+    while ($index -lt $bytes) {
+        # Read the header values for the current smaller file
+        $chunkType = $VDXFile[$index]
+        $unknownByte = $VDXFile[$index + 1]
+        $dataSize = [BitConverter]::ToUInt32($VDXFile, $index + 2)
+        $lengthMask = $VDXFile[$index + 6]
+        $lengthBits = $VDXFile[$index + 7]
+
+        # Determine the type of the smaller file based on the chunk type
+        if ($chunkType -eq 0x00) {
+        $type = "Replay"
+        } elseif ($chunkType -eq 0x20) {
+        $type = "Bitmap"
+        } elseif ($chunkType -eq 0x25) {
+        $type = "Delta Frame"
+        } elseif ($chunkType -eq 0x80) {
+        $type = "Raw WAV data - 8-bit, Mono, 22kHz"
+        } else {
+        $type = "Unknown"
+        }
+
+        # Determine if the smaller file is compressed based on the lengthMask and lengthBits values
+        if ($lengthMask -eq 0 -and $lengthBits -eq 0) {
+        $compressed = "false"
+        } else {
+        $compressed = "true"
+        }
+        
+        # Add the header information to the Markdown table
+        $markdown += "| $index | $chunkType | $dataSize | $lengthMask | $lengthBits | $type | $compressed |\n"
+
+        # Increment the index to the next smaller file
+        $index += 8 + $dataSize
+    }
 
     # Create a custom object with named properties
     $output = New-Object -TypeName PSObject -Property @{
@@ -173,8 +207,8 @@ foreach ($line in $RLentries) {
 "@
         $VDXData = Get-VDXData -Path ($inputFile -replace '\.rl$', '.GJD') -index $row[3] -bytes ($row[2] -replace ',', '')
 
-        $additionalContent += "<h2 id='$filename'>$filename</h2>`n"
-        $additionalContent += "<h3>Header</h3>`n"
+        $additionalContent += "<h2 id='$filename'>$filename</h2>"
+        $additionalContent += "<h3>Header</h3>"
         $additionalContent += $VDXData.HTML
 
         $VDXDataEntries = $VDXData.Markdown -split '\r?\n'      # Split the Markdown table into separate lines
