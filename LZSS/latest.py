@@ -7,10 +7,10 @@ def DecompressBlock(compressedBytes, lengthBits, blockSize):
     i = 0
     j = 0
     inputBufferPosition = 0
-    buffer = 0
     historyBufferPosition = N - F
     historyBuffer = [0] * N
     decompressedBytes = []
+    outputBufferPosition = 0
 
     while inputBufferPosition < blockSize - 1:
         Flags = compressedBytes[inputBufferPosition]
@@ -24,17 +24,19 @@ def DecompressBlock(compressedBytes, lengthBits, blockSize):
 
                     if OfsLen == 0:
                         break
-
+                    # Length may be wrong, and may have to use lengthMask
                     Length = (OfsLen & ((1 << lengthBits) - 1)) + Threshold
                     Offset = (historyBufferPosition - (OfsLen >> lengthBits)) & (N - 1)
 
                     for j in range(Length):
                         b = historyBuffer[(Offset + j) & (N - 1)]
                         decompressedBytes.append(b)
+                        outputBufferPosition += 1
                         historyBuffer[historyBufferPosition] = b
                         historyBufferPosition = (historyBufferPosition + 1) & (N - 1)
                 else:
                     decompressedBytes.append(compressedBytes[inputBufferPosition])
+                    outputBufferPosition += 1
                     historyBuffer[historyBufferPosition] = b
                     inputBufferPosition += 1
                     historyBufferPosition = (historyBufferPosition + 1) & (N - 1)
