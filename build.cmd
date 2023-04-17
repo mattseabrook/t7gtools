@@ -4,11 +4,15 @@ setlocal
 set CONFIG=Release
 set PLATFORM=x64
 
-if "%1" == "clean" (
+cls
+
+if exist bin\ (
     echo Cleaning build files...
-    rmdir /s /q bin
-    rmdir /s /q obj
-    exit /b
+    for /d %%i in (bin obj) do (
+        for /r "%%i" %%j in (*) do (
+            del /f /q "%%j"
+        )
+    )
 )
 
 if "%1" == "-target" (
@@ -35,5 +39,7 @@ for %%i in (src\*.cpp) do (
 
 echo Linking...
 link /NOLOGO /SUBSYSTEM:WINDOWS /INCREMENTAL:NO /ENTRY:WinMainCRTStartup /OUT:"%OUTPUT_DIR%\t7gtools.exe" %INTERMEDIATE_DIR%\*.obj "%GLFW_LIB_DIR%\glfw3.lib" opengl32.lib user32.lib gdi32.lib shell32.lib /LIBPATH:"%GLFW_LIB_DIR%"
+
+bin\x64_Release\t7gtools.exe -d
 
 endlocal

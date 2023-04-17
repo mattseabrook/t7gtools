@@ -8,10 +8,6 @@
 
 GJDFileInfo* openRLFile(std::string filename)
 {
-#ifdef _DEBUG
-	std::string rlStringData;
-#endif
-
 	std::ifstream rlFile;
 	rlFile.open(filename, std::ios::binary);
 	if (rlFile.is_open())
@@ -39,15 +35,6 @@ GJDFileInfo* openRLFile(std::string filename)
 				array[i].offset = *(uint32_t*)(buffer + 12);			// $12 - $15 : Offset
 				array[i].size = *(uint32_t*)(buffer + 16);				// $16 - $19 : Length
 
-#ifdef _DEBUG
-				rlStringData += array[i].name +
-					"," +
-					std::to_string(array[i].offset) +
-					"," +
-					std::to_string(array[i].size) +
-					"\n";
-#endif
-
 				// Empty the buffer
 				for (int j = 0; j < 20; j++)
 				{
@@ -63,18 +50,6 @@ GJDFileInfo* openRLFile(std::string filename)
 			}
 		}
 
-#ifdef _DEBUG
-		if ((strcmp(__argv[1], "-R") == 0 || strcmp(__argv[1], "-rl") == 0))
-		{
-			MessageBox(NULL, rlStringData.c_str(), "RL File", MB_OK);
-
-			std::ofstream rlDataFile;
-			rlDataFile.open("rlData.txt", std::ios::binary);
-			rlDataFile << rlStringData;
-			rlDataFile.close();
-		}
-#endif
-
 		rlFile.close();
 
 		// Return array
@@ -84,11 +59,9 @@ GJDFileInfo* openRLFile(std::string filename)
 	{
 		MessageBox(
 			NULL,
-			"Invalid command-line arguments provided!\n\n\
+			"Could not find RL file specified!\n\n\
 Usage:\n\n\
-t7gtools.exe [-R | -rl] filename.rl\n\
-t7gtools.exe [-v | -version]\n\
-t7gtools.exe [-d | -demo]",
+t7gtools.exe [-R | -rl] filename.rl",
 "t7gtools",
 MB_ICONERROR
 );
