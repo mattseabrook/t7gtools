@@ -1,6 +1,7 @@
 // window.cpp
 
 #include <GLFW/glfw3.h>
+#include <Windows.h>
 
 #include "window.h"
 #include "console.h"
@@ -40,8 +41,11 @@ int openWindow()
 	glfwSetWindowUserPointer(window, &console);
 	glfwSetKeyCallback(window, key_callback);
 
+	/* Set the background color to white */
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
 	/* Initialize Game State */
-	//init();
+	// init();
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -49,16 +53,10 @@ int openWindow()
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// Render the console if it's open
 		if (console.open)
 		{
-			/* Render the console area */
-			glColor3f(0.0f, 0.0f, 0.0f); // Set the color to black
-			glBegin(GL_QUADS);
-			glVertex2f(0.0f, 0.0f);		 // Bottom-left corner
-			glVertex2f(1280.0f, 0.0f);	 // Bottom-right corner
-			glVertex2f(1280.0f, 200.0f); // Top-right corner
-			glVertex2f(0.0f, 200.0f);	 // Top-left corner
-			glEnd();
+			renderConsole(1280, 720, 200);
 		}
 
 		/* Swap front and back buffers */

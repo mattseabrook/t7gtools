@@ -5,7 +5,7 @@
 
 //===========================================================================
 
-//char** openGJDFile(std::string filename, GJDFileInfo* gjdFiles, int entries);
+void renderConsole(int windowWidth, int windowHeight, int consoleHeight);
 
 //===========================================================================
 
