@@ -14,7 +14,7 @@ std::vector<uint8_t> parseVDX(const std::vector<uint8_t> &buffer)
     header.unknown.assign(buffer.begin() + 2, buffer.begin() + 8);
 
     // Skip the VDX Header
-    int offset = 8;
+    size_t offset = 8; // Changed the type of 'offset' to 'size_t'
 
     // Initialize a vector to store the VDX chunks
     std::vector<VDXChunk> chunks;

@@ -25,10 +25,10 @@ echo Building %CONFIG% %PLATFORM% configuration...
 
 echo Compiling source files...
 for %%i in (src\*.cpp) do (
-    cl /nologo /W3 /WX- /EHsc /MD /GS /std:c++17 /Fo"%INTERMEDIATE_DIR%\%%~ni.obj" /c /I include "%%i"
+    cl /nologo /W3 /WX- /EHsc /std:c++17 /MD /GS /Fo"%INTERMEDIATE_DIR%\%%~ni.obj" /c /I include /I "C:\libs\lpng1639" /I "C:\libs\lpng1639\scripts" "%%i"
 )
 
 echo Linking...
-link /NOLOGO /SUBSYSTEM:CONSOLE /INCREMENTAL:NO /ENTRY:mainCRTStartup /OUT:"%OUTPUT_DIR%\v64-tng.exe" %INTERMEDIATE_DIR%\*.obj /LIBPATH:"C:\libs"
+link /NOLOGO /SUBSYSTEM:CONSOLE /INCREMENTAL:NO /ENTRY:mainCRTStartup /OUT:"%OUTPUT_DIR%\v64-tng.exe" %INTERMEDIATE_DIR%\*.obj /LIBPATH:"C:\libs" /LIBPATH:"C:\libs\lpng1639" libpng16.lib
 
 endlocal
