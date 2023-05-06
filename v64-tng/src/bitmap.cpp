@@ -12,8 +12,9 @@
 
 void savePNG(const std::string &filename, const std::vector<uint8_t> &imageData, int width, int height)
 {
-    FILE *fp = fopen(filename.c_str(), "wb");
-    if (!fp)
+    FILE *fp;
+    errno_t err = fopen_s(&fp, filename.c_str(), "wb");
+    if (err != 0 || !fp)
     {
         throw std::runtime_error("Failed to open file for writing: " + filename);
     }

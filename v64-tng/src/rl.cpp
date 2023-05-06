@@ -26,15 +26,16 @@ std::vector<VDXEntry> parseRLFile(const std::string &rlFilename)
     while (!rlFile.eof())
     {
         VDXEntry entry;
-        char filename[13] = {0};
-        rlFile.read(filename, 12);
-        entry.filename.assign(filename);
+        char block[20] = {0};
 
-        rlFile.read(reinterpret_cast<char *>(&entry.offset), sizeof(entry.offset));
-        rlFile.read(reinterpret_cast<char *>(&entry.length), sizeof(entry.length));
+        rlFile.read(block, sizeof(block));
 
-        // Check if we reached the end of the file
-        if (rlFile.eof()) break;
+        if (rlFile.gcount() < sizeof(block))
+            break;
+
+        entry.filename.assign(block, block + 12);
+        entry.offset = *reinterpret_cast<uint32_t *>(block + 12);
+        entry.length = *reinterpret_cast<uint32_t *>(block + 16);
 
         vdxEntries.push_back(entry);
     }
