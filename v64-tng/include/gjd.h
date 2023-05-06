@@ -19,6 +19,6 @@
 */
 
 // Function prototype for parseGJDFile
-void parseGJDFile(const std::string &gjdFilename, const std::string &rlFilename);
+void parseGJDFile(const std::string &rlFilename);
 
 #endif // GJD_H

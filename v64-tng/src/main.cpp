@@ -39,6 +39,7 @@
 #include <filesystem>
 
 #include "rl.h"
+#include "gjd.h"
 #include "bitmap.h"
 
 //
@@ -72,11 +73,11 @@ int main(int argc, char *argv[])
         else if (option == "-x")
         {
             std::cout << "Extracting..." << std::endl;
-            // Extract the VDX files from the RL-GJD resource files
-            // auto vdxFiles = extractVDXFiles(filename);
             std::string dirName = filename;
             std::replace(dirName.begin(), dirName.end(), '.', '_');
             std::filesystem::create_directory(dirName);
+
+            parseGJDFile(filename);
         }
         else if (option == "-b")
         {
