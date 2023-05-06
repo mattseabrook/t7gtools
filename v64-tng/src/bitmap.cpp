@@ -4,8 +4,11 @@
 #include <cstdint>
 #include <cstdio>
 #include <stdexcept>
+#include <string>
 
 #include <png.h>
+
+#include "bitmap.h"
 
 void savePNG(const std::string &filename, const std::vector<uint8_t> &imageData, int width, int height)
 {
@@ -62,16 +65,16 @@ void savePNG(const std::string &filename, const std::vector<uint8_t> &imageData,
 std::vector<uint8_t> processType20Chunk(const std::vector<uint8_t> &chunkData)
 {
     // Parse the header
-    uint16_t numXTiles = readLittleEndian<uint16_t>(decompressedData.data());
-    uint16_t numYTiles = readLittleEndian<uint16_t>(decompressedData.data() + 2);
-    uint16_t colourDepth = readLittleEndian<uint16_t>(decompressedData.data() + 4);
+    uint16_t numXTiles = readLittleEndian<uint16_t>(chunkData.data());
+    uint16_t numYTiles = readLittleEndian<uint16_t>(chunkData.data() + 2);
+    uint16_t colourDepth = readLittleEndian<uint16_t>(chunkData.data() + 4);
 
     const int width = numXTiles * 4;
     const int height = numYTiles * 4;
     const int numPixels = width * height;
 
     std::vector<RGBColor> palette;
-    const uint8_t *paletteData = decompressedData.data() + 6;
+    const uint8_t *paletteData = chunkData.data() + 6;
     for (int i = 0; i < (1 << colourDepth); ++i)
     {
         palette.push_back({paletteData[i * 3], paletteData[i * 3 + 1], paletteData[i * 3 + 2]});
