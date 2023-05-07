@@ -23,6 +23,7 @@
 struct VDXChunk
 {
     uint8_t chunkType;
+    uint8_t unknown;
     uint32_t dataSize;
     uint8_t lengthMask;
     uint8_t lengthBits;

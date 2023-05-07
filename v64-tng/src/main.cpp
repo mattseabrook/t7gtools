@@ -93,17 +93,28 @@ int main(int argc, char *argv[])
                 std::replace(dirName.begin(), dirName.end(), '.', '_');
                 std::filesystem::create_directory(dirName);
 
-                auto VDXFiles = parseGJDFile(input_filename);
+                std::vector<VDXFile> VDXFiles = parseGJDFile(input_filename);
 
                 for (const auto &vdxFile : VDXFiles)
                 {
                     std::string vdxFileName = dirName + "/" + vdxFile.filename;
+
+                    std::cout << "filename: " << vdxFileName << std::endl;
+
                     std::ofstream vdxFileOut(vdxFileName, std::ios::binary);
                     vdxFileOut.write(reinterpret_cast<const char *>(&vdxFile.identifier), sizeof(vdxFile.identifier));
-                    vdxFileOut.write(reinterpret_cast<const char *>(&vdxFile.unknown), sizeof(vdxFile.unknown));
+                    vdxFileOut.write(reinterpret_cast<const char *>(vdxFile.unknown.data()), 6); // Write only the first 6 bytes of the unknown field
 
                     for (const auto &chunk : vdxFile.chunks)
                     {
+                        // Write chunk header
+                        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.chunkType), sizeof(chunk.chunkType));
+                        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.unknown), sizeof(chunk.unknown));
+                        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.dataSize), sizeof(chunk.dataSize));
+                        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.lengthMask), sizeof(chunk.lengthMask));
+                        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.lengthBits), sizeof(chunk.lengthBits));
+
+                        // Write chunk data
                         vdxFileOut.write(reinterpret_cast<const char *>(chunk.data.data()), chunk.data.size());
                     }
 
