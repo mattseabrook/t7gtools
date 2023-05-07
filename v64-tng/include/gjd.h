@@ -3,9 +3,10 @@
 #ifndef GJD_H
 #define GJD_H
 
+#include <vector>
 #include <string>
 
-#include "rl.h"
+#include "vdx.h"
 
 /*
 ===============================================================================
@@ -19,6 +20,6 @@
 */
 
 // Function prototype for parseGJDFile
-void parseGJDFile(const std::string &rlFilename);
+std::vector<VDXFile> parseGJDFile(const std::string &rlFilename);
 
 #endif // GJD_H

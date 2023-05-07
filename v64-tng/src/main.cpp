@@ -42,9 +42,12 @@
 #include "gjd.h"
 #include "bitmap.h"
 
-//
-// Main Entrypoint
-//
+/*
+====================
+    MAIN ENTRY POINT
+====================
+*/
+
 int main(int argc, char *argv[])
 {
     if (argc < 3)
@@ -77,7 +80,10 @@ int main(int argc, char *argv[])
             std::replace(dirName.begin(), dirName.end(), '.', '_');
             std::filesystem::create_directory(dirName);
 
-            parseGJDFile(filename);
+            //parseGJDFile(filename);
+
+            std::ofstream vdxFileOutput(dirName + "/" + entry.filename, std::ios::binary);
+            vdxFileOutput.write(reinterpret_cast<char *>(vdxData.data()), length);
         }
         else if (option == "-b")
         {

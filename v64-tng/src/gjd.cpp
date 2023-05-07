@@ -3,13 +3,28 @@
 #include <vector>
 #include <iostream>
 
-#include <algorithm>
-#include <filesystem>
-
 #include "rl.h"
+#include "gjd.h"
 #include "vdx.h"
 
-void parseGJDFile(const std::string &rlFilename)
+/*
+===============================================================================
+Function Name: parseGJDFile
+
+Description:
+    - TBD
+
+Parameters:
+    - rlFilename: the 7th Guest RL file to parse
+
+Return:
+    - TBD
+
+Notes:
+    - None.
+===============================================================================
+*/
+std::vector<VDXFile> parseGJDFile(const std::string &rlFilename)
 {
     std::vector<RLEntry> rlEntries = parseRLFile(rlFilename);
 
@@ -20,8 +35,10 @@ void parseGJDFile(const std::string &rlFilename)
     if (!gjdFile)
     {
         std::cerr << "Error opening GJD file: " << gjdFilename << std::endl;
-        return;
+        return std::vector<VDXFile>{}; // Return an empty result
     }
+
+    std::vector<VDXFile> GJDData;
 
     for (const auto &entry : rlEntries)
     {
@@ -36,10 +53,9 @@ void parseGJDFile(const std::string &rlFilename)
         // Process the VDX data and store it in a VDXFile object
         VDXFile vdxFile = parseVDXFile(entry.filename, vdxData);
 
-        // DEBUG-Write the VDX data to a file inside the sub-directory named dirName
-        std::string dirName = rlFilename;
-        std::replace(dirName.begin(), dirName.end(), '.', '_');
-        std::ofstream vdxFileOutput(dirName + "/" + entry.filename, std::ios::binary);
-        vdxFileOutput.write(reinterpret_cast<char *>(vdxData.data()), length);
+        // Add the VDXFile object to the result
+        GJDData.push_back(vdxFile);
     }
+
+    return GJDData;
 }

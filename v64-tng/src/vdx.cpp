@@ -2,11 +2,30 @@
 
 #include <vector>
 #include <stdexcept>
+#include <fstream>
 
 #include "vdx.h"
 #include "lzss.h"
 #include "bitmap.h"
 
+/*
+===============================================================================
+Function Name: parseVDXFile
+
+Description:
+    - Parses the VDX data and returns a VDXFile object containing the parsed data.
+
+Parameters:
+    - filename: The filename for the VDX data.
+    - buffer: A vector containing the VDX data to be parsed.
+
+Return:
+    - A VDXFile object containing the parsed VDX data.
+
+Notes:
+    - None.
+===============================================================================
+*/
 VDXFile parseVDXFile(const std::string &filename, const std::vector<uint8_t> &buffer)
 {
     VDXFile vdxFile;
@@ -34,11 +53,34 @@ VDXFile parseVDXFile(const std::string &filename, const std::vector<uint8_t> &bu
     return vdxFile;
 }
 
+/*
+===============================================================================
+Function Name: parseVDXChunks
+
+Description:
+    - TBD
+
+Parameters:
+    - vdxFile: Fully populated VDXFile object.
+
+Return:
+    - TBD
+
+Notes:
+    - None.
+===============================================================================
+*/
 void parseVDXChunks(VDXFile &vdxFile)
 {
     for (VDXChunk &chunk : vdxFile.chunks)
     {
-        std::vector<uint8_t> unprocessedData;
+        std::string compressedFilename = vdxFile.filename + "-00-0x20-(compressed).bin";
+        std::string decompressedFilename = vdxFile.filename + "-00-0x20-(decompressed).bin";
+
+        std::ofstream ofsCompressed(compressedFilename, std::ios::binary);
+        std::ofstream ofsDecompressed(decompressedFilename, std::ios::binary);
+
+        std::vector<uint8_t> decompressedData;
 
         switch (chunk.chunkType)
         {
@@ -47,8 +89,12 @@ void parseVDXChunks(VDXFile &vdxFile)
             break;
         case 0x20:
             // Handle chunk type 0x20
-            unprocessedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
-            chunk.data = processType20Chunk(unprocessedData);
+            decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
+
+            ofsCompressed.write(reinterpret_cast<char *>(chunk.data.data()), chunk.data.size());
+            ofsDecompressed.write(reinterpret_cast<char *>(decompressedData.data()), decompressedData.size());
+
+            //chunk.data = processType20Chunk(decompressedData);
             break;
         case 0x80:
             // Handle chunk type 0x80
@@ -57,5 +103,8 @@ void parseVDXChunks(VDXFile &vdxFile)
             // Handle unknown chunk types
             break;
         }
+
+        ofsCompressed.close();
+        ofsDecompressed.close();
     }
 }
