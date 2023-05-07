@@ -1,3 +1,5 @@
+// vdx.cpp
+
 #include <vector>
 #include <stdexcept>
 
@@ -5,24 +7,16 @@
 #include "lzss.h"
 #include "bitmap.h"
 
-std::vector<uint8_t> parseVDX(const std::vector<uint8_t> &buffer)
+VDXFile parseVDXFile(const std::string &filename, const std::vector<uint8_t> &buffer)
 {
-    // Initialize a vector store the VDX header
-    VDXHeader header;
+    VDXFile vdxFile;
+    vdxFile.filename = filename;
 
-    header.identifier = buffer[0] | (buffer[1] << 8);
-    header.unknown.assign(buffer.begin() + 2, buffer.begin() + 8);
+    vdxFile.identifier = buffer[0] | (buffer[1] << 8);
+    std::copy(buffer.begin() + 2, buffer.begin() + 8, vdxFile.unknown.begin());
 
-    // Skip the VDX Header
-    size_t offset = 8; // Changed the type of 'offset' to 'size_t'
+    size_t offset = 8;
 
-    // Initialize a vector to store the VDX chunks
-    std::vector<VDXChunk> chunks;
-
-    // Initialize a vector to store the output data
-    std::vector<uint8_t> VDXData;
-
-    // Iterate through each chunk in the buffer
     while (offset < buffer.size())
     {
         VDXChunk chunk;
@@ -34,9 +28,18 @@ std::vector<uint8_t> parseVDX(const std::vector<uint8_t> &buffer)
         chunk.data.assign(buffer.begin() + offset, buffer.begin() + offset + chunk.dataSize);
         offset += chunk.dataSize;
 
-        std::vector<uint8_t> decompressedData;
+        vdxFile.chunks.push_back(chunk);
+    }
 
-        // Handle different chunk types based on the chunkType value
+    return vdxFile;
+}
+
+void parseVDXChunks(VDXFile &vdxFile)
+{
+    for (VDXChunk &chunk : vdxFile.chunks)
+    {
+        std::vector<uint8_t> unprocessedData;
+
         switch (chunk.chunkType)
         {
         case 0x00:
@@ -44,8 +47,8 @@ std::vector<uint8_t> parseVDX(const std::vector<uint8_t> &buffer)
             break;
         case 0x20:
             // Handle chunk type 0x20
-            decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
-            VDXData = processType20Chunk(decompressedData);
+            unprocessedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
+            chunk.data = processType20Chunk(unprocessedData);
             break;
         case 0x80:
             // Handle chunk type 0x80
@@ -54,10 +57,5 @@ std::vector<uint8_t> parseVDX(const std::vector<uint8_t> &buffer)
             // Handle unknown chunk types
             break;
         }
-
-        // Add the parsed chunk to the vector of chunks
-        chunks.push_back(chunk);
     }
-
-    return VDXData;
 }

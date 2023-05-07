@@ -5,6 +5,8 @@
 
 #include <cstdint>
 #include <vector>
+#include <array>
+#include <string>
 
 /*
 ===============================================================================
@@ -16,13 +18,6 @@
 
 ===============================================================================
 */
-
-// VDXHeader struct
-struct VDXHeader
-{
-    uint16_t identifier;
-    std::vector<uint8_t> unknown;
-};
 
 // VDXChunk struct
 struct VDXChunk
@@ -37,10 +32,13 @@ struct VDXChunk
 // VDXFile struct
 struct VDXFile
 {
-    VDXHeader header;
+    std::string filename;
+    uint32_t identifier;
+    std::array<uint8_t, 6> unknown;
     std::vector<VDXChunk> chunks;
 };
 
-std::vector<uint8_t> parseVDX(const std::vector<uint8_t> &buffer);
+VDXFile parseVDXFile(const std::string &filename, const std::vector<uint8_t> &buffer);
+void parseVDXChunks(VDXFile &vdxFile);
 
 #endif // VDX_H

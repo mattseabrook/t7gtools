@@ -17,12 +17,12 @@
 ===============================================================================
 */
 
-struct VDXEntry {
+struct RLEntry {
     std::string filename;
     size_t offset;
     size_t length;
 };
 
-std::vector<VDXEntry> parseRLFile(const std::string &rlFilename);
+std::vector<RLEntry> parseRLFile(const std::string &rlFilename);
 
 #endif // RL_H
