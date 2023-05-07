@@ -75,12 +75,6 @@ void parseVDXChunks(VDXFile &vdxFile)
 {
     for (VDXChunk &chunk : vdxFile.chunks)
     {
-        std::string compressedFilename = vdxFile.filename + "-00-0x20-(compressed).bin";
-        std::string decompressedFilename = vdxFile.filename + "-00-0x20-(decompressed).bin";
-
-        std::ofstream ofsCompressed(compressedFilename, std::ios::binary);
-        std::ofstream ofsDecompressed(decompressedFilename, std::ios::binary);
-
         std::vector<uint8_t> decompressedData;
 
         switch (chunk.chunkType)
@@ -91,10 +85,6 @@ void parseVDXChunks(VDXFile &vdxFile)
         case 0x20:
             // Handle chunk type 0x20
             decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
-
-            ofsCompressed.write(reinterpret_cast<char *>(chunk.data.data()), chunk.data.size());
-            ofsDecompressed.write(reinterpret_cast<char *>(decompressedData.data()), decompressedData.size());
-
             // chunk.data = processType20Chunk(decompressedData);
             break;
         case 0x80:
@@ -104,8 +94,5 @@ void parseVDXChunks(VDXFile &vdxFile)
             // Handle unknown chunk types
             break;
         }
-
-        ofsCompressed.close();
-        ofsDecompressed.close();
     }
 }

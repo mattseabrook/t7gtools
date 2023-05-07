@@ -24,12 +24,11 @@ Notes:
     - None.
 ===============================================================================
 */
-std::vector<VDXFile> parseGJDFile(const std::string &rlFilename)
+std::vector<VDXFile> parseGJDFile(const std::string &rlFilename, const std::string &vdxFilename, size_t vdxOffset, size_t vdxLength)
 {
     std::vector<RLEntry> rlEntries = parseRLFile(rlFilename);
 
     std::string gjdFilename = rlFilename.substr(0, rlFilename.size() - 3) + ".GJD";
-
     std::ifstream gjdFile(gjdFilename, std::ios::binary | std::ios::ate);
 
     if (!gjdFile)
@@ -40,34 +39,46 @@ std::vector<VDXFile> parseGJDFile(const std::string &rlFilename)
 
     std::vector<VDXFile> GJDData;
 
-    size_t entryIndex = 0;
-    for (const auto &entry : rlEntries)
+    if (!vdxFilename.empty() && vdxOffset > 0 && vdxLength > 0)
     {
-        std::cout << entry.filename << " | " << entry.offset << " | " << entry.length << std::endl;
-        
-        size_t offset = entry.offset;
-        size_t length = entry.length;
+        auto entry = std::find_if(rlEntries.begin(), rlEntries.end(), [&](const RLEntry &e)
+                                  { return e.filename == vdxFilename; });
 
-        // Read the VDX data from the GJD file
-        std::vector<uint8_t> vdxData(length);
-        gjdFile.seekg(offset, std::ios::beg);
-        gjdFile.read(reinterpret_cast<char *>(vdxData.data()), length);
-
-        if (!gjdFile)
+        if (entry != rlEntries.end())
         {
-            std::cerr << "Error reading VDX data from GJD file: " << gjdFilename << std::endl;
-            gjdFile.clear(); // Clear the error state
-            entryIndex++;
-            continue;
+            size_t offset = entry->offset;
+            size_t length = entry->length;
+
+            // Read the VDX data from the GJD file
+            std::vector<uint8_t> vdxData(length);
+            gjdFile.seekg(offset, std::ios::beg);
+            gjdFile.read(reinterpret_cast<char *>(vdxData.data()), length);
+
+            // Process the VDX data and store it in a VDXFile object
+            VDXFile vdxFile = parseVDXFile(vdxFilename, vdxData);
+
+            // Add the VDXFile object to the result
+            GJDData.push_back(vdxFile);
         }
+    }
+    else
+    {
+        for (const auto &entry : rlEntries)
+        {
+            size_t offset = entry.offset;
+            size_t length = entry.length;
 
-        // Process the VDX data and store it in a VDXFile object
-        VDXFile vdxFile = parseVDXFile(entry.filename, vdxData);
+            // Read the VDX data from the GJD file
+            std::vector<uint8_t> vdxData(length);
+            gjdFile.seekg(offset, std::ios::beg);
+            gjdFile.read(reinterpret_cast<char *>(vdxData.data()), length);
 
-        // Add the VDXFile object to the result
-        GJDData.push_back(vdxFile);
+            // Process the VDX data and store it in a VDXFile object
+            VDXFile vdxFile = parseVDXFile(entry.filename, vdxData);
 
-        entryIndex++;
+            // Add the VDXFile object to the result
+            GJDData.push_back(vdxFile);
+        }
     }
 
     return GJDData;

@@ -20,6 +20,6 @@
 */
 
 // Function prototype for parseGJDFile
-std::vector<VDXFile> parseGJDFile(const std::string &rlFilename);
+std::vector<VDXFile> parseGJDFile(const std::string &rlFilename, const std::string &vdxFilename = "", size_t vdxOffset = 0, size_t vdxLength = 0);
 
 #endif // GJD_H
