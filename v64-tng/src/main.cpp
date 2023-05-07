@@ -37,9 +37,12 @@
 #include <vector>
 #include <string>
 #include <filesystem>
+#include <algorithm>
+#include <fstream>
 
 #include "rl.h"
 #include "gjd.h"
+#include "vdx.h"
 #include "bitmap.h"
 
 /*
@@ -63,35 +66,64 @@ int main(int argc, char *argv[])
     {
         if (option == "-i")
         {
-            // Print the list of VDX files in the RL-GJD resource files
             auto vdxFiles = parseRLFile(filename);
-
-            std::cout << "Number of VDX Files: " << vdxFiles.size() << std::endl;
 
             for (const auto &vdxFile : vdxFiles)
             {
                 std::cout << vdxFile.filename << " | " << vdxFile.offset << " | " << vdxFile.length << std::endl;
             }
+
+            std::cout << "Number of VDX Files: " << vdxFiles.size() << std::endl;
         }
         else if (option == "-x")
         {
-            std::cout << "Extracting..." << std::endl;
-            std::string dirName = filename;
-            std::replace(dirName.begin(), dirName.end(), '.', '_');
-            std::filesystem::create_directory(dirName);
+            if (argc < 4)
+            {
+                std::cerr << "Usage: " << argv[0] << " -x [gjd|vdx] file" << std::endl;
+                return 1;
+            }
 
-            //parseGJDFile(filename);
+            std::string extraction_type = argv[2];
+            std::string input_filename = argv[3];
 
-            std::ofstream vdxFileOutput(dirName + "/" + entry.filename, std::ios::binary);
-            vdxFileOutput.write(reinterpret_cast<char *>(vdxData.data()), length);
+            if (extraction_type == "gjd")
+            {
+                std::cout << "Extracting GJD..." << std::endl;
+                std::string dirName = input_filename;
+                std::replace(dirName.begin(), dirName.end(), '.', '_');
+                std::filesystem::create_directory(dirName);
+
+                auto VDXFiles = parseGJDFile(input_filename);
+
+                for (const auto &vdxFile : VDXFiles)
+                {
+                    std::string vdxFileName = dirName + "/" + vdxFile.filename;
+                    std::ofstream vdxFileOut(vdxFileName, std::ios::binary);
+                    vdxFileOut.write(reinterpret_cast<const char *>(&vdxFile.identifier), sizeof(vdxFile.identifier));
+                    vdxFileOut.write(reinterpret_cast<const char *>(&vdxFile.unknown), sizeof(vdxFile.unknown));
+
+                    for (const auto &chunk : vdxFile.chunks)
+                    {
+                        vdxFileOut.write(reinterpret_cast<const char *>(chunk.data.data()), chunk.data.size());
+                    }
+
+                    vdxFileOut.close();
+                }
+            }
+            else if (extraction_type == "vdx")
+            {
+                std::cout << "Extracting VDX..." << std::endl;
+                // Insert code here...
+            }
+            else
+            {
+                std::cerr << "Invalid extraction type: " << extraction_type << std::endl;
+                return 1;
+            }
         }
         else if (option == "-b")
         {
             std::cout << "Processing Bitmap..." << std::endl;
-
-            // Extract the first 0x20 chunk type from the specified VDX file
-            // VDXFile vdxFile = loadVDXFile(filename);
-            // processType20Chunk(vdxFile);
 
             // Save the output image as a PNG file
             // savePNG("output_image.png", outputImageData, width, height);
