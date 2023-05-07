@@ -34,7 +34,7 @@ struct VDXChunk
 struct VDXFile
 {
     std::string filename;
-    uint32_t identifier;
+    uint16_t identifier;
     std::array<uint8_t, 6> unknown;
     std::vector<VDXChunk> chunks;
 };

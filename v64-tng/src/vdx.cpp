@@ -31,37 +31,21 @@ VDXFile parseVDXFile(const std::string &filename, const std::vector<uint8_t> &bu
     VDXFile vdxFile;
     vdxFile.filename = filename;
 
-    // Read VDX header
     vdxFile.identifier = buffer[0] | (buffer[1] << 8);
     std::copy(buffer.begin() + 2, buffer.begin() + 8, vdxFile.unknown.begin());
 
-    // Process the chunks
-    size_t offset = 8; // Start after the VDX header
+    size_t offset = 8;
 
     while (offset < buffer.size())
     {
         VDXChunk chunk;
-
-        // Read chunk header
         chunk.chunkType = buffer[offset];
         chunk.unknown = buffer[offset + 1];
         chunk.dataSize = buffer[offset + 2] | (buffer[offset + 3] << 8) | (buffer[offset + 4] << 16) | (buffer[offset + 5] << 24);
         chunk.lengthMask = buffer[offset + 6];
         chunk.lengthBits = buffer[offset + 7];
-
-        // Update offset to start of chunk data
         offset += 8;
-
-        if (offset + chunk.dataSize > buffer.size())
-        {
-            std::cerr << "Error: Chunk data size exceeds buffer size" << std::endl;
-            break;
-        }
-
-        // Read chunk data
         chunk.data.assign(buffer.begin() + offset, buffer.begin() + offset + chunk.dataSize);
-
-        // Update offset to the next chunk
         offset += chunk.dataSize;
 
         vdxFile.chunks.push_back(chunk);
