@@ -24,7 +24,7 @@ Notes:
     - None.
 ===============================================================================
 */
-std::vector<VDXFile> parseGJDFile(const std::string &rlFilename, const std::string &vdxFilename, size_t vdxOffset, size_t vdxLength)
+std::vector<VDXFile> parseGJDFile(const std::string &rlFilename, const std::string &vdxFilename)
 {
     std::vector<RLEntry> rlEntries = parseRLFile(rlFilename);
 
@@ -39,7 +39,7 @@ std::vector<VDXFile> parseGJDFile(const std::string &rlFilename, const std::stri
 
     std::vector<VDXFile> GJDData;
 
-    if (!vdxFilename.empty() && vdxOffset > 0 && vdxLength > 0)
+    if (!vdxFilename.empty())
     {
         auto entry = std::find_if(rlEntries.begin(), rlEntries.end(), [&](const RLEntry &e)
                                   { return e.filename == vdxFilename; });

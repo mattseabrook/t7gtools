@@ -82,51 +82,32 @@ int main(int argc, char *argv[])
         }
 
         std::string extraction_type = argv[2];
-        std::string input_filename = argv[3];
+        std::string rl_filename = argv[3];
+
+        std::string dirName = rl_filename;
+        std::replace(dirName.begin(), dirName.end(), '.', '_');
+        std::filesystem::create_directory(dirName);
 
         if (extraction_type == "gjd")
         {
             std::cout << "Extracting GJD..." << std::endl;
-            std::string dirName = input_filename;
-            std::replace(dirName.begin(), dirName.end(), '.', '_');
-            std::filesystem::create_directory(dirName);
 
-            std::vector<VDXFile> VDXFiles = parseGJDFile(input_filename);
+            std::vector<VDXFile> VDXFiles = parseGJDFile(rl_filename);
 
             for (const auto &vdxFile : VDXFiles)
             {
-                std::string vdxFileName = dirName + "/" + vdxFile.filename;
-
-                std::cout << "filename: " << vdxFileName << std::endl;
-
-                std::ofstream vdxFileOut(vdxFileName, std::ios::binary);
-                vdxFileOut.write(reinterpret_cast<const char *>(&vdxFile.identifier), sizeof(vdxFile.identifier));
-                vdxFileOut.write(reinterpret_cast<const char *>(vdxFile.unknown.data()), 6); // Write only the first 6 bytes of the unknown field
-
-                for (const auto &chunk : vdxFile.chunks)
-                {
-                    // Write chunk header
-                    vdxFileOut.write(reinterpret_cast<const char *>(&chunk.chunkType), sizeof(chunk.chunkType));
-                    vdxFileOut.write(reinterpret_cast<const char *>(&chunk.unknown), sizeof(chunk.unknown));
-                    vdxFileOut.write(reinterpret_cast<const char *>(&chunk.dataSize), sizeof(chunk.dataSize));
-                    vdxFileOut.write(reinterpret_cast<const char *>(&chunk.lengthMask), sizeof(chunk.lengthMask));
-                    vdxFileOut.write(reinterpret_cast<const char *>(&chunk.lengthBits), sizeof(chunk.lengthBits));
-
-                    // Write chunk data
-                    vdxFileOut.write(reinterpret_cast<const char *>(chunk.data.data()), chunk.data.size());
-                }
-
-                vdxFileOut.close();
+                writeVDXFile(vdxFile, dirName);
             }
         }
         else if (extraction_type == "vdx")
         {
             std::cout << "Extracting VDX..." << std::endl;
-            std::string dirName = input_filename;
-            std::replace(dirName.begin(), dirName.end(), '.', '_');
-            std::filesystem::create_directory(dirName);
 
-            // std::vector<VDXFile> VDXFile = parseGJDFile(input_filename, "");
+            std::string vdx_filename = argv[4];
+
+            std::vector<VDXFile> VDXFile = parseGJDFile(rl_filename, vdx_filename);
+
+            writeVDXFile(VDXFile[0], dirName);
         }
         else
         {

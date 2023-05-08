@@ -96,3 +96,44 @@ void parseVDXChunks(VDXFile &vdxFile)
         }
     }
 }
+
+/*
+===============================================================================
+Function Name: writeVDXFile
+
+Description:
+    - TBD
+
+Parameters:
+    - vdxFile: Always an std::vector of VDXFile type, but sometimes only a single
+               VDXFile object is passed in.
+
+Notes:
+    - Used by the -x command-line switch as an Extraction Tool-set, not related
+    to Game Engine functionality.
+===============================================================================
+*/
+void writeVDXFile(const VDXFile &vdxFile, const std::string &outputDir)
+{
+    std::string vdxFileName = outputDir + "/" + vdxFile.filename;
+    std::cout << "filename: " << vdxFileName << std::endl;
+
+    std::ofstream vdxFileOut(vdxFileName, std::ios::binary);
+    vdxFileOut.write(reinterpret_cast<const char *>(&vdxFile.identifier), sizeof(vdxFile.identifier));
+    vdxFileOut.write(reinterpret_cast<const char *>(vdxFile.unknown.data()), 6);
+
+    for (const auto &chunk : vdxFile.chunks)
+    {
+        // Write chunk header
+        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.chunkType), sizeof(chunk.chunkType));
+        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.unknown), sizeof(chunk.unknown));
+        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.dataSize), sizeof(chunk.dataSize));
+        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.lengthMask), sizeof(chunk.lengthMask));
+        vdxFileOut.write(reinterpret_cast<const char *>(&chunk.lengthBits), sizeof(chunk.lengthBits));
+
+        // Write chunk data
+        vdxFileOut.write(reinterpret_cast<const char *>(chunk.data.data()), chunk.data.size());
+    }
+
+    vdxFileOut.close();
+}
