@@ -42,7 +42,7 @@ std::vector<VDXFile> parseGJDFile(const std::string &rlFilename, const std::stri
     if (!vdxFilename.empty())
     {
         auto entry = std::find_if(rlEntries.begin(), rlEntries.end(), [&](const RLEntry &e)
-                                  { return e.filename == vdxFilename; });
+                                  { return e.filename.compare(0, vdxFilename.size(), vdxFilename) == 0; });
 
         if (entry != rlEntries.end())
         {
@@ -56,6 +56,11 @@ std::vector<VDXFile> parseGJDFile(const std::string &rlFilename, const std::stri
 
             // Process the VDX data and store it in a VDXFile object
             VDXFile vdxFile = parseVDXFile(vdxFilename, vdxData);
+
+            // std::cout everything about vdxFile for debugging purposes:
+            std::cout << "vdxFile.filename: " << vdxFile.filename << std::endl;
+            std::cout << "offset: " << offset << std::endl;
+            std::cout << "length: " << length << std::endl;
 
             // Add the VDXFile object to the result
             GJDData.push_back(vdxFile);
