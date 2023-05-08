@@ -57,11 +57,6 @@ std::vector<VDXFile> parseGJDFile(const std::string &rlFilename, const std::stri
             // Process the VDX data and store it in a VDXFile object
             VDXFile vdxFile = parseVDXFile(vdxFilename, vdxData);
 
-            // std::cout everything about vdxFile for debugging purposes:
-            std::cout << "vdxFile.filename: " << vdxFile.filename << std::endl;
-            std::cout << "offset: " << offset << std::endl;
-            std::cout << "length: " << length << std::endl;
-
             // Add the VDXFile object to the result
             GJDData.push_back(vdxFile);
         }

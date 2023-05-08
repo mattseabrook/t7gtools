@@ -94,6 +94,17 @@ void parseVDXChunks(VDXFile &vdxFile)
             // Handle unknown chunk types
             break;
         }
+
+        if (chunk.chunkType == 0x20)
+        {
+            std::string compressedFilename = vdxFile.filename + "-compressed.bin";
+            std::ofstream compressedFile(compressedFilename, std::ios::binary);
+            compressedFile.write(reinterpret_cast<const char *>(chunk.data.data()), chunk.data.size());
+
+            std::string decompressedFilename = vdxFile.filename + "-decompressed.bin";
+            std::ofstream decompressedFile(decompressedFilename, std::ios::binary);
+            decompressedFile.write(reinterpret_cast<const char *>(decompressedData.data()), decompressedData.size());
+        }
     }
 }
 

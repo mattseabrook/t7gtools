@@ -37,7 +37,6 @@
 #include <vector>
 #include <string>
 #include <filesystem>
-#include <algorithm>
 #include <fstream>
 
 #include "rl.h"
@@ -59,12 +58,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    std::string option = argv[1];
-    std::string filename = argv[2];
+    std::string_view option = argv[1];
+    std::string_view filename = argv[2];
 
     if (option == "-i")
     {
-        auto vdxFiles = parseRLFile(filename);
+        auto vdxFiles = parseRLFile(filename.data());
 
         for (const auto &vdxFile : vdxFiles)
         {
@@ -72,6 +71,25 @@ int main(int argc, char *argv[])
         }
 
         std::cout << "Number of VDX Files: " << vdxFiles.size() << std::endl;
+    }
+    else if (option == "-p")
+    {
+        std::ifstream vdxFile(filename.data(), std::ios::binary | std::ios::ate);
+        if (!vdxFile)
+        {
+            std::cerr << "Failed to open the VDX file: " << filename << std::endl;
+            return 1;
+        }
+
+        auto fileSize = static_cast<std::size_t>(vdxFile.tellg());
+        vdxFile.seekg(0, std::ios::beg);
+
+        std::vector<uint8_t> vdxData(fileSize);
+        vdxFile.read(reinterpret_cast<char *>(vdxData.data()), fileSize);
+
+        VDXFile parsedVDXFile = parseVDXFile(filename.data(), vdxData);
+
+        parseVDXChunks(parsedVDXFile);
     }
     else if (option == "-x")
     {
@@ -81,10 +99,10 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        std::string extraction_type = argv[2];
-        std::string rl_filename = argv[3];
+        std::string_view extraction_type = argv[2];
+        std::string_view rl_filename = argv[3];
 
-        std::string dirName = rl_filename;
+        std::string dirName(rl_filename);
         std::replace(dirName.begin(), dirName.end(), '.', '_');
         std::filesystem::create_directory(dirName);
 
@@ -92,7 +110,7 @@ int main(int argc, char *argv[])
         {
             std::cout << "Extracting GJD..." << std::endl;
 
-            std::vector<VDXFile> VDXFiles = parseGJDFile(rl_filename);
+            std::vector<VDXFile> VDXFiles = parseGJDFile(rl_filename.data());
 
             for (const auto &vdxFile : VDXFiles)
             {
@@ -103,9 +121,9 @@ int main(int argc, char *argv[])
         {
             std::cout << "Extracting VDX..." << std::endl;
 
-            std::string vdx_filename = argv[4];
+            std::string_view vdx_filename = argv[4];
 
-            std::vector<VDXFile> VDXFile = parseGJDFile(rl_filename, vdx_filename);
+            std::vector<VDXFile> VDXFile = parseGJDFile(rl_filename.data(), vdx_filename.data());
 
             writeVDXFile(VDXFile[0], dirName);
         }
