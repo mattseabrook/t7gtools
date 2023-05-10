@@ -10,6 +10,26 @@
 
 #include "bitmap.h"
 
+/*
+===============================================================================
+Function Name: savePNG
+
+Description:
+    - Saves a *.PNG file from the given image data.
+
+Parameters:
+    - filename: The filename of the PNG file to be wrteen.
+    - imageData: x.
+    - width: width of the image
+    - height: height of the image
+
+Return:
+    - TBD
+
+Notes:
+    - imageData will be som.
+===============================================================================
+*/
 void savePNG(const std::string &filename, const std::vector<uint8_t> &imageData, int width, int height)
 {
     FILE *fp;
