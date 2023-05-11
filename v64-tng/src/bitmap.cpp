@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <stdexcept>
 #include <string>
+#include <iostream>
+#include <iomanip>
 
 #include <png.h>
 
@@ -83,7 +85,8 @@ void savePNG(const std::string &filename, const std::vector<uint8_t> &imageData,
     png_destroy_write_struct(&png_ptr, &info_ptr);
 }
 
-std::vector<uint8_t> processType20Chunk(const std::vector<uint8_t> &chunkData)
+// Convert LZSS decompressed data to a bitmap structure
+std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
 {
     // Parse the header
     uint16_t numXTiles = readLittleEndian<uint16_t>(chunkData.data());
@@ -94,6 +97,13 @@ std::vector<uint8_t> processType20Chunk(const std::vector<uint8_t> &chunkData)
     const int height = numYTiles * 4;
     const int numPixels = width * height;
 
+    std::cout << "numXTiles: " << numXTiles << std::endl;
+    std::cout << "numYTiles: " << numYTiles << std::endl;
+    std::cout << "colourDepth: " << colourDepth << std::endl;
+    std::cout << "width: " << width << std::endl;
+    std::cout << "height: " << height << std::endl;
+    std::cout << "numPixels: " << numPixels << std::endl;
+
     std::vector<RGBColor> palette;
     const uint8_t *paletteData = chunkData.data() + 6;
     for (int i = 0; i < (1 << colourDepth); ++i)
@@ -101,7 +111,22 @@ std::vector<uint8_t> processType20Chunk(const std::vector<uint8_t> &chunkData)
         palette.push_back({paletteData[i * 3], paletteData[i * 3 + 1], paletteData[i * 3 + 2]});
     }
 
+    // Debug output: Print the palette
+    std::cout << "Palette:\n";
+    for (size_t i = 0; i < palette.size(); ++i)
+    {
+        std::cout << "Color " << i << ": 0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(palette[i].r) << ", 0x" << std::setw(2) << std::setfill('0') << static_cast<int>(palette[i].g) << ", 0x" << std::setw(2) << std::setfill('0') << static_cast<int>(palette[i].b) << std::dec << std::endl;
+    }
+
     const uint8_t *imageData = paletteData + (1 << colourDepth) * 3;
+
+    // Debug output: Print the first 100 bytes of the imageData pointer
+    std::cout << "First 100 bytes of imageData:\n";
+    for (int i = 0; i < 100; ++i)
+    {
+        std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(imageData[i]) << " ";
+    }
+    std::cout << std::dec << std::endl;
 
     // Process the decompressed image data according to the Type 0x20 chunk specifications
     std::vector<uint8_t> outputImageData(numPixels * 3);
@@ -122,7 +147,7 @@ std::vector<uint8_t> processType20Chunk(const std::vector<uint8_t> &chunkData)
                     int globalY = tileY * 4 + y;
                     int pixelIndex = globalY * width + globalX;
 
-                    uint16_t mask = 1 << (x + y * 4);
+                    uint16_t mask = 1 << (15 - (x + y * 4)); // uint16_t mask = 1 << (x + y * 4);
                     uint8_t colourIndex = (colourMap & mask) ? colour1 : colour0;
 
                     // Use colourIndex to get the actual RGB value from the palette and set the pixel value in the output image
@@ -134,6 +159,14 @@ std::vector<uint8_t> processType20Chunk(const std::vector<uint8_t> &chunkData)
             }
         }
     }
+
+    // Debug output: Print the first 100 bytes of the outputImageData vector
+    std::cout << "First 100 bytes of outputImageData:\n";
+    for (int i = 0; i < 100; ++i)
+    {
+        std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(outputImageData[i]) << " ";
+    }
+    std::cout << std::dec << std::endl;
 
     return outputImageData;
 }
