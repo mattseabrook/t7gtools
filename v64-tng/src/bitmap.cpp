@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <string>
 #include <iostream>
-#include <iomanip>
 
 #include <png.h>
 
@@ -97,36 +96,40 @@ std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
     const int height = numYTiles * 4;
     const int numPixels = width * height;
 
-    std::cout << "numXTiles: " << numXTiles << std::endl;
-    std::cout << "numYTiles: " << numYTiles << std::endl;
-    std::cout << "colourDepth: " << colourDepth << std::endl;
-    std::cout << "width: " << width << std::endl;
-    std::cout << "height: " << height << std::endl;
-    std::cout << "numPixels: " << numPixels << std::endl;
+    const size_t headerSize = 6;    // 2 bytes for width, 2 bytes for height, and 2 bytes for color depth
+    const size_t paletteSize = 768; // size of the palette in bytes for 8-bit color depth
 
-    std::vector<RGBColor> palette;
+    // Read the palette
     const uint8_t *paletteData = chunkData.data() + 6;
-    for (int i = 0; i < (1 << colourDepth); ++i)
+
+    // Modify the loop to iterate 256 times (for an 8-bit color depth)
+    std::vector<RGBColor> palette;
+    for (int i = 0; i < 256; ++i)
     {
         palette.push_back({paletteData[i * 3], paletteData[i * 3 + 1], paletteData[i * 3 + 2]});
     }
 
-    // Debug output: Print the palette
-    std::cout << "Palette:\n";
-    for (size_t i = 0; i < palette.size(); ++i)
-    {
-        std::cout << "Color " << i << ": 0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(palette[i].r) << ", 0x" << std::setw(2) << std::setfill('0') << static_cast<int>(palette[i].g) << ", 0x" << std::setw(2) << std::setfill('0') << static_cast<int>(palette[i].b) << std::dec << std::endl;
-    }
+    // std::cout the size of palette
+    std::cout << "Size of palette: " << sizeof(palette) << std::endl;
 
     const uint8_t *imageData = paletteData + (1 << colourDepth) * 3;
 
-    // Debug output: Print the first 100 bytes of the imageData pointer
-    std::cout << "First 100 bytes of imageData:\n";
-    for (int i = 0; i < 100; ++i)
+    // std::cout the size of the actual data imageData points to
+    std::cout << "Size of imageData: " << sizeof(imageData) << std::endl;
+
+    const size_t imageDataSize = chunkData.size() - headerSize - paletteSize;
+    const size_t expectedImageDataSize = numXTiles * numYTiles * 4; // each 4x4 tile is represented by 4 bytes
+    std::cout << "Image data size: " << imageDataSize << std::endl;
+    std::cout << "Expected image data size: " << expectedImageDataSize << std::endl;
+
+    if (imageDataSize == expectedImageDataSize)
     {
-        std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(imageData[i]) << " ";
+        std::cout << "Image data size matches the expected size." << std::endl;
     }
-    std::cout << std::dec << std::endl;
+    else
+    {
+        std::cout << "Image data size does not match the expected size." << std::endl;
+    }
 
     // Process the decompressed image data according to the Type 0x20 chunk specifications
     std::vector<uint8_t> outputImageData(numPixels * 3);
@@ -139,34 +142,43 @@ std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
             uint16_t colourMap = readLittleEndian<uint16_t>(imageData);
             imageData += 2;
 
-            for (int y = 0; y < 4; ++y)
-            {
-                for (int x = 0; x < 4; ++x)
-                {
-                    int globalX = tileX * 4 + x;
-                    int globalY = tileY * 4 + y;
-                    int pixelIndex = globalY * width + globalX;
-
-                    uint16_t mask = 1 << (15 - (x + y * 4)); // uint16_t mask = 1 << (x + y * 4);
-                    uint8_t colourIndex = (colourMap & mask) ? colour1 : colour0;
-
-                    // Use colourIndex to get the actual RGB value from the palette and set the pixel value in the output image
-                    RGBColor pixelColor = palette[colourIndex];
-                    outputImageData[pixelIndex * 3] = pixelColor.r;
-                    outputImageData[pixelIndex * 3 + 1] = pixelColor.g;
-                    outputImageData[pixelIndex * 3 + 2] = pixelColor.b;
-                }
-            }
+            uint8_t colors[16];
+            expandColorMap(colors, colourMap, colour1, colour0);
+            decodeBlockStill(outputImageData, colors, width, tileX, tileY, palette);
         }
     }
 
-    // Debug output: Print the first 100 bytes of the outputImageData vector
-    std::cout << "First 100 bytes of outputImageData:\n";
-    for (int i = 0; i < 100; ++i)
-    {
-        std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(outputImageData[i]) << " ";
-    }
-    std::cout << std::dec << std::endl;
-
     return outputImageData;
+}
+
+// This function is used to expand a 2-bit color map to a 4-bit color map
+void expandColorMap(uint8_t *out, uint16_t colorMap, uint8_t color1, uint8_t color0)
+{
+    out += 16;
+    for (int i = 16; i; i--)
+    {
+        uint8_t selector = -(colorMap & 1);
+        *--out = (selector & color1) | (~selector & color0);
+        colorMap >>= 1;
+    }
+}
+
+// This function is used to decode a 4x4 block of pixels
+void decodeBlockStill(std::vector<uint8_t> &outputImageData, uint8_t *colors, uint16_t imageWidth, int tileX, int tileY, const std::vector<RGBColor> &palette)
+{
+    for (int y = 0; y < 4; ++y)
+    {
+        for (int x = 0; x < 4; ++x)
+        {
+            int globalX = tileX * 4 + x;
+            int globalY = tileY * 4 + y;
+            int pixelIndex = globalY * imageWidth + globalX;
+
+            uint8_t color = colors[x + y * 4];
+            RGBColor pixelColor = palette[color];
+            outputImageData[pixelIndex * 3] = pixelColor.r;
+            outputImageData[pixelIndex * 3 + 1] = pixelColor.g;
+            outputImageData[pixelIndex * 3 + 2] = pixelColor.b;
+        }
+    }
 }

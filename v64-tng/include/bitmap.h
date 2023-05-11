@@ -32,5 +32,7 @@ T readLittleEndian(const uint8_t *data) {
 
 void savePNG(const std::string &filename, const std::vector<uint8_t> &imageData, int width, int height);
 std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData);
+void expandColorMap(uint8_t *out, uint16_t colorMap, uint8_t color1, uint8_t color0);
+void decodeBlockStill(std::vector<uint8_t> &outputImageData, uint8_t *colors, uint16_t imageWidth, int tileX, int tileY, const std::vector<RGBColor> &palette);
 
 #endif // BITMAP_H
