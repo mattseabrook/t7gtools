@@ -10,7 +10,7 @@ program VDXExt;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, StrUtils, SaveBMP2, AviWriter, Graphics;
+  SysUtils, StrUtils, Interfaces, SaveBMP2, AviWriter, Graphics;
 
 type
   TVDXHeader   = packed record
@@ -108,66 +108,54 @@ begin
   ReadHeader := (SizeOf(TVDXHeader) = BytesRead) and (VDXHeader.ID = 37479)
 end;
 
-procedure DecompressBlock(InBuf: TBuffer; BlockHeader: TBlockHeader;
-  var OutBuf: TBuffer);
+procedure DecompressBlock(InBuf: TBuffer; BlockHeader: TBlockHeader; var OutBuf: TBuffer);
 var
-  N,
-  F,
-  Offset,
-  Length,
-  OfsLen   : Word;
-  Threshold,
-  Flags,
-  b        : Byte;
-  i, j,
-  InBufPos,
-  OutBufPos,
-  HisBufPos: Longint;
-  HisBuf   : TBuffer;
+  DebugFile: TextFile;
+  N, F, Offset, Length, OfsLen: Word;
+  Threshold, Flags, b: Byte;
+  i, j, InBufPos, OutBufPos, HisBufPos: Longint;
+  HisBuf: TBuffer;
 begin
-  // initialize LZSS parameters for this block
+  AssignFile(DebugFile, 'debug.txt');
+  Rewrite(DebugFile);
+
   N := 1 shl ($f - BlockHeader.BitsForLen + 1);
   F := 1 shl (BlockHeader.BitsForLen);
   Threshold := 3;
   HisBufPos := N - F;
 
+  WriteLn(DebugFile, 'DecompressBlock: N = ', N, ', F = ', F, ', Threshold = ', Threshold);
+
   SetLength(HisBuf, N);
   FillChar(HisBuf[0], N, 0);
-
   SetLength(OutBuf, 0);
   OutBufPos := 0;
-
   InBufPos := 0;
 
-  // start extracting block contents
   while Longword(InBufPos) < BlockHeader.BlockSize - 1 do
   begin
-    // read bit field 
     Flags := InBuf[InBufPos];
     Inc(InBufPos);
+    WriteLn(DebugFile, 'DecompressBlock: Flags = ', IntToBin(Flags, 8));
 
-    // process bit field 
     for i := 1 to 8 do
     begin
       if Longword(InBufPos) < BlockHeader.BlockSize - 1 then
       begin
-        // check for buffer window reference 
         if (Flags and 1 = 0) then
         begin
-          // read offset and length 
           OfsLen := InBuf[InBufPos] + (InBuf[InBufPos + 1] shl 8);
           Inc(InBufPos, 2);
+          WriteLn(DebugFile, 'DecompressBlock: OfsLen = ', OfsLen);
 
-          // check for end marker 
           if OfsLen = 0 then
             Break;
 
-          // derive offset and length values 
           Length := (OfsLen and BlockHeader.LengthMask) + Threshold;
           Offset := (HisBufPos - (OfsLen shr BlockHeader.BitsForLen))
             and (N - 1);
+          WriteLn(DebugFile, 'DecompressBlock: Length = ', Length, ', Offset = ', Offset);
 
-          // peek into buffer 
           SetLength(OutBuf, High(OutBuf) + Length + 1);
           for j := 0 to Length - 1 do
           begin
@@ -179,21 +167,21 @@ begin
           end
         end
         else
-        // copy literally 
         begin
           SetLength(OutBuf, High(OutBuf) + 2);
           b := InBuf[InBufPos];
           Inc(InBufPos);
           OutBuf[OutBufPos] := b;
-          HisBuf[HisBufPos] := b;
           Inc(OutBufPos);
+          HisBuf[HisBufPos] := b;
           HisBufPos := (HisBufPos + 1) and (N - 1)
         end;
-
         Flags := Flags shr 1
       end
     end
-  end
+  end;
+
+  CloseFile(DebugFile);
 end;
 
 procedure WriteBMP(VDXName: string; InBuf: TBuffer);
@@ -261,7 +249,8 @@ begin
   end;
 
   Dump8BitBMP(Prefix(VDXName) + '#' + IntToStrL(VidFrames - 1, 4) + '.bmp',
-    BMPHeader.Width, BMPHeader.Height, Palette3, OutBuf);
+    //BMPHeader.Width, BMPHeader.Height, Palette3, OutBuf);
+    BMPHeader.Width, BMPHeader.Height, Palette3, @OutBuf);
 
   SetLength(FrameBuf, High(OutBuf) + 1);
   FrameBuf := Copy(OutBuf, 0, High(OutBuf) + 1)
@@ -405,7 +394,8 @@ begin
   end;
 
   Dump8BitBMP(Prefix(VDXName) + '#' + IntToStrL(VidFrames - 1, 4) + '.bmp',
-    BMPHeader.Width, BMPHeader.Height, Palette3, FrameBuf)
+      //BMPHeader.Width, BMPHeader.Height, Palette3, FrameBuf)
+      BMPHeader.Width, BMPHeader.Height, Palette3, @FrameBuf)
 end;
 
 procedure WriteAudFrame(Buffer: TBuffer);
@@ -508,7 +498,8 @@ begin
   Inc(VidAdded);
 
   Dump8BitBMP(Prefix(VDXName) + '#' + IntToStrL(VidFrames - 1, 4) + '.bmp',
-    BMPHeader.Width, BMPHeader.Height, Palette3, FrameBuf)
+    //BMPHeader.Width, BMPHeader.Height, Palette3, FrameBuf)
+    BMPHeader.Width, BMPHeader.Height, Palette3, @FrameBuf)
 end;
 
 procedure PadVideo(VDXName: string);
@@ -550,8 +541,19 @@ var
   InBuf,
   OutBuf     : TBuffer;
   BlockHeader: TBlockHeader;
+  InBufFile,
+  OutBufFile : File of Byte;
+  i          : Integer;
 begin
   WAVOpen := false;
+
+  // 2023 BEGIN-------------------------->
+  // Create files for InBuf and OutBuf data
+  AssignFile(InBufFile, '0x20-static-bitmap-compressed.bin');
+  Rewrite(InBufFile);
+  AssignFile(OutBufFile, '0x20-static-bitmap-decompressed.bin');
+  Rewrite(OutBufFile);
+  // 2023 END---------------------------->
 
   VidFrames := 0;
   VidAdded  := 0;
@@ -569,11 +571,24 @@ begin
     SetLength(InBuf, BlockHeader.BlockSize);
     BlockRead(VDXFile, InBuf[0], BlockHeader.BlockSize);
 
-    // check block compression 
+    // 2023 BEGIN-------------------------->
+    // Write InBuf to file
+    for i := 0 to High(InBuf) do
+      Write(InBufFile, InBuf[i]);
+    // 2023 END---------------------------->
+
+    // check block compression
     if (BlockHeader.BitsForLen = 0) then
       OutBuf := Copy(InBuf)
     else
       DecompressBlock(InBuf, BlockHeader, OutBuf);
+
+    // 2023 BEGIN-------------------------->
+    // Write OutBuf to file
+    for i := 0 to High(OutBuf) do
+      Write(OutBufFile, OutBuf[i]);
+    // 2023 END---------------------------->
+    // Breakpoint to get byte values of InBuf, OutBuf
 
     // check for known media type 
     case BlockHeader.BlockType of
@@ -623,7 +638,10 @@ begin
     end;
 
     Finalize(InBuf);
-    Finalize(OutBuf)
+    Finalize(OutBuf);
+    // Close the files
+    CloseFile(InBufFile);
+    CloseFile(OutBufFile);
   end;
 
   AudFrames := AudSize div 1470;

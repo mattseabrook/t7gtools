@@ -1,11 +1,12 @@
 #include <vector>
-#include <cstdint>
+
+#include "lzss.h"
 
 std::vector<uint8_t> lzssDecompress(const std::vector<uint8_t> &compressedData, uint8_t lengthMask, uint8_t lengthBits)
 {
     const uint16_t N = 1 << (16 - lengthBits);
     const uint16_t F = 1 << lengthBits;
-    const uint8_t threshold = 3;
+    const int threshold = 3;
 
     std::vector<uint8_t> decompressedData;
     std::vector<uint8_t> his_buf(N, 0);
@@ -13,9 +14,12 @@ std::vector<uint8_t> lzssDecompress(const std::vector<uint8_t> &compressedData, 
 
     int32_t in_buf_pos = 0;
 
+    std::string input;
+
     while (in_buf_pos < compressedData.size())
     {
         uint8_t flags = compressedData[in_buf_pos++];
+
         for (int32_t i = 1; i <= 8; ++i)
         {
             if (in_buf_pos >= compressedData.size())
@@ -23,7 +27,9 @@ std::vector<uint8_t> lzssDecompress(const std::vector<uint8_t> &compressedData, 
 
             if ((flags & 1) == 0)
             {
-                uint16_t ofs_len = compressedData[in_buf_pos++] | (compressedData[in_buf_pos++] << 8);
+                uint16_t ofs_len = compressedData[in_buf_pos] | (compressedData[in_buf_pos + 1] << 8);
+                in_buf_pos += 2;
+
                 if (ofs_len == 0)
                 {
                     break;

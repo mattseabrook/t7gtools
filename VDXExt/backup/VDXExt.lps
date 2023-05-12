@@ -8,83 +8,187 @@
       <Unit>
         <Filename Value="VDXExt.dpr"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="108"/>
+        <CursorPos X="37" Y="116"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="AviWriter.pas"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="714"/>
-        <CursorPos X="156" Y="737"/>
-        <UsageCount Value="10"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="45"/>
+        <CursorPos X="20" Y="53"/>
+        <UsageCount Value="16"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="SaveBMP2.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="213"/>
+        <CursorPos Y="224"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\application.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="679"/>
+        <CursorPos Y="690"/>
+        <UsageCount Value="9"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="14">
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="VDXExt.dpr"/>
+        <Caret Line="193" TopLine="176"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="53" Column="40" TopLine="28"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="150" TopLine="140"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="350" Column="28" TopLine="334"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="152" TopLine="140"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="395" Column="24" TopLine="379"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="155" TopLine="140"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="350" Column="28" TopLine="333"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="184" TopLine="174"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="351" Column="47" TopLine="333"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="185" TopLine="174"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="460" Column="18" TopLine="443"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="186" TopLine="174"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="735" Column="5" TopLine="712"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="187" TopLine="174"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="736" Column="3" TopLine="712"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="188" TopLine="174"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="737" Column="5" TopLine="712"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="189" TopLine="174"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="738" Column="5" TopLine="712"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="190" TopLine="174"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="739" Column="5" TopLine="712"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="193" TopLine="176"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="740" Column="5" TopLine="712"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="150" TopLine="140"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="744" Column="5" TopLine="712"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="152" TopLine="140"/>
       </Position>
       <Position>
-        <Filename Value="AviWriter.pas"/>
-        <Caret Line="685" Column="83" TopLine="670"/>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="155" TopLine="140"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="158" TopLine="141"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="159" TopLine="142"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="162" TopLine="145"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="166" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="167" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="168" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="167" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="171" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="172" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="174" TopLine="157"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="175" TopLine="158"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="176" TopLine="159"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="177" TopLine="160"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="581" TopLine="569"/>
+      </Position>
+      <Position>
+        <Filename Value="VDXExt.dpr"/>
+        <Caret Line="648" Column="45" TopLine="639"/>
       </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes ActiveMode=""/>
+      <Modes ActiveMode="default">
+        <Mode Name="default">
+          <local>
+            <CommandLineParams Value="dr_d.vdx"/>
+          </local>
+        </Mode>
+      </Modes>
     </RunParams>
+    <HistoryLists>
+      <List Name="WorkingDirectory" Type="File" Count="1"/>
+      <List Name="LaunchingApplication" Type="File" Count="1">
+        <Item1 Value="C:\Windows\system32\cmd.exe /C ${TargetCmdLine}"/>
+      </List>
+      <List Name="CommandLineParameters" Count="2">
+        <Item1 Value="dr_d.vdx"/>
+      </List>
+    </HistoryLists>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="VDXExt.dpr"/>
+        <Line Value="118"/>
+      </Item>
+    </BreakPoints>
+  </Debugging>
 </CONFIG>

@@ -108,6 +108,14 @@ void parseVDXChunks(VDXFile &vdxFile)
             bitmapFile.write(reinterpret_cast<const char *>(rawBitmap.data()), rawBitmap.size());
             bitmapFile.close(); // Move this line outside of the switch
             savePNG(bitmapFilename + ".png", rawBitmap, 640, 320);
+
+            std::ofstream compressedFile(bitmapFilename + "-compressed.bin", std::ios::binary);
+            compressedFile.write(reinterpret_cast<const char *>(chunk.data.data()), chunk.data.size());
+            compressedFile.close();
+
+            std::ofstream decompressedFile(bitmapFilename + "-decompressed.bin", std::ios::binary);
+            decompressedFile.write(reinterpret_cast<const char *>(decompressedData.data()), decompressedData.size());
+            decompressedFile.close();
         }
     }
 }

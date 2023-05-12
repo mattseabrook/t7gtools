@@ -223,19 +223,17 @@ type
 
 procedure AVIFileInit; stdcall;
 procedure AVIFileExit; stdcall;
-//function AVIFileOpen(var ppfile: PAVIFile; szFile: PChar; uMode: UINT; lpHandler: pointer): HResult; stdcall;
-function AVIFileOpen(var pfile: PAVIFile; szFile: PAnsiChar; uMode: UINT; lpHandler: Pointer): HResult; stdcall; external 'avifil32.dll' name 'AVIFileOpenA';
-
-function AVIFileCreateStream(pfile: PAVIFile; var ppavi: PAVISTREAM; var psi: TAVIStreamInfo): HResult; stdcall;
-function AVIStreamSetFormat(pavi: PAVIStream; lPos: LONG; lpFormat: pointer; cbFormat: LONG): HResult; stdcall;
-function AVIStreamReadFormat(pavi: PAVIStream; lPos: LONG; lpFormat: pointer; var cbFormat: LONG): HResult; stdcall;
-function AVIStreamWrite(pavi: PAVIStream; lStart, lSamples: LONG; lpBuffer: pointer; cbBuffer: LONG; dwFlags: DWORD; var plSampWritten: LONG; var plBytesWritten: LONG): HResult; stdcall;
-function AVIStreamRelease(pavi: PAVISTREAM): ULONG; stdcall;
-function AVIFileRelease(pfile: PAVIFile): ULONG; stdcall;
-function AVIFileGetStream(pfile: PAVIFile; var ppavi: PAVISTREAM; fccType: DWORD; lParam: LONG): HResult; stdcall;
-function CreateEditableStream(var ppsEditable: PAVISTREAM; psSource: PAVISTREAM): HResult; stdcall;
+function AVIFileOpen(var ppfile: PAVIFile; szFile: PChar; uMode: UINT; lpHandler: pointer): HResult; stdcall; external 'avifil32.dll' name 'AVIFileOpenA';
+function AVIFileCreateStream(pfile: PAVIFile; var ppavi: PAVISTREAM; var psi: TAVIStreamInfo): HResult; stdcall; external 'avifil32.dll' name 'AVIFileCreateStreamA';
+function AVIStreamSetFormat(pavi: PAVIStream; lPos: LONG; lpFormat: pointer; cbFormat: LONG): HResult; stdcall; external 'avifil32.dll' name 'AVIStreamSetFormat';
+function AVIStreamReadFormat(pavi: PAVIStream; lPos: LONG; lpFormat: pointer; var cbFormat: LONG): HResult; stdcall; external 'avifil32.dll' name 'AVIStreamReadFormat';
+function AVIStreamWrite(pavi: PAVIStream; lStart, lSamples: LONG; lpBuffer: pointer; cbBuffer: LONG; dwFlags: DWORD; var plSampWritten: LONG; var plBytesWritten: LONG): HResult; stdcall; external 'avifil32.dll' name 'AVIStreamWrite';
+function AVIStreamRelease(pavi: PAVISTREAM): ULONG; stdcall; external 'avifil32.dll' name 'AVIStreamRelease';
+function AVIFileRelease(pfile: PAVIFile): ULONG; stdcall; external 'avifil32.dll' name 'AVIFileRelease';
+function AVIFileGetStream(pfile: PAVIFile; var ppavi: PAVISTREAM; fccType: DWORD; lParam: LONG): HResult; stdcall; external 'avifil32.dll' name 'AVIFileGetStream';
+function CreateEditableStream(var ppsEditable: PAVISTREAM; psSource: PAVISTREAM): HResult; stdcall; external 'avifil32.dll' name 'CreateEditableStream';
 function AVISaveV(szFile: PChar; pclsidHandler: PCLSID; lpfnCallback: TAVISaveCallback;
-  nStreams: integer; pavi: APAVISTREAM; lpOptions: APAVICompressOptions): HResult; stdcall;
+  nStreams: integer; pavi: APAVISTREAM; lpOptions: APAVICompressOptions): HResult; stdcall;  external 'avifil32.dll' name 'AVISaveV';
 
 const
   AVIERR_OK       = 0;
@@ -734,19 +732,5 @@ end;
 
   procedure AVIFileInit; stdcall; external 'avifil32.dll' name 'AVIFileInit';
   procedure AVIFileExit; stdcall; external 'avifil32.dll' name 'AVIFileExit';
-  function AVIFileOpen(var pfile: IAVIFILE; szFile: PAnsiChar; uMode: LongWord; lpHandler: Pointer): HResult; stdcall; external 'avifil32.dll' name 'AVIFileOpenA';
-function AVIFileCreateStream(pfile: IAVIFILE; var ppavi: IAVISTREAM; var psi: TAVISTREAMINFO): HResult; stdcall; external 'avifil32.dll' name 'AVIFileCreateStreamA';
-function AVIStreamSetFormat(pavi: IAVISTREAM; lPos: LongWord; lpFormat: Pointer; cbFormat: LongWord): HResult; stdcall; external 'avifil32.dll' name 'AVIStreamSetFormat';
-// ... and so on for the other functions.
-
-  function AVIFileCreateStream; external 'avifil32.dll' name 'AVIFileCreateStreamA';
-  function AVIStreamSetFormat; external 'avifil32.dll' name 'AVIStreamSetFormat';
-  function AVIStreamReadFormat; external 'avifil32.dll' name 'AVIStreamReadFormat';
-  function AVIStreamWrite; external 'avifil32.dll' name 'AVIStreamWrite';
-  function AVIStreamRelease; external 'avifil32.dll' name 'AVIStreamRelease';
-  function AVIFileRelease; external 'avifil32.dll' name 'AVIFileRelease';
-  function AVIFileGetStream; external 'avifil32.dll' name 'AVIFileGetStream';
-  function CreateEditableStream; external 'avifil32.dll' name 'CreateEditableStream';
-  function AVISaveV; external 'avifil32.dll' name 'AVISaveV';
 
 end.
