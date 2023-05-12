@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 {
     if (argc < 3)
     {
-        std::cerr << "Usage: " << argv[0] << " [-i|-x|-b] file" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " [-i|-p|-x] file" << std::endl;
         return 1;
     }
 
@@ -89,7 +89,18 @@ int main(int argc, char *argv[])
 
         VDXFile parsedVDXFile = parseVDXFile(filename.data(), vdxData);
 
-        parseVDXChunks(parsedVDXFile);
+        auto rawBitmap = parseVDXChunks(parsedVDXFile);
+
+        std::string dirName(filename.data());
+        std::replace(dirName.begin(), dirName.end(), '.', '_');
+        std::filesystem::create_directory(dirName);
+
+        std::string bitmapFilename = dirName + "/" + parsedVDXFile.filename + "-0x20-static-bitmap";
+        std::ofstream bitmapFile(bitmapFilename + ".raw", std::ios::binary);
+        bitmapFile.write(reinterpret_cast<const char *>(rawBitmap.data()), rawBitmap.size());
+        bitmapFile.close();
+
+        savePNG(bitmapFilename + ".png", rawBitmap, 640, 320);
     }
     else if (option == "-x")
     {

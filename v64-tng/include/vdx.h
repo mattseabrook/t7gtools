@@ -40,7 +40,7 @@ struct VDXFile
 };
 
 VDXFile parseVDXFile(const std::string &filename, const std::vector<uint8_t> &buffer);
-void parseVDXChunks(VDXFile &vdxFile);
+std::vector<uint8_t> parseVDXChunks(VDXFile &vdxFile);
 void writeVDXFile(const VDXFile &vdxFile, const std::string &outputDir);
 
 #endif // VDX_H

@@ -71,7 +71,7 @@ Notes:
     - None.
 ===============================================================================
 */
-void parseVDXChunks(VDXFile &vdxFile)
+std::vector<uint8_t> parseVDXChunks(VDXFile &vdxFile)
 {
     for (VDXChunk &chunk : vdxFile.chunks)
     {
@@ -86,36 +86,14 @@ void parseVDXChunks(VDXFile &vdxFile)
             // Handle chunk type 0x20
 
             decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
-
-            break;
+            return getBitmapData(decompressedData);
+            // break;
         case 0x80:
             // Handle chunk type 0x80
             break;
         default:
             // Handle unknown chunk types
             break;
-        }
-
-        if (chunk.chunkType == 0x20)
-        {
-            std::vector<uint8_t> rawBitmap;
-
-            std::string bitmapFilename = vdxFile.filename + "-0x20-static-bitmap";
-            std::ofstream bitmapFile(bitmapFilename + ".raw", std::ios::binary);
-
-            rawBitmap = getBitmapData(decompressedData);
-
-            bitmapFile.write(reinterpret_cast<const char *>(rawBitmap.data()), rawBitmap.size());
-            bitmapFile.close(); // Move this line outside of the switch
-            savePNG(bitmapFilename + ".png", rawBitmap, 640, 320);
-
-            std::ofstream compressedFile(bitmapFilename + "-compressed.bin", std::ios::binary);
-            compressedFile.write(reinterpret_cast<const char *>(chunk.data.data()), chunk.data.size());
-            compressedFile.close();
-
-            std::ofstream decompressedFile(bitmapFilename + "-decompressed.bin", std::ios::binary);
-            decompressedFile.write(reinterpret_cast<const char *>(decompressedData.data()), decompressedData.size());
-            decompressedFile.close();
         }
     }
 }

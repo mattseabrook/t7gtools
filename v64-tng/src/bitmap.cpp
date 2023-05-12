@@ -109,27 +109,10 @@ std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
         palette.push_back({paletteData[i * 3], paletteData[i * 3 + 1], paletteData[i * 3 + 2]});
     }
 
-    // std::cout the size of palette
-    std::cout << "Size of palette: " << sizeof(palette) << std::endl;
-
     const uint8_t *imageData = paletteData + (1 << colourDepth) * 3;
-
-    // std::cout the size of the actual data imageData points to
-    std::cout << "Size of imageData: " << sizeof(imageData) << std::endl;
 
     const size_t imageDataSize = chunkData.size() - headerSize - paletteSize;
     const size_t expectedImageDataSize = numXTiles * numYTiles * 4; // each 4x4 tile is represented by 4 bytes
-    std::cout << "Image data size: " << imageDataSize << std::endl;
-    std::cout << "Expected image data size: " << expectedImageDataSize << std::endl;
-
-    if (imageDataSize == expectedImageDataSize)
-    {
-        std::cout << "Image data size matches the expected size." << std::endl;
-    }
-    else
-    {
-        std::cout << "Image data size does not match the expected size." << std::endl;
-    }
 
     // Process the decompressed image data according to the Type 0x20 chunk specifications
     std::vector<uint8_t> outputImageData(numPixels * 3);
