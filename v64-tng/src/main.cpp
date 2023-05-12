@@ -89,18 +89,24 @@ int main(int argc, char *argv[])
 
         VDXFile parsedVDXFile = parseVDXFile(filename.data(), vdxData);
 
-        auto rawBitmap = parseVDXChunks(parsedVDXFile);
-
         std::string dirName(filename.data());
         std::replace(dirName.begin(), dirName.end(), '.', '_');
         std::filesystem::create_directory(dirName);
 
-        std::string bitmapFilename = dirName + "/" + parsedVDXFile.filename + "-0x20-static-bitmap";
-        std::ofstream bitmapFile(bitmapFilename + ".raw", std::ios::binary);
-        bitmapFile.write(reinterpret_cast<const char *>(rawBitmap.data()), rawBitmap.size());
-        bitmapFile.close();
+        std::vector<processedVDXChunk> parsedChunks = parseVDXChunks(parsedVDXFile);
+        for (const auto &parsedChunk : parsedChunks)
+        {
+            if (parsedChunk.chunkType == 0x20)
+            {
+                // Write the raw bitmap data to a file in the dirName directory
+                std::ofstream rawBitmapFile(dirName + "/" + parsedVDXFile.filename + ".raw", std::ios::binary);
+                rawBitmapFile.write(reinterpret_cast<const char *>(parsedChunk.data.data()), parsedChunk.data.size());
+                rawBitmapFile.close();
 
-        savePNG(bitmapFilename + ".png", rawBitmap, 640, 320);
+                // Call savePNG to convert the raw bitmap data to a PNG file and save it in the dirName directory
+                savePNG(dirName + "/" + parsedVDXFile.filename + ".png", parsedChunk.data, 640, 320);
+            }
+        }
     }
     else if (option == "-x")
     {

@@ -111,9 +111,6 @@ std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
 
     const uint8_t *imageData = paletteData + (1 << colourDepth) * 3;
 
-    const size_t imageDataSize = chunkData.size() - headerSize - paletteSize;
-    const size_t expectedImageDataSize = numXTiles * numYTiles * 4; // each 4x4 tile is represented by 4 bytes
-
     // Process the decompressed image data according to the Type 0x20 chunk specifications
     std::vector<uint8_t> outputImageData(numPixels * 3);
     for (int tileY = 0; tileY < numYTiles; ++tileY)
@@ -126,42 +123,52 @@ std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
             imageData += 2;
 
             uint8_t colors[16];
-            expandColorMap(colors, colourMap, colour1, colour0);
-            decodeBlockStill(outputImageData, colors, width, tileX, tileY, palette);
+            // Expand color map
+            uint8_t *out = colors + 16;
+            for (int i = 16; i; i--)
+            {
+                uint8_t selector = -(colourMap & 1);
+                *--out = (selector & colour1) | (~selector & colour0);
+                colourMap >>= 1;
+            }
+
+            // Decode block
+            for (int y = 0; y < 4; ++y)
+            {
+                for (int x = 0; x < 4; ++x)
+                {
+                    int globalX = tileX * 4 + x;
+                    int globalY = tileY * 4 + y;
+                    int pixelIndex = globalY * width + globalX;
+
+                    uint8_t color = colors[x + y * 4];
+                    RGBColor pixelColor = palette[color];
+                    outputImageData[pixelIndex * 3] = pixelColor.r;
+                    outputImageData[pixelIndex * 3 + 1] = pixelColor.g;
+                    outputImageData[pixelIndex * 3 + 2] = pixelColor.b;
+                }
+            }
         }
     }
 
     return outputImageData;
 }
 
-// This function is used to expand a 2-bit color map to a 4-bit color map
-void expandColorMap(uint8_t *out, uint16_t colorMap, uint8_t color1, uint8_t color0)
+// This function is used to decompress LZSS compressed data
+std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &originalImage, std::vector<uint8_t> &deltaBlock)
 {
-    out += 16;
-    for (int i = 16; i; i--)
-    {
-        uint8_t selector = -(colorMap & 1);
-        *--out = (selector & color1) | (~selector & color0);
-        colorMap >>= 1;
-    }
-}
+    // The deltaBlock is assumed to be LZSS compressed, so first we need to decompress it.
+    // std::vector<uint8_t> decompressedDelta = lzssDecompress(deltaBlock);
 
-// This function is used to decode a 4x4 block of pixels
-void decodeBlockStill(std::vector<uint8_t> &outputImageData, uint8_t *colors, uint16_t imageWidth, int tileX, int tileY, const std::vector<RGBColor> &palette)
-{
-    for (int y = 0; y < 4; ++y)
-    {
-        for (int x = 0; x < 4; ++x)
-        {
-            int globalX = tileX * 4 + x;
-            int globalY = tileY * 4 + y;
-            int pixelIndex = globalY * imageWidth + globalX;
+    // Now we need to apply the changes from decompressedDelta to originalImage.
+    // This will involve some kind of loop over the pixels in originalImage, and for each pixel,
+    // if there is a corresponding pixel in decompressedDelta, replace the original pixel with the delta pixel.
 
-            uint8_t color = colors[x + y * 4];
-            RGBColor pixelColor = palette[color];
-            outputImageData[pixelIndex * 3] = pixelColor.r;
-            outputImageData[pixelIndex * 3 + 1] = pixelColor.g;
-            outputImageData[pixelIndex * 3 + 2] = pixelColor.b;
-        }
-    }
+    // I'll leave this part as pseudocode for now, since the specifics will depend on the exact format of the delta data.
+    // for each pixel in originalImage:
+    //     if there is a corresponding pixel in decompressedDelta:
+    //         replace the original pixel with the delta pixel
+
+    // Finally, we return the modified image.
+    return originalImage;
 }

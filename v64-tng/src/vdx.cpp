@@ -71,31 +71,45 @@ Notes:
     - None.
 ===============================================================================
 */
-std::vector<uint8_t> parseVDXChunks(VDXFile &vdxFile)
+std::vector<processedVDXChunk> parseVDXChunks(VDXFile &vdxFile)
 {
+    std::vector<processedVDXChunk> processedChunks;
     for (VDXChunk &chunk : vdxFile.chunks)
     {
+        processedVDXChunk processedChunk;
+        processedChunk.chunkType = chunk.chunkType;
+
         std::vector<uint8_t> decompressedData;
 
         switch (chunk.chunkType)
         {
         case 0x00:
             // Handle chunk type 0x00
+            processedChunk.data = std::vector<uint8_t>();
             break;
         case 0x20:
             // Handle chunk type 0x20
-
             decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
-            return getBitmapData(decompressedData);
-            // break;
+            processedChunk.data = getBitmapData(decompressedData);
+            break;
+        case 0x25:
+            // Handle chunk type 0x25
+            processedChunk.data = std::vector<uint8_t>();
+            break;
         case 0x80:
             // Handle chunk type 0x80
+            processedChunk.data = chunk.data;
             break;
         default:
             // Handle unknown chunk types
+            processedChunk.data = std::vector<uint8_t>();
             break;
         }
+
+        processedChunks.push_back(processedChunk);
     }
+
+    return processedChunks;
 }
 
 /*

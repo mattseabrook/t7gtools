@@ -30,6 +30,13 @@ struct VDXChunk
     std::vector<uint8_t> data;
 };
 
+// Processed VDXChunk struct
+struct processedVDXChunk
+{
+    uint8_t chunkType;
+    std::vector<uint8_t> data;
+};
+
 // VDXFile struct
 struct VDXFile
 {
@@ -40,7 +47,7 @@ struct VDXFile
 };
 
 VDXFile parseVDXFile(const std::string &filename, const std::vector<uint8_t> &buffer);
-std::vector<uint8_t> parseVDXChunks(VDXFile &vdxFile);
+std::vector<processedVDXChunk> parseVDXChunks(VDXFile &vdxFile);
 void writeVDXFile(const VDXFile &vdxFile, const std::string &outputDir);
 
 #endif // VDX_H
