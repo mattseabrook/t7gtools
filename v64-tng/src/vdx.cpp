@@ -96,7 +96,12 @@ std::vector<processedVDXChunk> parseVDXChunks(VDXFile &vdxFile)
         case 0x25:
             // Handle chunk type 0x25
             decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
+
+            std::cout << "compressed size: " << chunk.data.size() << std::endl;
+            std::cout << "decompressed size: " << decompressedData.size() << std::endl;
+
             processedChunk.data = getDeltaBitmapData(decompressedData, processedChunks[0].data);
+
             break;
         case 0x80:
             // Handle chunk type 0x80

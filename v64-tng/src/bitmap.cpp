@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <bitset>
+#include <iomanip>
 
 #include <png.h>
 
@@ -192,7 +193,7 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
     // Reading 16-bit localPalSize
     uint16_t localPalSize = (static_cast<uint16_t>(buffer[0]) | (static_cast<uint16_t>(buffer[1]) << 8));
 
-    int originalBufferSize = buffer.size();
+    size_t originalBufferSize = buffer.size();
     buffer.erase(buffer.begin(), buffer.begin() + 2); // Erase the processed bytes.
 
     // Check if there are local palette changes.
@@ -233,10 +234,16 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
     int width = 640 * 3;        // Bitmap width is 640 pixels. Multiply by 3 for RGB.
     int blockNumber = 0;        // Define blockNumber outside the while loop
 
+    std::cout << "Processing delta bitmap data..." << std::endl;
+
     while (!buffer.empty())
     {
         uint8_t opcode = buffer[0];
         buffer.erase(buffer.begin());
+
+        std::cout << "opcode: 0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(opcode) << std::endl;
+        std::cout << "buffer size: " << std::dec << buffer.size() << std::endl;
+        std::cout << "block number: " << std::dec << blockNumber << std::endl;
 
         if (opcode >= 0x00 && opcode <= 0x5f)
         {
@@ -250,9 +257,9 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
             uint16_t colourMap = PREDEFINED_COLOUR_MAP[opcode];
 
             // Calculate the block number based on the original and current size of the buffer.
-            int totalBlocks = originalBufferSize / 3; // Assume 3 bytes per block (opcode and two color parameters).
-            int remainingBlocks = buffer.size() / 3;
-            int blockNumber = totalBlocks - remainingBlocks;
+            size_t totalBlocks = originalBufferSize / 3; // Assume 3 bytes per block (opcode and two color parameters).
+            size_t remainingBlocks = buffer.size() / 3;
+            size_t blockNumber = totalBlocks - remainingBlocks;
 
             // Iterate over the 16 pixels in the current block.
             for (int i = 0; i < 16; ++i)
@@ -261,13 +268,13 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
                 uint8_t colour = (colourMap & (1 << i)) ? c1 : c0;
 
                 // Calculate the position of the current pixel in the deltaBitmapData and staticBitmap.
-                int blockRow = blockNumber / blocksPerRow; // blocksPerRow is width of the image in blocks.
+                size_t blockRow = blockNumber / blocksPerRow; // blocksPerRow is width of the image in blocks.
                 int blockCol = blockNumber % blocksPerRow;
 
                 int pixelRow = i / 4; // Within the block, pixels are arranged in a 4x4 grid.
                 int pixelCol = i % 4;
 
-                int position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
+                size_t position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
 
                 // Store the new color to the deltaBitmapData.
                 deltaBitmapData[position] = colour;
@@ -276,9 +283,9 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
         else if (opcode == 0x60)
         {
             // Calculate the block number based on the original and current size of the buffer.
-            int totalBlocks = originalBufferSize - 1; // -1 because this opcode has no parameters.
-            int remainingBlocks = buffer.size();
-            int blockNumber = totalBlocks - remainingBlocks;
+            size_t totalBlocks = originalBufferSize - 1; // -1 because this opcode has no parameters.
+            size_t remainingBlocks = buffer.size();
+            size_t blockNumber = totalBlocks - remainingBlocks;
 
             // Iterate over the 16 pixels in the current block.
             for (int i = 0; i < 16; ++i)
@@ -288,13 +295,13 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
                 buffer.erase(buffer.begin());
 
                 // Calculate the position of the current pixel in the deltaBitmapData and staticBitmap.
-                int blockRow = blockNumber / blocksPerRow;
+                size_t blockRow = blockNumber / blocksPerRow;
                 int blockCol = blockNumber % blocksPerRow;
 
                 int pixelRow = i / 4; // Within the block, pixels are arranged in a 4x4 grid.
                 int pixelCol = i % 4;
 
-                int position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
+                size_t position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
 
                 // Store the new color to the deltaBitmapData.
                 deltaBitmapData[position] = colour;
@@ -340,12 +347,24 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
         else if (opcode >= 0x76 && opcode <= 0x7f)
         {
             int blocksToFill = opcode - 0x75;
+            std::cout << "blocksToFill: " << blocksToFill << std::endl;
 
             for (int filledBlocks = 0; filledBlocks < blocksToFill; ++filledBlocks)
             {
+                // Ensure buffer is not empty.
+                if (buffer.empty())
+                {
+                    std::cerr << "Error: Buffer is empty. Cannot read colour parameter." << std::endl;
+                    break;
+                }
+
                 // Read the colour parameter.
                 uint8_t colour = buffer[0];
                 buffer.erase(buffer.begin()); // Erase the processed byte.
+
+                std::cout << "Processing block: " << filledBlocks + 1
+                          << " of " << blocksToFill
+                          << " with colour: " << static_cast<int>(colour) << std::endl;
 
                 // Fill the block with the colour.
                 for (int i = 0; i < 16; ++i)
@@ -358,9 +377,19 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
 
                     int position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
 
+                    if (position >= deltaBitmapData.size())
+                    {
+                        std::cerr << "Error: Position out of bounds. Position: "
+                                  << position
+                                  << ", deltaBitmapData size: "
+                                  << deltaBitmapData.size() << std::endl;
+                        break;
+                    }
+
                     deltaBitmapData[position] = colour;
                 }
                 blockNumber++; // Move to the next block.
+                std::cout << "Finished processing block. Moving to block number: " << blockNumber << std::endl;
             }
         }
         else if (opcode >= 0x80 && opcode <= 0xff)
@@ -395,7 +424,12 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
             }
             blockNumber++; // Move to the next block.
         }
+        // Remove later
+        std::cout << "\nPress any key to continue...\n";
+        std::cin.get();
     }
+
+    std::cout << "Decoded " << blockNumber << " blocks." << std::endl;
 
     return deltaBitmapData;
 }
