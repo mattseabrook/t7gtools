@@ -7,6 +7,7 @@
 #include "vdx.h"
 #include "lzss.h"
 #include "bitmap.h"
+#include "delta.h"
 
 /*
 ===============================================================================
