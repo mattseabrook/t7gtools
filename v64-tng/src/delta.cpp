@@ -8,6 +8,7 @@
 #include <iostream>
 #include <bitset>
 #include <iomanip>
+#include <fstream> // Remove later
 
 #include "bitmap.h"
 #include "delta.h"
@@ -29,250 +30,159 @@ Return:
     - std::vector<uint8_t>: 8-bit RGB raw bitmap data structure
 ===============================================================================
 */
-std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vector<uint8_t> &staticBitmap)
+std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vector<uint8_t> &frameBuffer)
 {
-    std::vector<uint8_t> deltaBitmapData = staticBitmap;
+    const std::string LogFileName = "vdxext.log";
+    std::ofstream LogFile;
 
-    // Reading 16-bit localPalSize
-    uint16_t localPalSize = (static_cast<uint16_t>(buffer[0]) | (static_cast<uint16_t>(buffer[1]) << 8));
+    int i, j, k;
+    uint16_t Map, LocPalSz, x, y, width, height;
+    uint8_t c0, c1;
+    std::vector<RGBColor> palette(256);
 
-    size_t originalBufferSize = buffer.size();
-    buffer.erase(buffer.begin(), buffer.begin() + 2); // Erase the processed bytes.
+    // Open the log file in append mode, or create it if it doesn't exist
+    LogFile.open(LogFileName, std::ios::app);
 
-    // Check if there are local palette changes.
-    if (localPalSize > 0)
+    // Check for local palette adaptations
+    LocPalSz = buffer[0] | (buffer[1] << 8);
+    k = 0;
+
+    // Alter palette according to bitfield
+    if (LocPalSz > 0)
     {
-        std::bitset<16> palBitField[16];
-        for (int i = 0; i < 16; ++i)
+        for (i = 0; i < 16; i++)
         {
-            palBitField[i] = std::bitset<16>((static_cast<uint16_t>(buffer[0]) | (static_cast<uint16_t>(buffer[1]) << 8)));
-            buffer.erase(buffer.begin(), buffer.begin() + 2); // Erase the processed bytes.
-        }
-
-        // Update the local colors in the new bitmap's palette.
-        for (int i = 0; i < 16; ++i)
-        {
-            for (int j = 15; j >= 0; --j)
+            Map = buffer[i * 2 + 2] | (buffer[i * 2 + 3] << 8);
+            for (j = 0; j < 16; j++)
             {
-                if (palBitField[i][j])
+                if ((Map & 0x8000) != 0)
                 {
-                    // Get the new RGB color value.
-                    uint8_t r = buffer[0];
-                    uint8_t g = buffer[1];
-                    uint8_t b = buffer[2];
-                    buffer.erase(buffer.begin(), buffer.begin() + 3); // Erase the processed bytes.
-
-                    // Calculate the palette index to be updated.
-                    int palIndex = i * 16 + (15 - j);
-                    // Assuming the palette is in RGB format, each color takes 3 bytes.
-                    deltaBitmapData[palIndex * 3] = r;
-                    deltaBitmapData[palIndex * 3 + 1] = g;
-                    deltaBitmapData[palIndex * 3 + 2] = b;
+                    RGBColor color;
+                    color.r = buffer[34 + k];
+                    color.g = buffer[34 + k + 1];
+                    color.b = buffer[34 + k + 2];
+                    palette[i * 16 + j] = color;
+                    k += 3;
                 }
+                Map <<= 1;
             }
         }
     }
 
-    int blocksPerRow = 640 / 4; // Bitmap width is 640 pixels and each block is 4 pixels wide.
-    int width = 640 * 3;        // Bitmap width is 640 pixels. Multiply by 3 for RGB.
-    int blockNumber = 0;        // Define blockNumber outside the while loop
+    x = 0;
+    y = 0;
+    width = 640;
+    height = 320;
+    i = LocPalSz + 2;
 
-    std::cout << "Processing delta bitmap data..." << std::endl;
-
-    while (!buffer.empty())
+    // decode image
+    while (i < buffer.size())
     {
-        uint8_t opcode = buffer[0];
-        buffer.erase(buffer.begin());
+        // DEBUG
+        LogFile << std::hex << "0x" << std::setfill('0') << std::setw(2) << +buffer[i] << " " << std::dec << (buffer.size() - i) << std::endl;
+        std::cout << std::hex << "0x" << std::setfill('0') << std::setw(2) << +buffer[i] << " " << std::dec << (buffer.size() - i) << std::endl;
 
-        std::cout << "opcode: 0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(opcode) << std::endl;
-        std::cout << "buffer size: " << std::dec << buffer.size() << std::endl;
-        std::cout << "block number: " << std::dec << blockNumber << std::endl;
-
-        if (opcode >= 0x00 && opcode <= 0x5f)
+        if (buffer[i] >= 0x00 && buffer[i] <= 0x5F)
         {
-            // Followed by two parameters, which are hereby referred to as colours c1 and c0.
-            uint8_t c1 = buffer[0];
-            buffer.erase(buffer.begin());
-            uint8_t c0 = buffer[0];
-            buffer.erase(buffer.begin());
-
-            // The Colour Map used is extracted from a predefined array of uint16 values containing 96 entries.
-            uint16_t colourMap = PREDEFINED_COLOUR_MAP[opcode];
-
-            // Calculate the block number based on the original and current size of the buffer.
-            size_t totalBlocks = originalBufferSize / 3; // Assume 3 bytes per block (opcode and two color parameters).
-            size_t remainingBlocks = buffer.size() / 3;
-            size_t blockNumber = totalBlocks - remainingBlocks;
-
-            // Iterate over the 16 pixels in the current block.
-            for (int i = 0; i < 16; ++i)
+            Map = MapField[buffer[i] << 1] | (MapField[(buffer[i] << 1) + 1] << 8);
+            c1 = buffer[i + 1];
+            c0 = buffer[i + 2];
+            for (j = 0; j < 16; j++)
             {
-                // Determine the colour for the current pixel based on the colour map.
-                uint8_t colour = (colourMap & (1 << i)) ? c1 : c0;
+                uint8_t colorIndex = ((Map & 0x8000) == 0) ? c0 : c1;
+                RGBColor color = palette[colorIndex];
+                int pixelIndex = (y + (j / 4)) * width + x + (j % 4);
+                frameBuffer[pixelIndex * 3] = color.r;
+                frameBuffer[pixelIndex * 3 + 1] = color.g;
+                frameBuffer[pixelIndex * 3 + 2] = color.b;
 
-                // Calculate the position of the current pixel in the deltaBitmapData and staticBitmap.
-                size_t blockRow = blockNumber / blocksPerRow; // blocksPerRow is width of the image in blocks.
-                int blockCol = blockNumber % blocksPerRow;
-
-                int pixelRow = i / 4; // Within the block, pixels are arranged in a 4x4 grid.
-                int pixelCol = i % 4;
-
-                size_t position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
-
-                // Store the new color to the deltaBitmapData.
-                deltaBitmapData[position] = colour;
+                Map <<= 1;
             }
+            x += 4;
+            i += 2;
         }
-        else if (opcode == 0x60)
+        else if (buffer[i] == 0x60)
         {
-            // Calculate the block number based on the original and current size of the buffer.
-            size_t totalBlocks = originalBufferSize - 1; // -1 because this opcode has no parameters.
-            size_t remainingBlocks = buffer.size();
-            size_t blockNumber = totalBlocks - remainingBlocks;
-
-            // Iterate over the 16 pixels in the current block.
-            for (int i = 0; i < 16; ++i)
+            for (j = 0; j < 16; j++)
             {
-                // Determine the colour for the current pixel based on the next parameter in the buffer.
-                uint8_t colour = buffer[0];
-                buffer.erase(buffer.begin());
-
-                // Calculate the position of the current pixel in the deltaBitmapData and staticBitmap.
-                size_t blockRow = blockNumber / blocksPerRow;
-                int blockCol = blockNumber % blocksPerRow;
-
-                int pixelRow = i / 4; // Within the block, pixels are arranged in a 4x4 grid.
-                int pixelCol = i % 4;
-
-                size_t position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
-
-                // Store the new color to the deltaBitmapData.
-                deltaBitmapData[position] = colour;
+                uint8_t colorIndex = buffer[i + j + 1];
+                RGBColor color = palette[colorIndex];
+                int pixelIndex = (y + (j / 4)) * width + x + (j % 4);
+                frameBuffer[pixelIndex * 3] = color.r;
+                frameBuffer[pixelIndex * 3 + 1] = color.g;
+                frameBuffer[pixelIndex * 3 + 2] = color.b;
             }
+            x += 4;
+            i += 16;
         }
-        else if (opcode == 0x61)
+        else if (buffer[i] == 0x61)
         {
-            // Calculate blocksPerRow.
-            int blocksPerRow = 640 / 4; // Bitmap width is 320 pixels and each block is 4 pixels wide.
-
-            // Increase the block number by blocksPerRow to skip one line.
-            blockNumber += blocksPerRow;
+            x += 4;
         }
-        else if (opcode >= 0x62 && opcode <= 0x6b)
+        else if (buffer[i] == 0x62)
         {
-            int blocksToSkip = opcode - 0x62; // Calculate the number of blocks to skip.
-            blockNumber += blocksToSkip;      // Move the current position by skipping the calculated number of blocks.
+            y += 1;
+            x = 0;
         }
-        else if (opcode >= 0x6c && opcode <= 0x75)
+        else if (buffer[i] >= 0x63 && buffer[i] <= 0x6B)
         {
-            uint8_t colour = buffer[0];
-            buffer.erase(buffer.begin()); // Erase the processed byte.
-
-            int blocksToFill = opcode - 0x6b;
-
-            for (int filledBlocks = 0; filledBlocks < blocksToFill; ++filledBlocks)
+            x += (buffer[i] - 0x63) << 2;
+        }
+        else if (buffer[i] >= 0x6C && buffer[i] <= 0x75)
+        {
+            for (k = 1; k <= buffer[i] - 0x6B; k++)
             {
-                for (int i = 0; i < 16; ++i)
+                uint8_t colorIndex = buffer[i + 1];
+                RGBColor color = palette[colorIndex];
+                for (j = 0; j < 16; j++)
                 {
-                    int blockRow = blockNumber / blocksPerRow; // blocksPerRow is width of the image in blocks.
-                    int blockCol = blockNumber % blocksPerRow;
-
-                    int pixelRow = i / 4; // Within the block, pixels are arranged in a 4x4 grid.
-                    int pixelCol = i % 4;
-
-                    int position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
-
-                    deltaBitmapData[position] = colour;
+                    int pixelIndex = (y + (j / 4)) * width + x + (j % 4);
+                    frameBuffer[pixelIndex * 3] = color.r;
+                    frameBuffer[pixelIndex * 3 + 1] = color.g;
+                    frameBuffer[pixelIndex * 3 + 2] = color.b;
                 }
-                blockNumber++; // Move to the next block.
+                x += 4;
             }
+            i += 1;
         }
-        else if (opcode >= 0x76 && opcode <= 0x7f)
+        else if (buffer[i] >= 0x76 && buffer[i] <= 0x7F)
         {
-            int blocksToFill = opcode - 0x75;
-            std::cout << "blocksToFill: " << blocksToFill << std::endl;
-
-            for (int filledBlocks = 0; filledBlocks < blocksToFill; ++filledBlocks)
+            for (k = 1; k <= buffer[i] - 0x75; k++)
             {
-                // Ensure buffer is not empty.
-                if (buffer.empty())
+                uint8_t colorIndex = buffer[i + k];
+                RGBColor color = palette[colorIndex];
+                for (j = 0; j < 16; j++)
                 {
-                    std::cerr << "Error: Buffer is empty. Cannot read colour parameter." << std::endl;
-                    break;
+                    int frameBufferIndex = (y + (j / 4)) * width * 3 + (x + (j % 4)) * 3;
+                    frameBuffer[frameBufferIndex] = color.r;
+                    frameBuffer[frameBufferIndex + 1] = color.g;
+                    frameBuffer[frameBufferIndex + 2] = color.b;
                 }
-
-                // Read the colour parameter.
-                uint8_t colour = buffer[0];
-                buffer.erase(buffer.begin()); // Erase the processed byte.
-
-                std::cout << "Processing block: " << filledBlocks + 1
-                          << " of " << blocksToFill
-                          << " with colour: " << static_cast<int>(colour) << std::endl;
-
-                // Fill the block with the colour.
-                for (int i = 0; i < 16; ++i)
-                {
-                    int blockRow = blockNumber / blocksPerRow; // blocksPerRow is width of the image in blocks.
-                    int blockCol = blockNumber % blocksPerRow;
-
-                    int pixelRow = i / 4; // Within the block, pixels are arranged in a 4x4 grid.
-                    int pixelCol = i % 4;
-
-                    int position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
-
-                    if (position >= deltaBitmapData.size())
-                    {
-                        std::cerr << "Error: Position out of bounds. Position: "
-                                  << position
-                                  << ", deltaBitmapData size: "
-                                  << deltaBitmapData.size() << std::endl;
-                        break;
-                    }
-
-                    deltaBitmapData[position] = colour;
-                }
-                blockNumber++; // Move to the next block.
-                std::cout << "Finished processing block. Moving to block number: " << blockNumber << std::endl;
+                x += 4;
             }
+            i += buffer[i] - 0x75;
         }
-        else if (opcode >= 0x80 && opcode <= 0xff)
+        else if (buffer[i] >= 0x80 && buffer[i] <= 0xFF)
         {
-            // Extract the Colour Map from the opcode and the following byte.
-            uint16_t colourMap = opcode << 8;
-            colourMap |= buffer[0];
-            buffer.erase(buffer.begin()); // Erase the processed byte.
-
-            // Read the colours c1 and c0.
-            uint8_t c1 = buffer[0];
-            buffer.erase(buffer.begin()); // Erase the processed byte.
-            uint8_t c0 = buffer[0];
-            buffer.erase(buffer.begin()); // Erase the processed byte.
-
-            // Colour the block.
-            for (int i = 0; i < 16; ++i)
+            Map = buffer[i] | (buffer[i + 1] << 8);
+            RGBColor color1 = palette[buffer[i + 2]];
+            RGBColor color0 = palette[buffer[i + 3]];
+            for (j = 0; j < 16; j++)
             {
-                // Determine the colour for the current pixel based on the Colour Map.
-                uint8_t colour = (colourMap & (1 << i)) ? c1 : c0;
-
-                // Calculate the position of the current pixel in the deltaBitmapData and staticBitmap.
-                int blockRow = blockNumber / blocksPerRow; // blocksPerRow is width of the image in blocks.
-                int blockCol = blockNumber % blocksPerRow;
-
-                int pixelRow = i / 4; // Within the block, pixels are arranged in a 4x4 grid.
-                int pixelCol = i % 4;
-
-                int position = ((blockRow * 4 + pixelRow) * width + blockCol * 4 + pixelCol) * 3; // Multiply by 3 for RGB.
-
-                deltaBitmapData[position] = colour;
+                RGBColor selectedColor = ((Map & 0x8000) == 0) ? color0 : color1;
+                int frameBufferIndex = (y + (j / 4)) * width * 3 + (x + (j % 4)) * 3;
+                frameBuffer[frameBufferIndex] = selectedColor.r;
+                frameBuffer[frameBufferIndex + 1] = selectedColor.g;
+                frameBuffer[frameBufferIndex + 2] = selectedColor.b;
+                Map <<= 1;
             }
-            blockNumber++; // Move to the next block.
+            x += 4;
+            i += 3;
         }
-        // Remove later
-        std::cout << "\nPress any key to continue...\n";
-        std::cin.get();
+        i++;
     }
 
-    std::cout << "Decoded " << blockNumber << " blocks." << std::endl;
+    LogFile.close(); // Remove later
 
-    return deltaBitmapData;
+    return frameBuffer;
 }
