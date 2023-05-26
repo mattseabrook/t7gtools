@@ -161,11 +161,11 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
         else if (buffer[i] >= 0x80 && buffer[i] <= 0xFF)
         {
             Map = buffer[i] | (buffer[i + 1] << 8);
-            RGBColor color1 = palette[buffer[i + 2]];
-            RGBColor color0 = palette[buffer[i + 3]];
+            RGBColor c1 = palette[buffer[i + 2]];
+            RGBColor c0 = palette[buffer[i + 3]];
             for (j = 0; j < 16; j++)
             {
-                RGBColor selectedColor = ((Map & 0x8000) == 0) ? color0 : color1;
+                RGBColor selectedColor = ((Map & 0x8000) == 0) ? c0 : c1;
                 int frameBufferIndex = (y + (j / 4)) * width * 3 + (x + (j % 4)) * 3;
                 frameBuffer[frameBufferIndex] = selectedColor.r;
                 frameBuffer[frameBufferIndex + 1] = selectedColor.g;
