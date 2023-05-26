@@ -32,8 +32,8 @@ Return:
 */
 std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vector<uint8_t> &frameBuffer)
 {
-    const std::string LogFileName = "vdxext.log";
-    std::ofstream LogFile;
+    //const std::string LogFileName = "vdxext.log";
+    //std::ofstream LogFile;
 
     int i, j, k;
     uint16_t Map, LocPalSz, x, y, width, height;
@@ -41,7 +41,7 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
     std::vector<RGBColor> palette(256);
 
     // Open the log file in append mode, or create it if it doesn't exist
-    LogFile.open(LogFileName, std::ios::app);
+    //LogFile.open(LogFileName, std::ios::app);
 
     // Check for local palette adaptations
     LocPalSz = buffer[0] | (buffer[1] << 8);
@@ -79,8 +79,8 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
     while (i < buffer.size())
     {
         // DEBUG
-        LogFile << std::hex << "0x" << std::setfill('0') << std::setw(2) << +buffer[i] << " " << std::dec << (buffer.size() - i) << std::endl;
-        std::cout << std::hex << "0x" << std::setfill('0') << std::setw(2) << +buffer[i] << " " << std::dec << (buffer.size() - i) << std::endl;
+        //LogFile << std::hex << "0x" << std::setfill('0') << std::setw(2) << +buffer[i] << " " << std::dec << (buffer.size() - i) << std::endl;
+        //std::cout << std::hex << "0x" << std::setfill('0') << std::setw(2) << +buffer[i] << " " << std::dec << (buffer.size() - i) << std::endl;
 
         if (buffer[i] >= 0x00 && buffer[i] <= 0x5F)
         {
@@ -117,16 +117,12 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
         }
         else if (buffer[i] == 0x61)
         {
-            x += 4;
-        }
-        else if (buffer[i] == 0x62)
-        {
-            y += 1;
+            y += 4;
             x = 0;
         }
-        else if (buffer[i] >= 0x63 && buffer[i] <= 0x6B)
+        else if (buffer[i] >= 0x62 && buffer[i] <= 0x6B)
         {
-            x += (buffer[i] - 0x63) << 2;
+            x += (buffer[i] - 0x62) << 2;
         }
         else if (buffer[i] >= 0x6C && buffer[i] <= 0x75)
         {
@@ -182,7 +178,7 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
         i++;
     }
 
-    LogFile.close(); // Remove later
+    //LogFile.close(); // Remove later
 
     return frameBuffer;
 }

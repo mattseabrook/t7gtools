@@ -93,12 +93,14 @@ std::vector<processedVDXChunk> parseVDXChunks(VDXFile &vdxFile)
             // Handle chunk type 0x20
             decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
             processedChunk.data = getBitmapData(decompressedData);
+            // Call savePNG to convert the raw bitmap data to a PNG file and save it in the dirName directory
+            savePNG("static-0x20.png", processedChunk.data, 640, 320);
             break;
         case 0x25:
             // Handle chunk type 0x25
             decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
-            processedChunk.data = getDeltaBitmapData(decompressedData, processedChunks[0].data);
-
+            processedChunk.data = getDeltaBitmapData(decompressedData, processedChunks[processedChunks.size() - 1].data);
+            savePNG("delta-0x25-" + std::to_string(processedChunks.size()) + ".png", processedChunk.data, 640, 320);
             break;
         case 0x80:
             // Handle chunk type 0x80

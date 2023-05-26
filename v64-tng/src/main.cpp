@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 
         for (const auto &parsedChunk : parsedChunks)
         {
-            std::cout << "Chunk Type: " << std::hex << parsedChunk.chunkType << std::endl;
+            std::cout << "Chunk Type: 0x" << std::hex << static_cast<int>(parsedChunk.chunkType) << std::endl;
             std::cout << "Frame #: " << std::dec << frame << std::endl;
 
             if (parsedChunk.chunkType != 0x80)
