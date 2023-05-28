@@ -1,6 +1,7 @@
 // delta.cpp
 
 #include <vector>
+#include <tuple>
 #include <cstdint>
 #include <cstdio>
 #include <stdexcept>
@@ -8,7 +9,6 @@
 #include <iostream>
 #include <bitset>
 #include <iomanip>
-#include <fstream> // Remove later
 
 #include "bitmap.h"
 #include "delta.h"
@@ -30,19 +30,14 @@ Return:
     - std::vector<uint8_t>: 8-bit RGB raw bitmap data structure
 ===============================================================================
 */
-std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vector<uint8_t> &frameBuffer)
+std::tuple<std::vector<RGBColor>, std::vector<uint8_t>> getDeltaBitmapData(std::vector<uint8_t> &buffer,
+                                                                           std::vector<RGBColor> &palette,
+                                                                           std::vector<uint8_t> &frameBuffer)
 {
-    //const std::string LogFileName = "vdxext.log";
-    //std::ofstream LogFile;
-
     int i, j, k;
     uint16_t Map, LocPalSz, x, y, width, height;
-    uint8_t c0, c1;
-    std::vector<RGBColor> palette(256);
-
-    // Open the log file in append mode, or create it if it doesn't exist
-    //LogFile.open(LogFileName, std::ios::app);
-
+    //uint8_t c0, c1;
+ 
     // Check for local palette adaptations
     LocPalSz = buffer[0] | (buffer[1] << 8);
     k = 0;
@@ -78,15 +73,11 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
     // decode image
     while (i < buffer.size())
     {
-        // DEBUG
-        //LogFile << std::hex << "0x" << std::setfill('0') << std::setw(2) << +buffer[i] << " " << std::dec << (buffer.size() - i) << std::endl;
-        //std::cout << std::hex << "0x" << std::setfill('0') << std::setw(2) << +buffer[i] << " " << std::dec << (buffer.size() - i) << std::endl;
-
         if (buffer[i] >= 0x00 && buffer[i] <= 0x5F)
         {
             Map = MapField[buffer[i] << 1] | (MapField[(buffer[i] << 1) + 1] << 8);
-            c1 = buffer[i + 1];
-            c0 = buffer[i + 2];
+            uint8_t c1 = buffer[i + 1];
+            uint8_t c0 = buffer[i + 2];
             for (j = 0; j < 16; j++)
             {
                 uint8_t colorIndex = ((Map & 0x8000) == 0) ? c0 : c1;
@@ -178,7 +169,5 @@ std::vector<uint8_t> getDeltaBitmapData(std::vector<uint8_t> &buffer, std::vecto
         i++;
     }
 
-    //LogFile.close(); // Remove later
-
-    return frameBuffer;
+    return std::make_tuple(palette, frameBuffer);
 }

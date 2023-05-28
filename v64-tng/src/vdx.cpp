@@ -1,6 +1,7 @@
 // vdx.cpp
 
 #include <vector>
+#include <tuple>
 #include <fstream>
 #include <iostream>
 
@@ -76,39 +77,51 @@ std::vector<processedVDXChunk> parseVDXChunks(VDXFile &vdxFile)
 {
     std::vector<processedVDXChunk> processedChunks;
 
+    std::vector<RGBColor> palette;
+
     for (VDXChunk &chunk : vdxFile.chunks)
     {
         processedVDXChunk processedChunk;
         processedChunk.chunkType = chunk.chunkType;
-
-        std::vector<uint8_t> decompressedData;
 
         switch (chunk.chunkType)
         {
         case 0x00:
             // Handle chunk type 0x00
             processedChunk.data = std::vector<uint8_t>();
+
             break;
         case 0x20:
+        {
             // Handle chunk type 0x20
-            decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
-            processedChunk.data = getBitmapData(decompressedData);
-            // Call savePNG to convert the raw bitmap data to a PNG file and save it in the dirName directory
-            savePNG("static-0x20.png", processedChunk.data, 640, 320);
+            std::vector<uint8_t> decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
+            std::tuple<std::vector<RGBColor>, std::vector<uint8_t>> result = getBitmapData(decompressedData);
+            palette = std::get<0>(result);
+            processedChunk.data = std::get<1>(result);
+
             break;
+        }
         case 0x25:
+        {
             // Handle chunk type 0x25
-            decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
-            processedChunk.data = getDeltaBitmapData(decompressedData, processedChunks[processedChunks.size() - 1].data);
-            savePNG("delta-0x25-" + std::to_string(processedChunks.size()) + ".png", processedChunk.data, 640, 320);
+            std::vector<uint8_t> decompressedData = lzssDecompress(chunk.data, chunk.lengthMask, chunk.lengthBits);
+            std::tuple<std::vector<RGBColor>, std::vector<uint8_t>> result = getDeltaBitmapData(decompressedData,
+                                                                                                palette,
+                                                                                                processedChunks[processedChunks.size() - 1].data);
+            palette = std::get<0>(result);
+            processedChunk.data = std::get<1>(result);
+
             break;
+        }
         case 0x80:
             // Handle chunk type 0x80
             processedChunk.data = chunk.data;
+
             break;
         default:
             // Handle unknown chunk types
             processedChunk.data = std::vector<uint8_t>();
+
             break;
         }
 

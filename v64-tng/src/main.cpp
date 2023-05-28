@@ -35,9 +35,11 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include <string>
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 
 #include "rl.h"
 #include "gjd.h"
@@ -93,25 +95,28 @@ int main(int argc, char *argv[])
         std::replace(dirName.begin(), dirName.end(), '.', '_');
         std::filesystem::create_directory(dirName);
 
-        int frame = 0;
         std::vector<processedVDXChunk> parsedChunks = parseVDXChunks(parsedVDXFile);
 
-        std::cout << "VDX File processed successfully!" << std::endl;
-
+        int frame = 1;
         for (const auto &parsedChunk : parsedChunks)
         {
-            std::cout << "Chunk Type: 0x" << std::hex << static_cast<int>(parsedChunk.chunkType) << std::endl;
-            std::cout << "Frame #: " << std::dec << frame << std::endl;
-
             if (parsedChunk.chunkType != 0x80)
             {
-                // Write the raw bitmap data to a file in the dirName directory, with an index number as well
-                std::ofstream rawBitmapFile(dirName + "/" + parsedVDXFile.filename + "_" + std::to_string(frame) + ".raw", std::ios::binary);
-                rawBitmapFile.write(reinterpret_cast<const char *>(parsedChunk.data.data()), parsedChunk.data.size());
-                rawBitmapFile.close();
+                std::ostringstream frameString;
+                frameString << std::setfill('0') << std::setw(4) << frame;
 
-                // Call savePNG to convert the raw bitmap data to a PNG file and save it in the dirName directory
-                savePNG(dirName + "/" + parsedVDXFile.filename + ".png", parsedChunk.data, 640, 320);
+                if (argc == 4 && std::string_view(argv[3]) == "raw")
+                {
+                    // Write the raw bitmap data to a file in the dirName directory, with an index number as well
+                    std::ofstream rawBitmapFile(dirName + "/" + parsedVDXFile.filename + "_" + frameString.str() + ".raw", std::ios::binary);
+                    rawBitmapFile.write(reinterpret_cast<const char *>(parsedChunk.data.data()), parsedChunk.data.size());
+                    rawBitmapFile.close();
+                }
+                else
+                {
+                    // Call savePNG to convert the raw bitmap data to a PNG file and save it in the dirName directory
+                    savePNG(dirName + "/" + parsedVDXFile.filename + "_" + frameString.str() + ".png", parsedChunk.data, 640, 320);
+                }
             }
 
             frame++;

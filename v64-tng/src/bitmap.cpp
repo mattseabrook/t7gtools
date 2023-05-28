@@ -8,6 +8,7 @@
 #include <iostream>
 #include <bitset>
 #include <iomanip>
+#include <tuple>
 
 #include <png.h>
 
@@ -100,7 +101,7 @@ Return:
     - std::vector<uint8_t>: 8-bit RGB raw bitmap data structure
 ===============================================================================
 */
-std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
+std::tuple<std::vector<RGBColor>, std::vector<uint8_t>> getBitmapData(const std::vector<uint8_t> &chunkData)
 {
     // Parse the header
     uint16_t numXTiles = readLittleEndian<uint16_t>(chunkData.data());
@@ -111,8 +112,7 @@ std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
     const int height = numYTiles * 4;
     const int numPixels = width * height;
 
-    const size_t headerSize = 6;    // 2 bytes for width, 2 bytes for height, and 2 bytes for color depth
-    const size_t paletteSize = 768; // size of the palette in bytes for 8-bit color depth
+    std::vector<uint8_t> outputImageData(numPixels * 3);
 
     // Read the palette
     const uint8_t *paletteData = chunkData.data() + 6;
@@ -127,7 +127,6 @@ std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
     const uint8_t *imageData = paletteData + (1 << colourDepth) * 3;
 
     // Process the decompressed image data according to the Type 0x20 chunk specifications
-    std::vector<uint8_t> outputImageData(numPixels * 3);
     for (int tileY = 0; tileY < numYTiles; ++tileY)
     {
         for (int tileX = 0; tileX < numXTiles; ++tileX)
@@ -166,5 +165,5 @@ std::vector<uint8_t> getBitmapData(const std::vector<uint8_t> &chunkData)
         }
     }
 
-    return outputImageData;
+    return std::make_tuple(palette, outputImageData);
 }
