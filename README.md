@@ -1,10 +1,10 @@
 This repo is legacy! In efforts to be more organized, two new repos have been created. Please use the following links to access the new repos:
 
-# v64-tng
+# v64tng
 
 This is the new project that `t7gtools` morphed into. It is a complete rewrite of the original codebase from scratch, and is written in C++.
 
-[v64-tng](https://github.com/mattseabrook/v64-tng)
+[v64tng](https://github.com/mattseabrook/v64tng)
 
 # The-7th-Guest-Toolset
 
